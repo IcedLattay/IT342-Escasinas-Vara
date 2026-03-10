@@ -1,0 +1,195 @@
+
+
+.registration-page {
+    display: flex;
+    background-color: #F9F9F9;
+    min-height: 100vh;
+    /* padding: 10rem 0; */
+    box-sizing: border-box;
+}
+
+
+    .registration-page .registration-form-container {
+        padding: 7rem 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        /* border: 1px solid black; */
+    }
+
+        .registration-page .registration-form-container .card {
+            overflow: hidden;
+            display: flex;
+            width: 60rem;
+            background-color: white;
+            border-radius: 1.5rem;
+            border: 1px solid #C3C3C3;
+            box-shadow: 
+            0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+            0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+            0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+        }
+
+            .registration-page .registration-form-container .card .card-left {
+                display: flex;
+                width: 100%;
+                border-radius: 1.5rem;
+                background: linear-gradient(to bottom, #F9FFBE 0%, #d9df66 75%, #D4D952 100%);
+                flex-direction: column;
+                padding: 2rem;
+                box-sizing: border-box;
+                /* border: 1px solid red; */
+            }
+
+                .vara {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.7rem;
+                    margin-top: auto;
+                    /* border: 1px solid rgb(220, 51, 51); */
+                }
+
+                    .logo-container {
+                        flex-grow: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0.5rem;
+                        border-radius: 0.7rem;
+                        background-color: white;
+                        /* border: 1px solid black; */
+                    }
+
+            .registration-page .registration-form-container .card .container-content {
+                padding: 6rem 0;
+                width: 100%;
+                /* border: 1px solid black; */
+                display: flex;
+                justify-content: center;
+            }
+
+                .content {
+                    /* border: 1px solid black; */
+                    width: 70%;
+                }
+
+                    .registration-page .registration-form-container .card .container-content .form {
+                        /* border: 1px solid black; */
+                        display: flex;
+                        flex-direction: column;
+                        /* gap: 0.5rem; */
+                    }
+
+                        .registration-page .registration-form-container .card .container-content .form .input-group {
+                            display: flex;
+                            flex-direction: column;
+                            gap: .5rem;
+                        }
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group input,
+                            .registration-page .registration-form-container .card .container-content .form button {
+                                box-sizing: border-box;
+                                padding: .75rem;
+                                outline: none;
+                                border: none;
+                                border-radius: 0.5rem;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group input {
+                                font-family: "Inter", sans-serif;
+                                background-color: #EDEDED;
+                                transition: box-shadow 0.1s ease-in-out;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group input::placeholder {
+                                color: #818181;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group input:hover,
+                            .registration-page .registration-form-container .card .container-content .form .input-group input:focus {
+                                box-shadow: inset 0 0 0 1px #424242;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .submit-button {
+                                cursor: pointer;
+                                background-color: #93983D;
+                                font-weight: 700;
+                                color: white;
+                                transition: 0.1s ease-in-out;
+                                margin-top: 1rem;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .submit-button:active {
+                                opacity: .7;
+                                color: rgb(255, 255, 255, 0.7);
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .submit-button:disabled {
+                                cursor: default;
+                                opacity: .3;
+                                color: rgb(255, 255, 255, 0.7);
+                            }
+
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group .error-message {
+                                color: #D32F2F;
+                                /* border: 1px solid #D32F2F; */
+                                font-size: 0.7rem;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group .password .error-message {
+                                opacity: 0;
+                                max-height: 0;
+                                transition:
+                                    visibility 0s ease,
+                                    opacity 0.5s ease,
+                                    max-height 0.2s ease;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group .password .error-message.visible {
+                                opacity: 1;
+                                max-height: 50rem;
+                                transition:
+                                    visibility 0s ease .5s,
+                                    opacity 0.5s ease .5s,
+                                    max-height 0.5s ease .5s;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group .rules {
+                                max-height: 0;
+                                opacity: 0;
+                                overflow: hidden;
+                                /* border: 1px solid red; */
+                                transition:
+                                    max-height 2s ease 0s,
+                                    opacity .7s ease 0.5s;
+                            }
+
+                            .registration-page .registration-form-container .card .container-content .form .input-group .rules.visible {
+                                max-height: 50rem;
+                                opacity: 1;
+                                transition:
+                                    max-height 3s ease,
+                                    opacity .7s ease;
+                            }
+
+                                .registration-page .registration-form-container .card .container-content .form .input-group .rules .rule {
+                                    font-size: 0.7rem;
+                                    display: flex;
+                                }
+
+                                    .registration-page .registration-form-container .card .container-content .form .input-group .rules .rule .check {
+                                        max-width: 0;
+                                        display: inline-block;
+                                        visibility: hidden;
+                                    }
+
+                                    .registration-page .registration-form-container .card .container-content .form .input-group .rules .rule .check.show {
+                                        max-width: 5rem;
+                                        margin-right: .2rem;
+                                        visibility: visible;
+                                    }
+                                
+
+                    

@@ -1,0 +1,152 @@
+
+
+.login-page {
+    display: flex;
+    background-color: #F9F9F9;
+    max-height: 100vh;
+    /* padding: 10rem 0; */
+    box-sizing: border-box;
+}
+
+
+    .login-page .login-form-container {
+        padding: 7rem 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        /* border: 1px solid black; */
+    }
+
+        .login-page .login-form-container .card {
+            overflow: hidden;
+            display: flex;
+            width: 60rem;
+            background-color: white;
+            border-radius: 1.5rem;
+            border: 1px solid #C3C3C3;
+            box-shadow: 
+            0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+            0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+            0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+        }
+
+            .login-page .login-form-container .card .card-left {
+                display: flex;
+                width: 100%;
+                border-radius: 1.5rem;
+                background: linear-gradient(to bottom, #F9FFBE 0%, #d9df66 75%, #D4D952 100%);
+                flex-direction: column;
+                padding: 2rem;
+                box-sizing: border-box;
+                /* border: 1px solid red; */
+            }
+
+                .vara {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.7rem;
+                    margin-top: auto;
+                    /* border: 1px solid rgb(220, 51, 51); */
+                }
+
+                    .logo-container {
+                        flex-grow: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0.5rem;
+                        border-radius: 0.7rem;
+                        background-color: white;
+                        /* border: 1px solid black; */
+                    }
+
+            .login-page .login-form-container .card .container-content {
+                padding: 6rem 0;
+                width: 100%;
+                /* border: 1px solid black; */
+                display: flex;
+                justify-content: center;
+            }
+
+                .content {
+                    /* border: 1px solid black; */
+                    width: 70%;
+                }
+
+                    .login-page .login-form-container .card .container-content .form {
+                        /* border: 1px solid black; */
+                        display: flex;
+                        flex-direction: column;
+                        /* gap: 0.5rem; */
+                    }
+
+                        .login-page .login-form-container .card .container-content .form .input-group {
+                            display: flex;
+                            flex-direction: column;
+                            gap: .5rem;
+                            /* border: 1px solid black; */
+                        }
+
+                            .login-page .login-form-container .card .container-content .form .input-group input,
+                            .login-page .login-form-container .card .container-content .form button {
+                                box-sizing: border-box;
+                                padding: .75rem;
+                                outline: none;
+                                border: none;
+                                border-radius: 0.5rem;
+                            }
+
+                            .login-page .login-form-container .card .container-content .form .input-group input {
+                                background-color: #EDEDED;
+                                transition: box-shadow 0.1s ease-in-out;
+                            }
+
+                            .login-page .login-form-container .card .container-content .form .input-group input::placeholder {
+                                color: #818181;
+                            }
+
+                            .login-page .login-form-container .card .container-content .form .input-group input:hover,
+                            .login-page .login-form-container .card .container-content .form .input-group input:focus {
+                                box-shadow: inset 0 0 0 1px #424242;
+                            }
+
+                            .login-page .login-form-container .card .container-content .form .submit-button {
+                                cursor: pointer;
+                                background-color: #93983D;
+                                font-weight: 700;
+                                color: white;
+                                transition: 0.1s ease-in-out;
+                                margin-top: 1rem;
+                            }
+
+                            .login-page .login-form-container .card .container-content .form .submit-button:active {
+                                opacity: .7;
+                                color: rgb(255, 255, 255, 0.7);
+                            }
+
+                            .login-page .login-form-container .card .container-content .form .submit-button:disabled {
+                                cursor: default;
+                                opacity: .3;
+                                color: rgb(255, 255, 255, 0.7);
+                            }
+
+
+                        .login-page .login-form-container .card .container-content .form .error-message {
+                            color: #D32F2F;
+                            /* border: 1px solid #D32F2F; */
+                            font-size: 0.75rem;
+                        }
+
+                            .login-page .login-form-container .card .container-content .form .continue-with-google {
+                                margin-top: 1rem;
+                                display: flex;
+                                gap: .5rem;
+                                justify-content: center;
+                                align-items: center;
+                                cursor: pointer;
+                                background-color: #EDF0F2;
+                                color: rgb(0, 0, 0);
+                            }
+
+                    
