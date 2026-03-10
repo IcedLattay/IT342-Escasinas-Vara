@@ -1,0 +1,37 @@
+package edu.cit.escasinas.vara.model;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name="users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long userId;
+
+    @Column(name = "first_name")
+    public String firstname;
+
+    @Column(name = "last_name")
+    public String lastname;
+
+    @Column(name = "email", unique = true)
+    public String email;
+
+    public String password;
+
+    @Column(name = "is_active")
+    public Boolean isActive;
+
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    public LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    public LocalDateTime updatedAt;
+}
