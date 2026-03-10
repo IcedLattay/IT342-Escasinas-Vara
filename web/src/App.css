@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+p {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-size: .8rem;
+}
+
+input {
+  font-size: .8rem;
+}
+
+input::placeholder {
+  font-size: .8rem;
+}
