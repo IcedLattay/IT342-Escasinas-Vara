@@ -1,11 +1,61 @@
 
 
+import axios from 'axios';
 
 
 //helper functions
 
+
+let debounceTimer;
+
 export function onEmailInput({ emailField, setErrorMsgs, setFieldsValidationTracker }) {
-    if (emailField.current.value=="") {
+
+    const email = emailField.current.value;
+
+    async function validateEmailUniqueness() {
+        try {
+            const res = await axios.post(
+                "http://localhost:8080/api/auth/validate/email-uniqueness",
+                { email : email },
+                {
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true,
+                }
+            );
+
+            console.log("Email is unique")
+
+            setErrorMsgs(prev => ({
+                ...prev,
+                email: ""
+            }));
+            setFieldsValidationTracker(prev => ({
+                ...prev,
+                emailIsValid: true,
+            }))
+        } catch (err) {
+
+            console.log(err)
+
+            const rawError = err.response.data.error?.details; 
+
+            const match = rawError.match(/"(.*)"/);
+            const cleanMessage = match ? match[1] : rawError;
+
+
+            setErrorMsgs(prev => ({
+                ...prev,
+                email: cleanMessage
+            }));
+            setFieldsValidationTracker(prev => ({
+                ...prev,
+                emailIsValid: false,
+            }))
+        }
+    
+    }
+
+    if (email=="") {
         setErrorMsgs(prev => ({
             ...prev,
             email: "",
@@ -14,27 +64,29 @@ export function onEmailInput({ emailField, setErrorMsgs, setFieldsValidationTrac
             ...prev,
             emailIsValid: false,
         }))
-    } else {
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.current.value)) {
-            setErrorMsgs(prev => ({
-                ...prev,
-                email: "Invalid email address.",
-            }))
-            setFieldsValidationTracker(prev => ({
-                ...prev,
-                emailIsValid: false,
-            }))
-        } else {
-            setErrorMsgs(prev => ({
-                ...prev,
-                email: "",
-            }))
-            setFieldsValidationTracker(prev => ({
-                ...prev,
-                emailIsValid: true,
-            }))
-        }
-    }
+
+        return;
+    } 
+    
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setErrorMsgs(prev => ({
+            ...prev,
+            email: "Invalid email address.",
+        }))
+        setFieldsValidationTracker(prev => ({
+            ...prev,
+            emailIsValid: false,
+        }))
+
+        return;
+    } 
+    
+    clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(() => {
+        validateEmailUniqueness(email);
+    }, 300);
+
 }
 
 export function onPasswordInput({ passwordField, setErrorMsgs, setFieldsValidationTracker, setPasswordRules }) {
