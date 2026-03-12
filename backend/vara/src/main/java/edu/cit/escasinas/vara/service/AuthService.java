@@ -1,5 +1,6 @@
 package edu.cit.escasinas.vara.service;
 
+import edu.cit.escasinas.vara.dto.EmailUniquessValidationRequest;
 import edu.cit.escasinas.vara.dto.LoginRequest;
 import edu.cit.escasinas.vara.dto.LoginResponse;
 import edu.cit.escasinas.vara.dto.RegisterRequest;
@@ -62,6 +63,16 @@ public class AuthService {
         }
 
         return user;
+    }
+
+    public void validateEmailUniqueness(EmailUniquessValidationRequest req) {
+
+        if (userRepository.existsByEmail(req.email)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Email address is already taken."
+            );
+        }
     }
 
     public void logout(Long userId) {

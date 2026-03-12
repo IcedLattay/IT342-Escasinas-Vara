@@ -83,6 +83,38 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/validate/email-uniqueness")
+    public ResponseEntity<?> validateEmailUniqueness(@RequestBody EmailUniquessValidationRequest request) {
+
+        try {
+            authService.validateEmailUniqueness(request);
+
+            ApiResponse res = new ApiResponse(
+                    true,
+                    null,
+                    null,
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception e) {
+            ApiResponse res = new ApiResponse(
+                    false,
+                    null,
+                    new ApiError(
+                            "DB-002",
+                            "Duplicate entry",
+                            e.getMessage()
+                    ),
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+        }
+
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
