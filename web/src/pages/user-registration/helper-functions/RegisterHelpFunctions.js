@@ -126,3 +126,18 @@ export function onConfirmPasswordInput({ confirmPasswordField, passwordField, se
         }))
     }
 }
+
+export function clearForm({ fields, setErrorMsgs, setFieldsValidationTracker }) {
+    setErrorMsgs(prev => ({
+        ...prev,
+        email: "",
+        password: "",
+        confirmPassword: "",
+    }));
+
+    fields.forEach(field => {
+        field.current.value = "";
+    });
+
+    setFieldsValidationTracker(prev => ({ ...prev, emailIsValid: false, passwordIsValid: false }));
+}

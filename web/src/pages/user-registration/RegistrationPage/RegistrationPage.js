@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import "./RegistrationPage.css";
 import axios from 'axios';
+import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../security/AuthContext"
 import { Link } from "react-router-dom";
-import { onEmailInput, onPasswordInput, onConfirmPasswordInput } from "../helper-functions/RegisterHelpFunctions";
+import { onEmailInput, onPasswordInput, onConfirmPasswordInput, clearForm } from "../helper-functions/RegisterHelpFunctions";
 
 
 
@@ -42,6 +43,8 @@ export default function RegistrationPage() {
         confirmPasswordIsValid: false,
     });
     
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     
     
     
@@ -61,6 +64,8 @@ export default function RegistrationPage() {
 
     // JSX/Api calls
     async function handleOnSubmit(e) {
+        setIsSubmitting(true);
+        
         e.preventDefault();
 
         const registerFormData = {
@@ -89,7 +94,15 @@ export default function RegistrationPage() {
 
             navigate("/home");
         } catch (err) {
+            const fields = {
+                firstnameField,
+                lastnameField,
+                emailField,
+                passwordField,
+                confirmPasswordField
+            };
             
+            clearForm({fields, setErrorMsgs, setFieldsValidationTracker});
 
             const rawError = err.response.data.error?.details; 
 
@@ -101,6 +114,8 @@ export default function RegistrationPage() {
                 ...prev,
                 email: cleanMessage
             }));
+        } finally {
+            setIsSubmitting(false);
         }
     
     }
@@ -311,13 +326,28 @@ export default function RegistrationPage() {
                                     fontSize: ".8rem",
                                     fontFamily: "Inter"
                                 }}
-                                disabled={!(fieldValidationTracker.firstnameIsValid &&
+                                disabled={
+                                    isSubmitting ||
+                                    !(fieldValidationTracker.firstnameIsValid &&
                                             fieldValidationTracker.lastnameIsValid &&
                                             fieldValidationTracker.emailIsValid &&
                                             fieldValidationTracker.passwordIsValid && 
                                             fieldValidationTracker.confirmPasswordIsValid
                                 )}
-                                onClick={handleOnSubmit}>Create account</button>
+                                onClick={handleOnSubmit}>
+
+                                    { isSubmitting ? 
+                                        <Loader2 
+                                            style={{ 
+                                                height: "1rem",
+                                                margin: 0,
+                                                animation: "spin 1s linear infinite",
+                                                width: "1rem"
+                                            }}/>
+                                    : 
+                                        <>Create account</>
+                                    }
+                                </button>
     
                                 <Link to={"/login"}>
                                     <p style={{

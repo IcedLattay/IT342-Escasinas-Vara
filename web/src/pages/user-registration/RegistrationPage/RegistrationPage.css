@@ -10,7 +10,7 @@
 
 
     .registration-page .registration-form-container {
-        padding: 7rem 0;
+        padding: 5rem 0;
         width: 100%;
         display: flex;
         justify-content: center;
@@ -112,6 +112,12 @@
                             }
 
                             .registration-page .registration-form-container .card .container-content .form .submit-button {
+                                display: flex;
+                                gap: .2rem;
+                                height: 2.5rem;
+                                align-items: center;
+                                justify-content: center;
+                                padding: 0;
                                 cursor: pointer;
                                 background-color: #93983D;
                                 font-weight: 700;
