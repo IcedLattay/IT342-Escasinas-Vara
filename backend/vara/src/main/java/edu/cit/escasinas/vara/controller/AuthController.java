@@ -53,6 +53,7 @@ public class AuthController {
             ApiResponse res = new ApiResponse(
                     true,
                     Map.of(
+                            "token", token,
                             "user", Map.of(
                                     "email", newUser.email,
                                     "firstname", newUser.firstname,
@@ -133,7 +134,8 @@ public class AuthController {
             ApiResponse res = new ApiResponse(
                     true,
                     Map.of(
-                      "user", Map.of(
+                        "token", token,
+                        "user", Map.of(
                                     "email", authenticateUser.email,
                                     "firstname", authenticateUser.firstname,
                                     "lastname", authenticateUser.lastname
