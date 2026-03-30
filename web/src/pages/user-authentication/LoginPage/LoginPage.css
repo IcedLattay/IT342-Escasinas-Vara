@@ -3,14 +3,14 @@
 .login-page {
     display: flex;
     background-color: #F9F9F9;
-    max-height: 100vh;
+    min-height: 100vh;
     /* padding: 10rem 0; */
     box-sizing: border-box;
 }
 
 
     .login-page .login-form-container {
-        padding: 7rem 0;
+        padding: 5rem 0;
         width: 100%;
         display: flex;
         justify-content: center;
@@ -112,12 +112,27 @@
                             }
 
                             .login-page .login-form-container .card .container-content .form .submit-button {
+                                display: flex;
+                                gap: .2rem;
+                                height: 2.5rem;
+                                align-items: center;
+                                justify-content: center;
+                                padding: 0;
                                 cursor: pointer;
                                 background-color: #93983D;
                                 font-weight: 700;
                                 color: white;
                                 transition: 0.1s ease-in-out;
                                 margin-top: 1rem;
+                            }
+
+                            @keyframes spin {
+                                from {
+                                    transform: rotate(0deg);
+                                }
+                                to {
+                                    transform: rotate(360deg);
+                                }
                             }
 
                             .login-page .login-form-container .card .container-content .form .submit-button:active {

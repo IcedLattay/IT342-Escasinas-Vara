@@ -23,12 +23,10 @@ export function onPasswordInput(e, setFieldsValidationTracker) {
 }
 
 
-export function clearForm({ emailField, passwordField, setErrorMsg }) {
-        setErrorMsg({
-            email: "",
-            password: "",
-        })
+export function clearForm({ emailField, passwordField, setErrorMsg, setFieldsValidationTracker }) {
+    setErrorMsg("");
 
-        emailField.current.value = "";
-        passwordField.current.value = "";
-    }
+    emailField.current.value = "";
+    passwordField.current.value = "";
+    setFieldsValidationTracker(prev => ({ ...prev, emailIsValid: false, passwordIsValid: false }));
+}

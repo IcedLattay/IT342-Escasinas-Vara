@@ -1,9 +1,9 @@
 package edu.cit.escasinas.vara.dto;
 
-public class EmailValidationRequest {
+public class EmailUniquessValidationRequest {
     public String email;
 
-    public EmailValidationRequest(
+    public EmailUniquessValidationRequest(
             String email
     ) {
         this.email = email;

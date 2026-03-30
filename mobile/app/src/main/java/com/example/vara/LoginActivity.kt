@@ -1,0 +1,145 @@
+package com.example.vara
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class LoginActivity : AppCompatActivity() {
+
+    private val api by lazy { RetrofitClient.instance.create(ApiService::class.java) }
+
+    private lateinit var emailInput: EditText
+    private lateinit var passwordInput: EditText
+
+    private lateinit var errorText: TextView
+    private lateinit var loginButton: MaterialButton
+    private lateinit var goToRegister: TextView
+
+    private var emailValid = false
+    private var passwordValid = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+
+        bindViews()
+        setupListeners()
+        updateButton()
+    }
+
+    private fun bindViews() {
+        emailInput = findViewById(R.id.emailAddress_editText)
+        passwordInput = findViewById(R.id.password_editText)
+
+        errorText = findViewById(R.id.nonFieldError_text)
+        loginButton = findViewById(R.id.login_button)
+        goToRegister = findViewById(R.id.goToRegister_button)
+    }
+
+    private fun setupListeners() {
+
+        emailInput.doAfterTextChanged {
+            emailValid = it.toString().trim().isNotEmpty()
+            clearErrorUI()
+            updateButton()
+        }
+
+        passwordInput.doAfterTextChanged {
+            passwordValid = it.toString().isNotEmpty()
+            clearErrorUI()
+            updateButton()
+        }
+
+        loginButton.setOnClickListener {
+            submitLogin()
+        }
+
+        goToRegister.setOnClickListener {
+            startActivity(Intent(this, CreateAccountActivity::class.java))
+        }
+    }
+
+    // ================= LOGIN =================
+
+    private fun submitLogin() {
+        loginButton.isEnabled = false
+
+        val email = emailInput.text.toString().trim()
+        val password = passwordInput.text.toString()
+
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    api.login(LoginRequest(email, password))
+                }
+
+                if (response.isSuccessful && response.body()?.data != null) {
+
+                    val loginData = response.body()!!.data!!
+                    val token = loginData.token
+                    val user = loginData.user
+
+                    val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+                    prefs.edit()
+                        .putString("token", token)
+                        .putString("email", user.email)
+                        .putString("firstname", user.firstname)
+                        .putString("lastname", user.lastname)
+                        .apply()
+
+                    // go to main/home
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finish()
+
+                } else {
+                    showError("Email and password are incorrect.")
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showError("Something went wrong.")
+            } finally {
+                updateButton()
+            }
+        }
+    }
+
+    // ================= UI =================
+
+    private fun updateButton() {
+        loginButton.isEnabled = emailValid && passwordValid
+    }
+
+    private fun showError(message: String) {
+        errorText.text = message
+        errorText.visibility = View.VISIBLE
+
+        setError(emailInput)
+        setError(passwordInput)
+    }
+
+    private fun clearErrorUI() {
+        errorText.visibility = View.GONE
+
+        setNormal(emailInput)
+        setNormal(passwordInput)
+    }
+
+    private fun setError(editText: EditText) {
+        editText.background = ContextCompat.getDrawable(this, R.drawable.error_input_field_bg)
+    }
+
+    private fun setNormal(editText: EditText) {
+        editText.background = ContextCompat.getDrawable(this, R.drawable.input_field_bg)
+    }
+}

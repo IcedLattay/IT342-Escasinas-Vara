@@ -53,6 +53,7 @@ public class AuthController {
             ApiResponse res = new ApiResponse(
                     true,
                     Map.of(
+                            "token", token,
                             "user", Map.of(
                                     "email", newUser.email,
                                     "firstname", newUser.firstname,
@@ -83,6 +84,38 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/validate/email-uniqueness")
+    public ResponseEntity<?> validateEmailUniqueness(@RequestBody EmailUniquessValidationRequest request) {
+
+        try {
+            authService.validateEmailUniqueness(request);
+
+            ApiResponse res = new ApiResponse(
+                    true,
+                    null,
+                    null,
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception e) {
+            ApiResponse res = new ApiResponse(
+                    false,
+                    null,
+                    new ApiError(
+                            "DB-002",
+                            "Duplicate entry",
+                            e.getMessage()
+                    ),
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+        }
+
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
@@ -101,7 +134,8 @@ public class AuthController {
             ApiResponse res = new ApiResponse(
                     true,
                     Map.of(
-                      "user", Map.of(
+                        "token", token,
+                        "user", Map.of(
                                     "email", authenticateUser.email,
                                     "firstname", authenticateUser.firstname,
                                     "lastname", authenticateUser.lastname
@@ -133,11 +167,16 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("token", null);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+
+        ResponseCookie cookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+        response.setHeader("Set-Cookie", cookie.toString());
 
         return ResponseEntity.ok().build();
     }

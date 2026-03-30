@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, use } from "react";
+import axios from "axios";
 
 export const AuthContext = createContext();
 
@@ -7,22 +8,36 @@ export function AuthProvider({ children }) {
     // useStates
     const [userIsAuthenticated, setUserIsAuthenticated] = useState(null);
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
 
 
     // useEffects
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        
-        if (token) {
-        setUserIsAuthenticated(true);
-        } else {
-        setUserIsAuthenticated(false);
+
+        async function fetchUser() {
+            setIsLoading(true);
+            try {
+                const res = await axios.get("http://localhost:8080/api/users/me", 
+                    { 
+                        withCredentials: true,
+                    });
+
+                const userData = await res.data.data.user;
+                setUser(userData);
+                setUserIsAuthenticated(true);
+            } catch (err) {
+                setUserIsAuthenticated(false);
+            } finally {
+                setIsLoading(false);
+            }
         }
+
+        fetchUser();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ userIsAuthenticated, setUserIsAuthenticated, user, setUser }}>
+        <AuthContext.Provider value={{ userIsAuthenticated, setUserIsAuthenticated, user, setUser, isLoading, setIsLoading }}>
         {children}
         </AuthContext.Provider>
     );
