@@ -1,4 +1,4 @@
-package com.example.vara
+package com.example.vara.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
+import com.example.vara.MainActivity
+import com.example.vara.R
+import com.example.vara.network.ApiService
+import com.example.vara.network.RetrofitClient
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,15 +22,25 @@ class LoginActivity : AppCompatActivity() {
 
     private val api by lazy { RetrofitClient.instance.create(ApiService::class.java) }
 
+    // Views
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
-
     private lateinit var errorText: TextView
     private lateinit var loginButton: MaterialButton
     private lateinit var goToRegister: TextView
 
-    private var emailValid = false
-    private var passwordValid = false
+    // State
+    private data class FormState(
+        val email: Boolean    = false,
+        val password: Boolean = false,
+    ) {
+        val allValid get() = email && password
+    }
+
+    private var form = FormState()
+        set(value) { field = value; loginButton.isEnabled = value.allValid }
+
+    // ── Lifecycle ────────────────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,47 +48,44 @@ class LoginActivity : AppCompatActivity() {
 
         bindViews()
         setupListeners()
-        updateButton()
     }
+
+    // ── View binding ─────────────────────────────────────────────────────────
 
     private fun bindViews() {
-        emailInput = findViewById(R.id.emailAddress_editText)
+        emailInput    = findViewById(R.id.emailAddress_editText)
         passwordInput = findViewById(R.id.password_editText)
-
-        errorText = findViewById(R.id.nonFieldError_text)
-        loginButton = findViewById(R.id.login_button)
-        goToRegister = findViewById(R.id.goToRegister_button)
+        errorText     = findViewById(R.id.nonFieldError_text)
+        loginButton   = findViewById(R.id.login_button)
+        goToRegister  = findViewById(R.id.goToRegister_button)
     }
 
-    private fun setupListeners() {
+    // ── Listeners ────────────────────────────────────────────────────────────
 
+    private fun setupListeners() {
         emailInput.doAfterTextChanged {
-            emailValid = it.toString().trim().isNotEmpty()
+            form = form.copy(email = it.toString().trim().isNotEmpty())
             clearErrorUI()
-            updateButton()
         }
 
         passwordInput.doAfterTextChanged {
-            passwordValid = it.toString().isNotEmpty()
+            form = form.copy(password = it.toString().isNotEmpty())
             clearErrorUI()
-            updateButton()
         }
 
-        loginButton.setOnClickListener {
-            submitLogin()
-        }
+        loginButton.setOnClickListener { submitLogin() }
 
         goToRegister.setOnClickListener {
             startActivity(Intent(this, CreateAccountActivity::class.java))
         }
     }
 
-    // ================= LOGIN =================
+    // ── Login ────────────────────────────────────────────────────────────────
 
     private fun submitLogin() {
         loginButton.isEnabled = false
 
-        val email = emailInput.text.toString().trim()
+        val email    = emailInput.text.toString().trim()
         val password = passwordInput.text.toString()
 
         lifecycleScope.launch {
@@ -84,20 +95,9 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 if (response.isSuccessful && response.body()?.data != null) {
+                    val data = response.body()!!.data!!
+                    saveSession(data.token, data.user)
 
-                    val loginData = response.body()!!.data!!
-                    val token = loginData.token
-                    val user = loginData.user
-
-                    val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-                    prefs.edit()
-                        .putString("token", token)
-                        .putString("email", user.email)
-                        .putString("firstname", user.firstname)
-                        .putString("lastname", user.lastname)
-                        .apply()
-
-                    // go to main/home
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
 
@@ -108,29 +108,33 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 showError("Something went wrong.")
+
             } finally {
-                updateButton()
+                loginButton.isEnabled = form.allValid
             }
         }
     }
 
-    // ================= UI =================
-
-    private fun updateButton() {
-        loginButton.isEnabled = emailValid && passwordValid
+    private fun saveSession(token: String, user: RegisteredUser) {
+        getSharedPreferences("auth", MODE_PRIVATE).edit()
+            .putString("token", token)
+            .putString("email", user.email)
+            .putString("firstname", user.firstname)
+            .putString("lastname", user.lastname)
+            .apply()
     }
 
-    private fun showError(message: String) {
-        errorText.text = message
-        errorText.visibility = View.VISIBLE
+    // ── UI Helpers ───────────────────────────────────────────────────────────
 
+    private fun showError(message: String) {
+        errorText.text       = message
+        errorText.visibility = View.VISIBLE
         setError(emailInput)
         setError(passwordInput)
     }
 
     private fun clearErrorUI() {
         errorText.visibility = View.GONE
-
         setNormal(emailInput)
         setNormal(passwordInput)
     }
