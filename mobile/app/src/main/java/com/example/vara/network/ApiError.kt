@@ -1,4 +1,4 @@
-package com.example.vara
+package com.example.vara.network
 
 data class ApiError(
     val code: String,

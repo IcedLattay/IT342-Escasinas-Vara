@@ -1,4 +1,4 @@
-package com.example.vara
+package com.example.vara.network
 
 data class ApiResponse<T>(
     val success: Boolean,

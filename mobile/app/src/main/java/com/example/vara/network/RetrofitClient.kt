@@ -1,4 +1,4 @@
-package com.example.vara
+package com.example.vara.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
