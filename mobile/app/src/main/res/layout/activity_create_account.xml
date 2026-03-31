@@ -5,11 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".auth.LoginActivity">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -221,6 +221,7 @@
                                 android:paddingHorizontal="10dp"
 
                                 android:fontFamily="@font/inter"
+                                android:inputType="textPassword"
                                 android:hint="Enter your password"
                                 android:textColorHint="#8C8C8C"
                                 android:background="@drawable/input_field_bg"
@@ -324,6 +325,7 @@
                                 android:paddingHorizontal="10dp"
 
                                 android:fontFamily="@font/inter"
+                                android:inputType="textPassword"
                                 android:hint="Confirm your password"
                                 android:textColorHint="#8C8C8C"
                                 android:background="@drawable/input_field_bg"
@@ -389,6 +391,7 @@
                                 app:backgroundTint="@color/button_bg"
 
                                 android:layout_marginTop="15dp"
+                                android:layout_marginBottom="30dp"
 
                                 android:enabled="false"/>
 
