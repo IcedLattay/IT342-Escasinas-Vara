@@ -66,15 +66,12 @@ public class AuthService {
         return user;
     }
 
-    public AuthResponse loginWithGoogle(OAuth2User oauth2User) {
+    public AuthResponse authenticateWithGoogleOAuth2User(OAuth2User oauth2User) {
         String email = stringAttr(oauth2User, "email");
-
-        if (email == null || email.isBlank()) {
-            throw new RuntimeException("Google account email is not available");
-        }
 
         String firstname = stringAttr(oauth2User, "given_name");
         String lastname = stringAttr(oauth2User, "family_name");
+
         if ((firstname == null || firstname.isBlank()) && (lastname == null || lastname.isBlank())) {
             String name = stringAttr(oauth2User, "name");
             if (name != null && !name.isBlank()) {
@@ -85,6 +82,15 @@ public class AuthService {
                 firstname = "Google";
                 lastname = "User";
             }
+        }
+
+        return loginWithGoogle(email, firstname, lastname);
+    }
+
+    public AuthResponse loginWithGoogle(String email, String firstname, String lastname) {
+
+        if (email == null || email.isBlank()) {
+            throw new RuntimeException("Google account email is not available");
         }
 
         final String resolvedFirstname = (firstname == null || firstname.isBlank()) ? "Google" : firstname;
@@ -100,10 +106,6 @@ public class AuthService {
 
         String token = tokenProvider.generateToken(user);
         return new AuthResponse(token, user);
-    }
-
-    public AuthResponse authenticateWithGoogleOAuth2User(OAuth2User oauth2User) {
-        return loginWithGoogle(oauth2User);
     }
 
     private static String stringAttr(OAuth2User oauth2User, String key) {
