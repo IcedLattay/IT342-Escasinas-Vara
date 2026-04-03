@@ -2,9 +2,12 @@ package com.example.vara.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
@@ -13,6 +16,11 @@ import com.example.vara.MainActivity
 import com.example.vara.R
 import com.example.vara.network.ApiService
 import com.example.vara.network.RetrofitClient
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,11 +30,14 @@ class LoginActivity : AppCompatActivity() {
 
     private val api by lazy { RetrofitClient.instance.create(ApiService::class.java) }
 
+    private lateinit var googleSignInClient: GoogleSignInClient
+
     // Views
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
     private lateinit var errorText: TextView
     private lateinit var loginButton: MaterialButton
+    private lateinit var continueWithGoogle: MaterialButton
     private lateinit var goToRegister: TextView
 
     // State
@@ -40,24 +51,53 @@ class LoginActivity : AppCompatActivity() {
     private var form = FormState()
         set(value) { field = value; loginButton.isEnabled = value.allValid }
 
+    private val googleSignInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+
+            try {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                val account = task.getResult(ApiException::class.java)
+                handleGoogleAccount(account)
+            } catch (e: ApiException) {
+                e.printStackTrace()
+                Log.e("GOOGLE_SIGN_IN", "statusCode=${e.statusCode}", e)
+
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Google sign-in failed. Code: ${e.statusCode}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
     // ── Lifecycle ────────────────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+
         bindViews()
         setupListeners()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken("919849335849-jjutlkrpdiuivefeqpuvgnarlggod4pj.apps.googleusercontent.com")
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
     // ── View binding ─────────────────────────────────────────────────────────
 
     private fun bindViews() {
-        emailInput    = findViewById(R.id.emailAddress_editText)
-        passwordInput = findViewById(R.id.password_editText)
-        errorText     = findViewById(R.id.nonFieldError_text)
-        loginButton   = findViewById(R.id.login_button)
-        goToRegister  = findViewById(R.id.goToRegister_button)
+        emailInput          = findViewById(R.id.emailAddress_editText)
+        passwordInput       = findViewById(R.id.password_editText)
+        errorText           = findViewById(R.id.nonFieldError_text)
+        loginButton         = findViewById(R.id.login_button)
+        continueWithGoogle  = findViewById(R.id.continueWithGoogle_button)
+        goToRegister        = findViewById(R.id.goToRegister_button)
     }
 
     // ── Listeners ────────────────────────────────────────────────────────────
@@ -74,6 +114,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginButton.setOnClickListener { submitLogin() }
+
+        continueWithGoogle.setOnClickListener {
+            clearErrorUI()
+            launchGoogleSignIn()
+        }
 
         goToRegister.setOnClickListener {
             startActivity(Intent(this, CreateAccountActivity::class.java))
@@ -111,6 +156,55 @@ class LoginActivity : AppCompatActivity() {
 
             } finally {
                 loginButton.isEnabled = form.allValid
+            }
+        }
+    }
+
+    private fun launchGoogleSignIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
+    }
+
+    private fun handleGoogleAccount(account: GoogleSignInAccount) {
+        val idToken = account.idToken
+
+        if (idToken.isNullOrBlank()) {
+
+            Toast.makeText(
+                this@LoginActivity,
+                "Something went wrong.",
+                Toast.LENGTH_LONG
+            ).show()
+
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    api.googleMobileLogin(GoogleLoginRequest(idToken))
+                }
+
+                if (response.isSuccessful && response.body()?.data != null) {
+                    val data = response.body()!!.data!!
+                    saveSession(data.token, data.user)
+
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finish()
+                } else {
+                    val errorMessage =
+                        response.body()?.error?.message ?: "Google sign-in failed."
+
+                    Toast.makeText(
+                        this@LoginActivity,
+                        errorMessage,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showError("Something went wrong.")
             }
         }
     }
