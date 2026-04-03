@@ -1,5 +1,9 @@
 package edu.cit.escasinas.vara.controller;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import edu.cit.escasinas.vara.dto.*;
 import edu.cit.escasinas.vara.model.User;
 import edu.cit.escasinas.vara.security.JwtProvider;
@@ -7,6 +11,7 @@ import edu.cit.escasinas.vara.service.AuthService;
 import edu.cit.escasinas.vara.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.Map;
 
 @RestController
@@ -24,6 +30,9 @@ public class AuthController {
     public AuthService authService;
     public UserService userService;
     public JwtProvider tokenProvider;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String googleWebClientId;
 
     public AuthController(
             AuthService authService,
@@ -162,6 +171,60 @@ public class AuthController {
             );
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
+        }
+    }
+
+    @PostMapping("/google/mobile")
+    public ResponseEntity<?> googleMobileLogin(@RequestBody GoogleLoginRequest request) {
+        try {
+            if (request == null || request.idToken == null || request.idToken.isBlank()) {
+                return ResponseEntity.badRequest().body("Missing Google ID token");
+            }
+
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                    new NetHttpTransport(),
+                    GsonFactory.getDefaultInstance()
+            )
+                    .setAudience(Collections.singletonList(googleWebClientId))
+                    .build();
+
+            GoogleIdToken googleIdToken = verifier.verify(request.idToken);
+
+            if (googleIdToken == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Google ID token");
+            }
+
+            GoogleIdToken.Payload payload = googleIdToken.getPayload();
+
+            String email = payload.getEmail();
+            String firstname = (String) payload.get("given_name");
+            String lastname = (String) payload.get("family_name");
+
+            AuthResponse authResponse = authService.loginWithGoogle(email, firstname, lastname);
+
+            ApiResponse res = new ApiResponse(
+                    true,
+                    authResponse,
+                    null,
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.ok().body(res);
+
+        } catch (Exception e) {
+
+            ApiResponse res = new ApiResponse(
+                    false,
+                    null,
+                    new ApiError(
+                            "AUTH_001",
+                            "Google authentication failed",
+                            e.getMessage()
+                    ),
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 
