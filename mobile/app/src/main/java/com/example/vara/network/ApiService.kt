@@ -2,6 +2,7 @@ package com.example.vara.network
 
 
 import com.example.vara.auth.EmailUniquenessRequest
+import com.example.vara.auth.GoogleLoginRequest
 import com.example.vara.auth.LoginRequest
 import com.example.vara.auth.RegisterData
 import com.example.vara.auth.RegisterRequest
@@ -14,6 +15,11 @@ interface ApiService {
     @POST("/api/auth/login")
     suspend fun login(
         @Body request: LoginRequest
+    ): Response<ApiResponse<RegisterData>>
+
+    @POST("/api/auth/google/mobile")
+    suspend fun googleMobileLogin(
+        @Body request: GoogleLoginRequest
     ): Response<ApiResponse<RegisterData>>
 
     @POST("/api/auth/register")
