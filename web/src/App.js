@@ -3,6 +3,7 @@ import './App.css';
 import LoginPage from './pages/user-authentication/LoginPage/LoginPage';
 import RegistrationPage from './pages/user-registration/RegistrationPage/RegistrationPage';
 import HomePage from './pages/HomePage/HomePage';
+import Layout from './pages/LayoutPage/LayoutPage';
 import ProtectedRoute from './security/ProtectedRoute';
 import PublicRoute from './security/PublicRoute';
 import { AuthProvider } from './security/AuthContext';
@@ -18,7 +19,19 @@ function App() {
       <Router>
         <Routes>
 
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route 
+            element={
+                <Layout />
+            }
+          >
+            <Route path="*" element={ <HomePage /> } />
+
+          </Route>
+
+
+          
+
+          {/* <Route path="*" element={<Navigate to="/login" />} />
 
           <Route path="/login" element={
             <PublicRoute><LoginPage /></PublicRoute>
@@ -28,9 +41,16 @@ function App() {
             <PublicRoute><RegistrationPage /></PublicRoute>
           } />
 
-          <Route path="/home" element={
-            <ProtectedRoute><HomePage /></ProtectedRoute>
-          } />
+          <Route 
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/home" element={ <HomePage /> } />
+
+          </Route> */}
 
         </Routes>
       </Router>
