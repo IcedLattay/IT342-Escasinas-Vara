@@ -1,0 +1,16 @@
+
+
+.layout-page {
+    display: flex;
+    min-height: 100vh;
+    max-width: 100vw;
+}
+
+    .layout-page .layout-page-main {
+        flex: 1;
+        display: flex;
+        /* min-width: 100%; */
+        /* border: 1px solid black; */
+        background-color: #f8f9f2;
+    }
+
