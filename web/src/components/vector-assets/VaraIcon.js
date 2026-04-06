@@ -1,8 +1,8 @@
 
 
-export default function VaraIcon({weight=1, height=1}) {
+export default function VaraIcon({width=1, height=1}) {
     return (
-        <svg width={`${weight}rem`} height={`${height}rem`} viewBox="0 0 329 384" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width={`${width}rem`} height={`${height}rem`} viewBox="0 0 329 384" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M82.25 60.3577H41.125C19.74 60.3577 0 76.5315 0 100.792V343.399C0 364.029 18.4643 383.834 41.125 383.834H164.5V315.904L116.541 208.421C141 212.665 152.031 212.665 164.5 212.665V196.633C101.329 176.851 84.7736 137.538 82.25 60.3577Z" fill="url(#paint0_radial_159_24)"/>
             <path d="M246.75 60.3578L164.5 315.904V383.834L287.875 383.834C310.536 383.834 329 364.029 329 343.4V100.792C329 76.5316 309.26 60.3578 287.875 60.3578H246.75Z" fill="url(#paint1_radial_159_24)"/>
             <path d="M82.4917 26.8778C82.4917 41.7219 70.2527 53.7555 55.155 53.7555C40.0573 53.7555 27.8183 41.7219 27.8183 26.8778C27.8183 12.0336 40.0573 0 55.155 0C70.2527 0 82.4917 12.0336 82.4917 26.8778Z" fill="#D4D952"/>
