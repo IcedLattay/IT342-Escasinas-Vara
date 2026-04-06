@@ -1,0 +1,60 @@
+
+
+
+
+.overlay#edit-profile {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 3.5rem 3rem;
+    display: flex;
+    align-items: start;
+    border-radius: 1rem;
+    gap: 2rem;
+}
+
+    .overlay#edit-profile .edit-section {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 0.4rem;
+    }
+
+        .overlay#edit-profile p {
+            padding: .3rem .5rem; 
+        }
+
+        .overlay#edit-profile p.header-label {
+            font-size: 1rem;
+        }
+
+        .overlay#edit-profile p.edit-button {
+            color: #7d9357;
+            border-radius: .3rem;
+        }
+
+        
+        .overlay#edit-profile p#change-photo-button {
+            border-radius: .3rem;
+            width: 3rem;
+            text-align: center;
+        }
+
+        .overlay#edit-profile p#change-photo-button:hover {
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        .overlay#edit-profile p.edit-button:hover {
+            background-color: #eff1eb;
+            cursor: pointer;
+        }
+        
+        .overlay#edit-profile p#change-photo-button:active {
+            background-color: #eaeaea;
+        }
+            
+        .overlay#edit-profile p.edit-button:active {
+            background-color: #dfe7d1;
+        }
