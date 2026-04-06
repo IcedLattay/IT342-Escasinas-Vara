@@ -40,7 +40,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             String token = authResponse.getToken();
 
             String cookieHeader = String.format(
-                    "token=%s; Path=/; HttpOnly; Max-Age=%d; SameSite=Strict",
+                    "token=%s; Path=/; HttpOnly; Max-Age=%d; SameSite=Lax",
                     token,
                     24 * 60 * 60
             );

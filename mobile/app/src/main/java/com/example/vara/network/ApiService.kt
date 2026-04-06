@@ -1,10 +1,13 @@
-package com.example.vara
+package com.example.vara.network
 
 
+import com.example.vara.auth.EmailUniquenessRequest
+import com.example.vara.auth.GoogleLoginRequest
+import com.example.vara.auth.LoginRequest
+import com.example.vara.auth.RegisterData
+import com.example.vara.auth.RegisterRequest
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface ApiService {
@@ -12,6 +15,11 @@ interface ApiService {
     @POST("/api/auth/login")
     suspend fun login(
         @Body request: LoginRequest
+    ): Response<ApiResponse<RegisterData>>
+
+    @POST("/api/auth/google/mobile")
+    suspend fun googleMobileLogin(
+        @Body request: GoogleLoginRequest
     ): Response<ApiResponse<RegisterData>>
 
     @POST("/api/auth/register")
@@ -23,4 +31,7 @@ interface ApiService {
     suspend fun validateEmailUniqueness(
         @Body request: EmailUniquenessRequest
     ): Response<ApiResponse<Any>>
+
+    @POST("/api/auth/logout")
+    suspend fun logout(): Response<Void>
 }

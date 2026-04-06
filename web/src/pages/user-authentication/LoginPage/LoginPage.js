@@ -35,10 +35,6 @@ export default function LoginPage() {
 
 
     // useEffects
-    useEffect(() => {
-        console.log(userIsAuthenticated);
-        console.log(authenticatedUser);
-    }, []);
 
 
 

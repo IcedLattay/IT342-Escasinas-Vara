@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".auth.LoginActivity">
 
     <LinearLayout
         android:id="@+id/vara_icon_label"
@@ -123,6 +123,7 @@
                     android:paddingHorizontal="10dp"
 
                     android:fontFamily="@font/inter"
+                    android:inputType="textPassword"
                     android:hint="Enter your password"
                     android:background="@drawable/input_field_bg"
                     android:textSize="14sp"

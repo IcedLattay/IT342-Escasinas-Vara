@@ -50,3 +50,8 @@ input {
 input::placeholder {
   font-size: .8rem;
 }
+
+button {
+  border: none;
+  background-color: transparent;
+}

@@ -1,0 +1,22 @@
+
+
+.exit-overlay-button {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    border-radius: .75rem;
+}
+
+.exit-overlay-button:hover {
+    background-color: #f0f0f0;
+}
+
+.exit-overlay-button:active {
+    background-color: #e0e0e0;
+}

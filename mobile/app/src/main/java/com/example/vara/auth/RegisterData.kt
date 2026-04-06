@@ -1,4 +1,4 @@
-package com.example.vara
+package com.example.vara.auth
 
 data class RegisterData(
     val token: String,

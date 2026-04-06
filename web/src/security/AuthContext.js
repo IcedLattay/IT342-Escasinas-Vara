@@ -36,6 +36,11 @@ export function AuthProvider({ children }) {
         fetchUser();
     }, []);
 
+    useEffect(() => {
+        console.log("Auth Status changed:", userIsAuthenticated);
+        console.log("User Data changed:", user);
+    }, [userIsAuthenticated, user]);
+
     return (
         <AuthContext.Provider value={{ userIsAuthenticated, setUserIsAuthenticated, user, setUser, isLoading, setIsLoading }}>
         {children}
