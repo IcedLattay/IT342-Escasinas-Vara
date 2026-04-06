@@ -29,7 +29,7 @@
         margin-top: .5rem;
     }
 
-        .sidebar-menu .header .sidebar-vara {
+        #sidebar-vara {
             display: flex;
             align-items: center;
             padding: 0 1rem;
@@ -45,7 +45,7 @@
 
 
 
-        .sidebar-menu.shown .header .sidebar-vara {
+        .sidebar-menu.shown #sidebar-vara {
             opacity: 1;
             visibility: visible;
             
@@ -54,7 +54,7 @@
                 visibility 0s linear;
         }
 
-        .sidebar-menu .header .sidebar-menu-button-container {
+        .sidebar-menu-button-container {
             /* border: black 1px solid; */
             position: absolute;
             top: 50%;
@@ -64,7 +64,7 @@
             justify-content: end;
         }   
 
-            .sidebar-menu .header .sidebar-menu-button-container .sidebar-menu-button {
+            .sidebar-menu-button {
                 box-sizing: border-box;
                 display: flex;
                 align-items: center;
@@ -73,12 +73,12 @@
                 background-color: transparent;
                 border-radius: .75rem;
             }
-            .sidebar-menu .header .sidebar-menu-button-container .sidebar-menu-button:hover {
+            .sidebar-menu-button:hover {
                 background-color: #eaeaea;
                 cursor: pointer;
             }
 
-    .sidebar-menu .sidebar-menu-content {
+    .sidebar-menu-content {
         /* border: 1px solid rgb(255, 0, 0);
         background-color: aqua; */
         height: 100%;
@@ -109,9 +109,6 @@
     }
 
         .sidebar-menu-content p {
-            box-sizing: border-box;
-            /* border: 1px solid black; */
-            padding: 0 0 0 1rem;
             white-space: nowrap;
         }
 
@@ -129,26 +126,6 @@
                 padding-bottom: .75rem;
                 /* border: 1px solid red; */
                 border-bottom: 1px solid #C3C3C3;
-            }
-
-                .sidebar-menu-content .menu-buttons .top .general {
-                    display: flex;
-                    flex-direction: column;
-                    /* border: 1px solid greenyellow; */
-                }
-                
-                .sidebar-menu-content .menu-buttons .top .for-lending {
-                    display: flex;
-                    flex-direction: column;
-                    /* border: 1px solid blue; */
-                }
-                
-
-            .sidebar-menu-content .menu-buttons .bottom {
-                display: flex;
-                flex-direction: column;
-                margin-top: auto;
-                /* border: 1px solid blue; */
             }
 
                 .sidebar-menu-content .menu-buttons .menu-button {
@@ -174,7 +151,30 @@
                     background-color: #eaeaea;
                 }
 
-                .sidebar-menu .menu-buttons .bottom #profile {
+                .sidebar-menu-content .menu-buttons .top .general {
+                    display: flex;
+                    flex-direction: column;
+                    /* border: 1px solid greenyellow; */
+                }
+                
+                .sidebar-menu-content .menu-buttons .top .for-lending {
+                    display: flex;
+                    flex-direction: column;
+                    /* border: 1px solid blue; */
+                }
+                
+                
+
+            .sidebar-menu-content .menu-buttons .bottom {
+                display: flex;
+                flex-direction: column;
+                margin-top: auto;
+                /* border: 1px solid blue; */
+            }
+
+                
+
+                .menu-buttons #profile {
                     position: relative;
                     display: flex;
                     background-color: transparent;
@@ -182,16 +182,8 @@
                     border: none;
                     /* border: 1px solid red; */
                 }
-
-                    .sidebar-menu-content .menu-buttons .menu-button p {
-                        font-size: 0.8rem;
-                    }
-
-                    .sidebar-menu-content .menu-buttons .bottom #profile p {
-                        padding: 0;
-                    }
                     
-                    .sidebar-menu .menu-buttons .bottom #profile #hitbox {
+                    .menu-buttons #profile #hitbox {
                         height: 2.75rem;
                         flex: 1;
                         box-sizing: border-box;
@@ -206,22 +198,16 @@
                         border-radius: .4rem;
                     }
 
-                    .sidebar-menu .menu-buttons .bottom #profile #hitbox:hover,
-                    .sidebar-menu .menu-buttons .bottom #profile #hitbox.active {
+                    .menu-buttons #profile #hitbox:hover,
+                    .menu-buttons #profile #hitbox.active {
                         background-color: #f0f0f0;
                     }
 
-                    .sidebar-menu .menu-buttons .bottom #profile #hitbox:active {
+                    .menu-buttons #profile #hitbox:active {
                         background-color: #eaeaea;
                     }
 
-                    .sidebar-menu-content .menu-buttons .bottom #profile .backdrop {
-                        position: fixed;
-                        inset: 0;
-                        z-index: 1;
-                    }
-
-                    .sidebar-menu-content .menu-buttons .bottom #profile .overlay {
+                    .menu-buttons #profile .overlay {
                         background-color: #ffffff;
                         border: 1px solid #cfcfcf;
                         box-shadow: 0.2rem 0 0.75rem rgba(0, 0, 0, 0.1);
@@ -229,11 +215,7 @@
                         z-index: 2;
                     }
 
-                    .sidebar-menu-content .menu-buttons .bottom #profile .backdrop.profile-overlay {
-                        background: rgba(255, 255, 255, 0.262);
-                    }
-
-                    .sidebar-menu-content .menu-buttons .bottom #profile .overlay.profile-overlay {
+                    .menu-buttons #profile .overlay.profile-overlay {
                         border-radius: 1rem;
                         width: 15.5rem;
                         padding: .8rem;
@@ -247,7 +229,7 @@
                     }
 
 
-                        .sidebar-menu-content .menu-buttons .bottom #profile .overlay #top {
+                        .menu-buttons #profile .overlay #top {
                             /* border: 1px solid #c0c0c0; */
                             display: flex;
                             flex-direction: column;
@@ -256,7 +238,7 @@
                             padding: .5rem 0;
                         }
 
-                                .sidebar-menu-content .menu-buttons .bottom #profile .overlay #top #edit-profile #icon {
+                                .menu-buttons #edit-profile #icon {
                                     background-color: #ffffff;
                                     position: absolute;
                                     bottom: 0;
@@ -271,11 +253,11 @@
                                     justify-content: center;
                                 }
                                 
-                                .sidebar-menu-content .menu-buttons .bottom #profile .overlay #top #edit-profile:hover #icon {
+                                .menu-buttons #edit-profile:hover #icon {
                                     border: 1px solid #dc2c00;
                                 }
 
-                        .sidebar-menu-content .menu-buttons .bottom #profile .overlay #middle {
+                        .menu-buttons #profile .overlay #middle {
                             border-top: 1.5px solid #c0c0c0;
                             border-bottom: 1px solid #c0c0c0;
                             padding: .5rem 0;
@@ -284,12 +266,12 @@
 
                         }
 
-                        .sidebar-menu-content .menu-buttons .bottom #profile .overlay #bottom {
+                        .menu-buttons #profile .overlay #bottom {
                             display: flex;
                             flex-direction: column;
                         }
 
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay .button {
+                            .menu-buttons #profile .overlay .button {
                                 padding: .6rem 0 .6rem .6rem;
                                 display: flex;
                                 flex-direction: column;
@@ -298,78 +280,15 @@
                                 border-radius: .4rem;
                             }
 
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay .button:hover {
+                            .menu-buttons #profile .overlay .button:hover {
                                 background-color: #f0f0f0;
                             }
 
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay .button:active {
+                            .menu-buttons #profile .overlay .button:active {
                                 background-color: #eaeaea;
                             }    
 
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay #logout-button {
+                            #logout-button {
                                 color: #d00000;
                             }
 
-                    .sidebar-menu-content .menu-buttons .bottom #profile .backdrop.edit-profile-overlay {
-                        background: rgba(77, 77, 77, 0.201);
-                        border: 1px solid red;
-                    }
-
-                    .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay {
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        padding: 3.5rem 3rem;
-                        display: flex;
-                        align-items: start;
-                        border-radius: 1rem;
-                        gap: 2rem;
-                    }
-
-                        .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay .edit-section {
-                            display: flex;
-                            flex-direction: column;
-                            align-items: start;
-                            gap: .4rem;
-                        }
-
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay p {
-                                /* border: 1px solid red; */
-                                padding: .3rem .5rem;
-                            }
-
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay p.header-label {
-                                font-size: 1rem;
-                            }
-
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay p.edit-button {
-                                color: #7d9357;
-                                border-radius: .3rem;
-                            }
-
-                            
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay p#edit-profile {
-                                border-radius: .3rem;
-                                width: 3rem;
-                                text-align: center;
-                            }
-
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay p#edit-profile:hover {
-                                background-color: #f0f0f0;
-                                cursor: pointer;
-                            }
-
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay p.edit-button:hover {
-                                background-color: #eff1eb;
-                                cursor: pointer;
-                            }
-                            
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay p#edit-profile:active {
-                                background-color: #eaeaea;
-                            }
-                                
-                            .sidebar-menu-content .menu-buttons .bottom #profile .overlay.edit-profile-overlay p.edit-button:active {
-                                background-color: #dfe7d1;
-                            }
-                    
