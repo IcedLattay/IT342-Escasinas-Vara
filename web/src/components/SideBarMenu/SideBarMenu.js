@@ -2,8 +2,12 @@ import { useContext, useState, useEffect } from "react";
 import "./SideBarMenu.css";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../security/AuthContext";
-import VaraIcon from "../VaraIcon/VaraIcon"
+import VaraIcon from "../vector-assets/VaraIcon"
 import ExitOverlayButton from "../ExitOverlayButton/ExitOverlayButton";
+import OverlayBackdrop from "../OverlayBackdrop/OverlayBackdrop";
+import WalletDashboardOverlay from "../overlays/WalletDashboardOverlay/WalletDashboardOverlay";
+import EditProfileOverlay from "../overlays/EditProfileOverlay/EditProfileOverlay";
+import WalletDepositOverlay from "../overlays/WalletDepositOverlay/WalletDepositOverlay";
 
 export default function SideBarMenu() {
     
@@ -14,10 +18,39 @@ export default function SideBarMenu() {
 
 
     // useStates
+    const [receiptData, setReceiptData] = useState(null) 
     const [sidebarVisible, setSidebarVisible] = useState(false);
     const [profileOverlayIsOpen, setProfileOverlayIsOpen] = useState(false);
     const [editProfileIsHovered, setEditProfileIsHovered] = useState(false);
     const [editProfileOverlayIsOpen, setEditProfileOverlayIsOpen] = useState(false);
+    const [walletDashboardOverlayIsOpen, setWalletDashboardOverIsOpen] = useState(false);
+    const [walletDepositOverlayIsOpen, setWalletDepositOverlayIsOpen] = useState(false);
+
+
+
+    // useEffects
+    useEffect(() => {
+        console.log("getting receipt data")
+
+        const rawData = sessionStorage.getItem("receiptData");
+    
+        console.log("Raw Receipt data", rawData)
+
+        if (rawData) {
+            console.log("Opening the overlay and saving the receipt data!")
+
+            const data = JSON.parse(rawData); 
+            setReceiptData(data);            
+            setSidebarVisible(true)
+            setWalletDashboardOverIsOpen(true); 
+            
+            sessionStorage.removeItem("receiptData");
+        }
+    }, [])
+
+    useEffect(() => {
+        console.log("Receipt data:", receiptData)
+    }, [receiptData])
 
 
 
@@ -64,9 +97,9 @@ export default function SideBarMenu() {
             <div className="header" style={{
                 // border: "1px solid red"
             }}>
-                <div className="sidebar-vara">
+                <div id="sidebar-vara">
                     <div>
-                        <VaraIcon weight={1.2} height={1.2}/>
+                        <VaraIcon width={1.2} height={1.2}/>
                     </div>
 
                     <p style={{
@@ -103,7 +136,7 @@ export default function SideBarMenu() {
                         <div className="general">
 
                             <button className="menu-button">
-                                    <p
+                                    <p className=""
                                         style={{
                                             padding: "0",
                                         }}>Home</p>
@@ -154,6 +187,7 @@ export default function SideBarMenu() {
                                     alignItems: "center",
                                     fontSize: ".7rem",
                                     // border: "1px solid red",
+                                    paddingLeft: "1rem",
                                     color: "#868686",
                                     height: "1.5rem",
                                 }}
@@ -214,11 +248,13 @@ export default function SideBarMenu() {
                                 { profileOverlayIsOpen &&
 
                                     <>
-                                        <div className="backdrop profile-overlay" 
+                                        <OverlayBackdrop 
+                                            background={"#ffffff43"}
                                             onClick={() => {
                                                 setProfileOverlayIsOpen(false)
-                                            }} 
+                                            }}
                                         />
+
                                         <div className="overlay profile-overlay">
                                             <div id="top">
 
@@ -292,7 +328,12 @@ export default function SideBarMenu() {
                                             </div>
 
                                             <div id="middle">
-                                                <button className="button">
+                                                <button className="button"
+                                                    onClick={() => {
+                                                        setProfileOverlayIsOpen(false)
+                                                        setWalletDashboardOverIsOpen(true)
+                                                    }}
+                                                >
                                                     Manage Wallet
                                                 </button>
                                                 
@@ -314,91 +355,46 @@ export default function SideBarMenu() {
                                     </>
                                 }   
 
+                                { (editProfileOverlayIsOpen || walletDashboardOverlayIsOpen) && 
+                                    <OverlayBackdrop 
+                                        background={"#4d4d4d33"}
+                                        onClick={() => {
+                                            setEditProfileOverlayIsOpen(false)
+                                            setWalletDashboardOverIsOpen(false)
+                                        }} 
+                                    />
+                                }
+
                                 { editProfileOverlayIsOpen &&
-                                    <>
-                                        <div className="backdrop edit-profile-overlay" 
-                                            onClick={() => {
-                                                setEditProfileOverlayIsOpen(false)
-                                            }} 
-                                        />
                                             
-                                        <div className="overlay edit-profile-overlay">
+                                    <EditProfileOverlay 
+                                        onExit={() => setEditProfileOverlayIsOpen(false)}
+                                        authenticatedUser={authenticatedUser}
+                                    />
 
-                                            <ExitOverlayButton onClick={() => setEditProfileOverlayIsOpen(false)}/>
-                                            
-                                            <div style={{
-                                                // border: "1px solid red",
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                alignItems: "center",
-                                                gap: ".5rem",
-                                            }}>
-                                                <div style={{
-                                                    overflow: "hidden",
-                                                    borderRadius: "100rem",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                }}>
-                                                    <img src="https://i.pinimg.com/736x/a4/2a/57/a42a571ae6268294ff6931e6b41d06cf.jpg"
-                                                        style={{
-                                                            objectFit: "cover",
-                                                            width: "7rem",
-                                                            height: "7rem",
-                                                        }}
-                                                    />
-                                                </div>
+                                }
 
-                                                <p id="edit-profile">Edit</p>
-                                            </div>
+                                { walletDashboardOverlayIsOpen &&
+                                    <WalletDashboardOverlay 
+                                        onExit={() => setWalletDashboardOverIsOpen(false)}
+                                        handleOnClickWalletDeposit={() => setWalletDepositOverlayIsOpen(true)}
+                                    />
+                                }
 
-                                            <div style={{
-                                                width: "23rem",
-                                                // border: "1px solid red",
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                gap: "1.5rem",
-                                            }}>
+                                { walletDepositOverlayIsOpen &&
+                                    <OverlayBackdrop 
+                                        background={"#4d4d4d33"}
+                                        onClick={() => {
+                                            setWalletDepositOverlayIsOpen(false)
+                                        }} 
+                                        zIndex={2}
+                                    />
+                                }
 
-                                                <div className="edit-section">
-                                                    
-                                                    <p className="header-label">Name</p>
-
-                                                    <p>{ authenticatedUser?.firstName && authenticatedUser?.lastName ? `${authenticatedUser?.firstName} ${authenticatedUser?.lastName}` : "No name available" }</p>
-
-                                                    <p className="edit-button">Change name</p>
-
-                                                </div>
-
-                                                <div className="edit-section">
-
-                                                    <p className="header-label">Email</p>
-
-                                                    <p>{ authenticatedUser?.email || "No email available" }</p>
-
-                                                    <p className="edit-button">Change email</p>
-
-                                                </div>
-
-                                                <div style={{
-                                                    margin: ".5rem 0",
-                                                    borderBottom: "1px solid #C3C3C3",
-                                                }}/>
-
-                                                <div className="edit-section">
-
-                                                    <p className="header-label">Language</p>
-
-                                                    <p>English</p>
-
-                                                    <p className="edit-button">Change language</p>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                    </>
+                                { walletDepositOverlayIsOpen &&
+                                    <WalletDepositOverlay
+                                        onExit={() => setWalletDepositOverlayIsOpen(false)}
+                                    />
                                 }
                         </div>
                     </div>
@@ -423,11 +419,13 @@ export default function SideBarMenu() {
                     background: "white",
                     border: "1px solid black",
                     padding: ".5rem",
-                    fontSize: ".75rem"
+                    fontSize: ".75rem",
+                    visibility: "hidden"
                 }}
                 >
                 <div>profileOverlayIsOpen: {String(profileOverlayIsOpen)}</div>
                 <div>editProfileOverlayIsOpen: {String(editProfileOverlayIsOpen)}</div>
+                <div>walletDashboardOverlayIsOpen: {String(walletDashboardOverlayIsOpen)}</div>
             </div>
 
         </div>
