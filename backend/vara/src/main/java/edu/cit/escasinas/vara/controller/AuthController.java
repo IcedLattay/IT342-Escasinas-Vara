@@ -53,10 +53,10 @@ public class AuthController {
 
             ResponseCookie cookie = ResponseCookie.from("token", token)
                     .httpOnly(true)
-                    .secure(true)
+                    .secure(false)
                     .path("/")
                     .maxAge(24 * 60 * 60)
-                    .sameSite("Strict")
+                    .sameSite("Lax")
                     .build();
 
             ApiResponse res = new ApiResponse(
@@ -134,10 +134,10 @@ public class AuthController {
 
             ResponseCookie cookie = ResponseCookie.from("token", token)
                     .httpOnly(true)
-                    .secure(true)
+                    .secure(false)
                     .path("/")
                     .maxAge(24 * 60 * 60)
-                    .sameSite("Strict")
+                    .sameSite("Lax")
                     .build();
 
             ApiResponse res = new ApiResponse(
@@ -233,10 +233,10 @@ public class AuthController {
 
         ResponseCookie cookie = ResponseCookie.from("token", "")
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(0)
-                .sameSite("Strict")
+                .sameSite("Lax")
                 .build();
 
         response.setHeader("Set-Cookie", cookie.toString());
