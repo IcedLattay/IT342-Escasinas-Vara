@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage/HomePage';
 import Layout from './pages/LayoutPage/LayoutPage';
 import ProtectedRoute from './security/ProtectedRoute';
 import PublicRoute from './security/PublicRoute';
+import AfterWalletTransaction from './pages/LoadingPages/AfterWalletTransaction';
 import { AuthProvider } from './security/AuthContext';
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
@@ -19,19 +20,18 @@ function App() {
       <Router>
         <Routes>
 
-          <Route 
+          {/* <Route 
             element={
                 <Layout />
             }
           >
             <Route path="*" element={ <HomePage /> } />
 
-          </Route>
+          </Route> */}
 
 
           
-
-          {/* <Route path="*" element={<Navigate to="/login" />} />
+          {/* <Route path="*" element={ <LoginPage /> } /> */}
 
           <Route path="/login" element={
             <PublicRoute><LoginPage /></PublicRoute>
@@ -40,6 +40,10 @@ function App() {
           <Route path="/register" element={
             <PublicRoute><RegistrationPage /></PublicRoute>
           } />
+
+          <Route path="/loading" element={
+            <AfterWalletTransaction/>
+          }/>
 
           <Route 
             element={
@@ -50,7 +54,9 @@ function App() {
           >
             <Route path="/home" element={ <HomePage /> } />
 
-          </Route> */}
+          </Route>
+          
+          <Route path="*" element={<Navigate to="/login" />} />
 
         </Routes>
       </Router>
