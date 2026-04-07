@@ -42,6 +42,13 @@ public class WalletService {
         this.userRepository = userRepository;
     }
 
+    public Wallet getWallet(User owner) {
+
+        return walletRepository.findByOwner(owner)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
+
+    }
+
     public String createDeposit(WalletDepositRequest req, String externalRefId) {
 
         BigDecimal amount = req.amount;

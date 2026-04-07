@@ -1,13 +1,18 @@
 package edu.cit.escasinas.vara.controller;
 
+import edu.cit.escasinas.vara.dto.ApiError;
 import edu.cit.escasinas.vara.dto.ApiResponse;
 import edu.cit.escasinas.vara.dto.WalletDepositRequest;
 import edu.cit.escasinas.vara.dto.WalletTransactionRetrievalRequest;
+import edu.cit.escasinas.vara.model.User;
+import edu.cit.escasinas.vara.model.Wallet;
 import edu.cit.escasinas.vara.model.WalletTransaction;
 import edu.cit.escasinas.vara.service.UserService;
 import edu.cit.escasinas.vara.service.WalletService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,15 +33,54 @@ public class WalletController {
         this.userService = userService;
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getWallet(@AuthenticationPrincipal String email) {
+        try {
+            User owner = userService.getCurrentUser(email);
+            Wallet wallet = walletService.getWallet(owner);
+
+            ApiResponse res = new ApiResponse(
+                    true,
+                    Map.of(
+                            "wallet", Map.of(
+                                    "balance", wallet.balance.toString(),
+                                    "currency", wallet.currency.name()
+                            )
+                    ),
+                    null,
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.ok(res);
+
+        } catch (Exception e) {
+            ApiResponse res = new ApiResponse(
+                    false,
+                    null,
+                    new ApiError(
+                            "DB-001",
+                            "Resource not found",
+                            e.getMessage()
+                    ),
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+        }
+    };
+
     @PostMapping("/deposit")
-    public ResponseEntity<?> deposit(@RequestBody WalletDepositRequest req) {
+    public ResponseEntity<?> deposit(
+            @RequestBody WalletDepositRequest req,
+            @AuthenticationPrincipal String email
+    ) {
 
         String externalReferenceId = UUID.randomUUID().toString();
 
         String checkoutUrl = walletService.createDeposit(req, externalReferenceId);
 
         walletService.createDepositTransaction(
-                userService.getCurrentUser(),
+                userService.getCurrentUser(email),
                 externalReferenceId,
                 req
         );
@@ -75,7 +119,7 @@ public class WalletController {
 
         Map<String, Object> walletTransactionData = new HashMap<>();
         walletTransactionData.put("type", walletTransaction.type.getDisplayName());
-        walletTransactionData.put("amount", walletTransaction.amount);
+        walletTransactionData.put("amount", walletTransaction.amount.toString());
         walletTransactionData.put("externalReferenceId", walletTransaction.externalReferenceId);
         walletTransactionData.put("paymentMethod", walletTransaction.paymentMethod.getDisplayName());
         walletTransactionData.put("status", walletTransaction.status.getDisplayName());
