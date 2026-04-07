@@ -31,13 +31,11 @@ public class UserService {
         this.walletRepository = walletRepository;
     }
 
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public User getCurrentUser(String email) {
 
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (email == null) {
             throw new RuntimeException("No user is currently logged in!");
         }
-        String email = (String) authentication.getPrincipal();
 
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
