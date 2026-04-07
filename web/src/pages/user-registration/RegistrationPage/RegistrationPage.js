@@ -14,7 +14,7 @@ export default function RegistrationPage() {
 
     // useNavigate and useContext
     const navigate = useNavigate();
-    const { setUser, setUserIsAuthenticated, userIsAuthenticated } = useContext(AuthContext);
+    const { setUser, setUserIsAuthenticated, userIsAuthenticated, setWallet } = useContext(AuthContext);
 
     // useStates
     const [errorMsgs, setErrorMsgs] = useState({
@@ -91,6 +91,15 @@ export default function RegistrationPage() {
 
             setUser(authenticatedUser);
             setUserIsAuthenticated(true);
+
+            const walletRes = await axios.get(
+                "http://localhost:8080/api/wallet/me",
+                {
+                    withCredentials: true,
+                });
+
+            const walletData = walletRes.data.data.wallet;
+            setWallet(walletData);
 
             navigate("/home");
         } catch (err) {
