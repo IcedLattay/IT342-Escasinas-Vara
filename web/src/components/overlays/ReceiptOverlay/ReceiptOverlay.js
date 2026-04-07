@@ -1,12 +1,18 @@
 import ExitOverlayButton from "../../ExitOverlayButton/ExitOverlayButton";
 import "./ReceiptOverlay.css"
 import Checkmark from "../../vector-assets/Checkmark"
+import MayaLogo  from "../../vector-assets/MayaLogo";
 import GCashLogo from "../../vector-assets/GCashLogo";
+import { formatBalance } from "../../../helper-functions/WalletHelpFunctions";
+import { useContext } from "react";
+import { AuthContext } from "../../../security/AuthContext";
 
 export default function ReceiptOverlay({ 
         receiptData,
         onExit,
     }) {
+
+    const { wallet } = useContext(AuthContext);
     
     return (
         <div className="overlay" id="receipt">
@@ -39,25 +45,53 @@ export default function ReceiptOverlay({
                 <div className="details receipt">
                     <div className="detail receipt">
                         <p>Amount</p>
-                        <p className="value receipt">PHP 2,000.00</p>
+
+                        { receiptData ? 
+                        <p className="value receipt">{`${wallet.currency} ${formatBalance(receiptData.amount)}`} </p>
+                        :
+                        <div className="value receipt" style={{ width: "25%", backgroundColor: "#dddddd" }}/>
+                         }
                     </div>
                     <div className="detail receipt">
                         <p>Transaction ID</p>
-                        <p className="value receipt">sD-scz0ee11Hxhs</p>
+
+                        { receiptData ? 
+                        <p className="value receipt"> {receiptData.externalReferenceId} </p>
+                        :
+                        <div className="value receipt" style={{ width: "50%", backgroundColor: "#dddddd" }}/>
+                         }
+                        
                     </div>
                     <div className="detail receipt">
                         <p>Payment Method</p>
 
+                        
+                        { receiptData ?
                         <div className="value receipt payment-method">
                             
-                            <p>GCash</p>
+                            <p>{ receiptData.paymentMethod }</p>
 
+                            { receiptData.paymentMethod == "GCash" ? 
                             <GCashLogo width={1} height={1} />
+                            :
+                                ( receiptData.paymentMethod == "Paymaya" &&
+                                    <MayaLogo width={1} height={1} />
+                                )
+                            } 
+                            
                         </div>
+                        :
+                        <div className="value receipt" style={{ width: "40%", backgroundColor: "#dddddd" }}/>
+                        }
                     </div>
                     <div className="detail receipt last">
                         <p>Date of Transaction</p>
-                        <p className="value receipt">sD-scz0ee11Hxhs</p>
+
+                        { receiptData ? 
+                        <p className="value receipt"> {receiptData.createdAt} </p>
+                        :
+                        <div className="value receipt" style={{ width: "35%", backgroundColor: "#dddddd" }}/>
+                         }
                     </div>
                 </div>
             </div>
