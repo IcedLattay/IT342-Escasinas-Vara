@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import "./SideBarMenu.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../security/AuthContext";
 import VaraIcon from "../vector-assets/VaraIcon"
 import ExitOverlayButton from "../ExitOverlayButton/ExitOverlayButton";
@@ -8,12 +8,14 @@ import OverlayBackdrop from "../OverlayBackdrop/OverlayBackdrop";
 import WalletDashboardOverlay from "../overlays/WalletDashboardOverlay/WalletDashboardOverlay";
 import EditProfileOverlay from "../overlays/EditProfileOverlay/EditProfileOverlay";
 import WalletDepositOverlay from "../overlays/WalletDepositOverlay/WalletDepositOverlay";
+import ReceiptOverlay from "../overlays/ReceiptOverlay/ReceiptOverlay";
 
 export default function SideBarMenu() {
     
     // useNavigate and useContext
     const navigate = useNavigate();
     const { setUser, setUserIsAuthenticated, authenticatedUser } = useContext(AuthContext);
+    const location = useLocation();
 
 
 
@@ -25,28 +27,22 @@ export default function SideBarMenu() {
     const [editProfileOverlayIsOpen, setEditProfileOverlayIsOpen] = useState(false);
     const [walletDashboardOverlayIsOpen, setWalletDashboardOverIsOpen] = useState(false);
     const [walletDepositOverlayIsOpen, setWalletDepositOverlayIsOpen] = useState(false);
+    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(false);
 
 
 
     // useEffects
     useEffect(() => {
-        console.log("getting receipt data")
+        const receiptData = location.state?.receiptData;
 
-        const rawData = sessionStorage.getItem("receiptData");
-    
-        console.log("Raw Receipt data", rawData)
+        if (receiptData) {
+            setReceiptData(receiptData);
+            setSidebarVisible(true);
+            setWalletDashboardOverIsOpen(true);
 
-        if (rawData) {
-            console.log("Opening the overlay and saving the receipt data!")
-
-            const data = JSON.parse(rawData); 
-            setReceiptData(data);            
-            setSidebarVisible(true)
-            setWalletDashboardOverIsOpen(true); 
-            
-            sessionStorage.removeItem("receiptData");
+            window.history.replaceState({}, document.title);
         }
-    }, [])
+    }, [location.state]);
 
     useEffect(() => {
         console.log("Receipt data:", receiptData)
@@ -378,14 +374,16 @@ export default function SideBarMenu() {
                                     <WalletDashboardOverlay 
                                         onExit={() => setWalletDashboardOverIsOpen(false)}
                                         handleOnClickWalletDeposit={() => setWalletDepositOverlayIsOpen(true)}
+                                        handleOnClickWalletWithdrawal={() => setReceiptOverlayIsOpen(true)}
                                     />
                                 }
 
-                                { walletDepositOverlayIsOpen &&
+                                { (walletDepositOverlayIsOpen || receiptOverlayIsOpen) &&
                                     <OverlayBackdrop 
                                         background={"#4d4d4d33"}
                                         onClick={() => {
                                             setWalletDepositOverlayIsOpen(false)
+                                            setReceiptOverlayIsOpen(false)
                                         }} 
                                         zIndex={2}
                                     />
@@ -394,6 +392,12 @@ export default function SideBarMenu() {
                                 { walletDepositOverlayIsOpen &&
                                     <WalletDepositOverlay
                                         onExit={() => setWalletDepositOverlayIsOpen(false)}
+                                    />
+                                }
+
+                                { receiptOverlayIsOpen &&
+                                    <ReceiptOverlay 
+                                        onExit={() => setReceiptOverlayIsOpen(false)}
                                     />
                                 }
                         </div>
