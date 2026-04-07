@@ -1,36 +1,33 @@
 package edu.cit.escasinas.vara.service;
 
 import edu.cit.escasinas.vara.dto.*;
+import edu.cit.escasinas.vara.enums.AuthProvider;
 import edu.cit.escasinas.vara.model.User;
 import edu.cit.escasinas.vara.repository.UserRepository;
-import edu.cit.escasinas.vara.security.JwtProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Service
 public class AuthService {
-    public UserRepository userRepository;
-    public PasswordEncoder passwordEncoder;
-    public JwtProvider tokenProvider;
 
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationStrategyFactory authenticationStrategyFactory;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            JwtProvider tokenProvider) {
+            AuthenticationStrategyFactory authenticationStrategyFactory
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
+        this.authenticationStrategyFactory = authenticationStrategyFactory;
     }
 
     public User createUser(RegisterRequest req) {
-
         if (userRepository.existsByEmail(req.email)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
@@ -39,8 +36,6 @@ public class AuthService {
         }
 
         User newUser = new User();
-
-        System.out.println("Email from req: " + req.email);
         newUser.firstname = req.firstname;
         newUser.lastname = req.lastname;
         newUser.email = req.email;
@@ -49,21 +44,22 @@ public class AuthService {
         return userRepository.save(newUser);
     }
 
-    public User authenticate(LoginRequest req) {
-        User user = userRepository.findByEmail(req.email)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED,
-                        "Incorrect username or password.")
-                );
+    public AuthResponse authenticate(LoginRequest req) {
+        @SuppressWarnings("unchecked")
+        AuthenticationStrategy<LoginRequest> strategy =
+                (AuthenticationStrategy<LoginRequest>) authenticationStrategyFactory.getStrategy(AuthProvider.EMAIL);
 
-        if (!passwordEncoder.matches(req.password, user.password)) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Incorrect username or password."
-            );
-        }
+        return strategy.authenticate(req);
+    }
 
-        return user;
+    public AuthResponse loginWithGoogle(String email, String firstname, String lastname) {
+        GoogleAuthCommand command = new GoogleAuthCommand(email, firstname, lastname);
+
+        @SuppressWarnings("unchecked")
+        AuthenticationStrategy<GoogleAuthCommand> strategy =
+                (AuthenticationStrategy<GoogleAuthCommand>) authenticationStrategyFactory.getStrategy(AuthProvider.GOOGLE);
+
+        return strategy.authenticate(command);
     }
 
     public AuthResponse authenticateWithGoogleOAuth2User(OAuth2User oauth2User) {
@@ -87,34 +83,12 @@ public class AuthService {
         return loginWithGoogle(email, firstname, lastname);
     }
 
-    public AuthResponse loginWithGoogle(String email, String firstname, String lastname) {
-
-        if (email == null || email.isBlank()) {
-            throw new RuntimeException("Google account email is not available");
-        }
-
-        final String resolvedFirstname = (firstname == null || firstname.isBlank()) ? "Google" : firstname;
-        final String resolvedLastname = (lastname == null || lastname.isBlank()) ? "User" : lastname;
-
-        Optional<User> existing = userRepository.findByEmail(email);
-        User user = existing.orElseGet(() -> userRepository.save(new User(
-                resolvedFirstname,
-                resolvedLastname,
-                email,
-                UUID.randomUUID().toString()
-        )));
-
-        String token = tokenProvider.generateToken(user);
-        return new AuthResponse(token, user);
-    }
-
     private static String stringAttr(OAuth2User oauth2User, String key) {
         Object v = oauth2User.getAttributes().get(key);
         return v == null ? null : String.valueOf(v);
     }
 
     public void validateEmailUniqueness(EmailUniquessValidationRequest req) {
-
         if (userRepository.existsByEmail(req.email)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
@@ -122,10 +96,4 @@ public class AuthService {
             );
         }
     }
-
-    public void logout(Long userId) {
-
-    }
-
-
 }
