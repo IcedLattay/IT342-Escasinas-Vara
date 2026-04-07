@@ -39,6 +39,7 @@ export default function SideBarMenu() {
             setReceiptData(receiptData);
             setSidebarVisible(true);
             setWalletDashboardOverIsOpen(true);
+            setReceiptOverlayIsOpen(true);
 
             window.history.replaceState({}, document.title);
         }
@@ -374,7 +375,7 @@ export default function SideBarMenu() {
                                     <WalletDashboardOverlay 
                                         onExit={() => setWalletDashboardOverIsOpen(false)}
                                         handleOnClickWalletDeposit={() => setWalletDepositOverlayIsOpen(true)}
-                                        handleOnClickWalletWithdrawal={() => setReceiptOverlayIsOpen(true)}
+                                        // handleOnClickWalletWithdrawal={() => setReceiptOverlayIsOpen(true)}
                                     />
                                 }
 
@@ -397,6 +398,7 @@ export default function SideBarMenu() {
 
                                 { receiptOverlayIsOpen &&
                                     <ReceiptOverlay 
+                                        receiptData={receiptData}
                                         onExit={() => setReceiptOverlayIsOpen(false)}
                                     />
                                 }
