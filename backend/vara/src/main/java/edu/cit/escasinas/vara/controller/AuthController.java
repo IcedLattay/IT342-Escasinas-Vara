@@ -128,9 +128,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            User authenticateUser = authService.authenticate(request);
-
-            String token = tokenProvider.generateToken(authenticateUser);
+            AuthResponse authResponse = authService.authenticate(request);
+            String token = authResponse.getToken();
+            User authenticatedUser = authResponse.getUser();
 
             ResponseCookie cookie = ResponseCookie.from("token", token)
                     .httpOnly(true)
@@ -145,9 +145,9 @@ public class AuthController {
                     Map.of(
                         "token", token,
                         "user", Map.of(
-                                    "email", authenticateUser.email,
-                                    "firstname", authenticateUser.firstname,
-                                    "lastname", authenticateUser.lastname
+                                    "email", authenticatedUser.email,
+                                    "firstname", authenticatedUser.firstname,
+                                    "lastname", authenticatedUser.lastname
                             )
                     ),
                     null,
