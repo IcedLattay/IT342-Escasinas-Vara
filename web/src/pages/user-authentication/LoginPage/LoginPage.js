@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../security/AuthContext"
 import { Link } from "react-router-dom";
-import { onEmailInput, onPasswordInput, clearForm } from "../helper-functions/LoginHelpFunctions";
+import { onEmailInput, onPasswordInput, clearForm } from "../../../helper-functions/LoginHelpFunctions";
 
 
 

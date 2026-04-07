@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../security/AuthContext"
 import { Link } from "react-router-dom";
-import { onEmailInput, onPasswordInput, onConfirmPasswordInput, clearForm } from "../helper-functions/RegisterHelpFunctions";
+import { onEmailInput, onPasswordInput, onConfirmPasswordInput, clearForm } from "../../../helper-functions/RegisterHelpFunctions";
 
 
 
