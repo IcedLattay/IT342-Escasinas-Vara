@@ -2,6 +2,9 @@ import "./WalletDashboardOverlay.css"
 import ExitOverlayButton from "../../ExitOverlayButton/ExitOverlayButton";
 import RightArrow from "../../vector-assets/RightArrow";
 import TransactionItem from "../../TransactionItem/TransactionItem";
+import { useContext } from "react";
+import { formatBalance } from "../../../helper-functions/WalletHelpFunctions";
+import { AuthContext } from "../../../security/AuthContext";
 
 export default function WalletDashboardOverlay({ 
         onExit,
@@ -9,6 +12,9 @@ export default function WalletDashboardOverlay({
         handleOnClickWalletWithdrawal,
         handleOnClickViewTransactions, 
     }) {
+
+    const { wallet } = useContext(AuthContext);
+
     return (
         <div className="overlay" id="wallet-dashboard">
             <ExitOverlayButton onClick={onExit}/>
@@ -16,18 +22,23 @@ export default function WalletDashboardOverlay({
             <div className="section wallet-balance">
                 <div className="display wallet-balance">
                     <p>Wallet Balance</p>
+
+                    { wallet ?  
                     <p
                         style={{
                             fontSize: "1.25rem"
                         }}
-                    >PHP 70,500.00</p>
+                    >{`${wallet.currency} ${formatBalance(wallet.balance)}`} </p>
+                    :
+                    <div style={{ width: "35%", height: "1.25rem", backgroundColor: "#dddddd" }}/>
+                    }
                 </div>
                 <div className="buttons wallet-balance">
                     <p className="small-button"
                         onClick={handleOnClickWalletDeposit}
                     >Deposit to wallet</p>
                     <p className="small-button"
-                        onClick={handleOnClickWalletWithdrawal}
+                        // onClick={handleOnClickWalletWithdrawal}
                     >Withdraw from wallet</p>
                 </div>
             </div>

@@ -2,11 +2,14 @@ import "./WalletDepositOverlay.css"
 import ExitOverlayButton from "../../ExitOverlayButton/ExitOverlayButton";
 import MayaLogo from "../../vector-assets/MayaLogo"
 import GCashLogo from "../../vector-assets/GCashLogo"
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
+import { AuthContext } from "../../../security/AuthContext";
 
 export default function WalletDepositOverlay({ onExit }) {
+
+    const { wallet } = useContext(AuthContext);
 
     // useStates
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("GCASH")
@@ -15,6 +18,19 @@ export default function WalletDepositOverlay({ onExit }) {
         amountToDepositIsValid: false
     })
     const [amountToDeposit, setAmountToDeposit] = useState("")
+
+
+
+    // useRefs
+    const amountToDepositField = useRef(null);
+
+
+
+    // useEffects
+    useEffect(() => {
+        amountToDepositField.current.focus();
+        
+    }, [])
 
 
 
@@ -105,12 +121,13 @@ export default function WalletDepositOverlay({ onExit }) {
                     <p>Enter amount</p>
 
                     <div className="input-field">
-                        <p>PHP</p>
+                        <p>{ wallet.currency }</p>
 
                         <input input type="text" inputMode="decimal" placeholder="10.00" value={amountToDeposit}
                             onChange={handleAmountToDepositOnChange}
                             onBlur={handleAmountToDepositOnBlur}
                             disabled={isSubmitting}
+                            ref={amountToDepositField}
                         />
                     </div>
 
