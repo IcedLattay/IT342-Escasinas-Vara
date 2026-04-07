@@ -7,10 +7,10 @@ export default function AfterWalletTransaction() {
     const navigate = useNavigate();
     
     useEffect(() => {
-        const externalReferenceId = sessionStorage.getItem("externalReferenceId");
+        const externalReferenceId = sessionStorage.getItem("externalReferenceId")
 
         if (!externalReferenceId) {
-            navigate("/");
+            navigate("/home");
             return;
         }
 
@@ -41,22 +41,22 @@ export default function AfterWalletTransaction() {
                 console.log("ATTEMPT:", attempts);
 
                 if (walletTransaction.status === "Success") {
-                    sessionStorage.setItem(
-                        "receiptData",
-                        JSON.stringify(walletTransaction)
-                    );
-                    navigate("/home");
+                    sessionStorage.removeItem("externalReferenceId");
+                    navigate("/home", { 
+                        replace: true,
+                        state: { receiptData: walletTransaction }
+                    });
                     return;
                 }
 
-                attempts += 1;
+                // attempts += 1;
 
-                if (attempts >= maxAttempts) {
-                    navigate("/");
-                    return;
-                }
+                // if (attempts >= maxAttempts) {
+                //     navigate("/");
+                //     return;
+                // }
 
-                setTimeout(checkStatus, 2000);
+                // setTimeout(checkStatus, 2000);
             } catch (err) {
                 console.error(
                     "Failed to verify deposit:",
@@ -65,12 +65,12 @@ export default function AfterWalletTransaction() {
                     err
                 );
 
-                attempts += 1;
+                // attempts += 1;
 
-                if (attempts >= maxAttempts) {
-                    navigate("/");
-                    return;
-                }
+                // if (attempts >= maxAttempts) {
+                //     navigate("/");
+                //     return;
+                // }
 
                 // setTimeout(checkStatus, 2000);
             }
