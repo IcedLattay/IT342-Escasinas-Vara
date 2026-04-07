@@ -1,0 +1,54 @@
+.overlay#receipt {
+    z-index: 2;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+    .overlay#receipt .overlay-header.receipt {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1.4rem 1rem .6rem 1rem;
+        box-sizing: border-box;
+        width: 26rem;
+        border-bottom: 1px solid #C3C3C3;
+        gap: .5rem;
+    }
+
+    .overlay#receipt .overlay-body.receipt {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        padding: 1.6rem 1.2rem;
+        gap: 1.5rem;
+        /* border: 1px solid red; */
+    }
+
+        .overlay#receipt .details.receipt {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+            .overlay#receipt .detail.receipt.last {
+                border-bottom: none;
+            }
+            .overlay#receipt .detail.receipt {
+                padding: 1.2rem 0;
+                display: flex;
+                border-bottom: 1px solid #C3C3C3;
+            }
+
+                .overlay#receipt .value.receipt {
+                    margin-left: auto;
+                }
+                .overlay#receipt .value.receipt.payment-method {
+                    display: flex;
+                    align-items: center;
+                    gap: .5rem;
+                }
