@@ -1,195 +1,203 @@
-
-
-import axios from 'axios';
-
+import { validateEmailUniqueness } from "../api/AuthService";
 
 //helper functions
 
-
 let debounceTimer;
 
-export function onEmailInput({ emailField, setErrorMsgs, setFieldsValidationTracker }) {
+export function onFirstNameInput(
+    value, 
+    setFieldsValidationTracker,
+    setErrorMsgs
+) {
+    const result = registerValidationStrategies.firstname(value);
 
-    const email = emailField.current.value;
+    setErrorMsgs((prev) => ({ ...prev, firstname: result.error }));
+    setFieldsValidationTracker((prev) => ({
+        ...prev,
+        firstnameIsValid: result.isValid,
+    }));
+}
 
-    async function validateEmailUniqueness() {
+export function onLastNameInput(
+    value, 
+    setFieldsValidationTracker,
+    setErrorMsgs
+) {
+    const result = registerValidationStrategies.lastname(value);
+
+    setErrorMsgs((prev) => ({ ...prev, lastname: result.error }));
+    setFieldsValidationTracker((prev) => ({
+        ...prev,
+        lastnameIsValid: result.isValid,
+    }));
+}
+
+export function onEmailInput(
+    value,
+    setFieldsValidationTracker,
+    setErrorMsgs,
+
+) {
+    const email = value;
+    const formatResult = registerValidationStrategies.emailFormat(email);
+
+    setErrorMsgs((prev) => ({ ...prev, email: formatResult.error }));
+    setFieldsValidationTracker((prev) => ({
+        ...prev,
+        emailIsValid: false,
+    }));
+
+    if (!formatResult.isValid) return;
+
+    clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(async () => {
         try {
-            const res = await axios.post(
-                "http://localhost:8080/api/auth/validate/email-uniqueness",
-                { email : email },
-                {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                }
-            );
+            await validateEmailUniqueness(email);
 
-            console.log("Email is unique")
-
-            setErrorMsgs(prev => ({
-                ...prev,
-                email: ""
-            }));
-            setFieldsValidationTracker(prev => ({
+            setErrorMsgs((prev) => ({ ...prev, email: "" }));
+            setFieldsValidationTracker((prev) => ({
                 ...prev,
                 emailIsValid: true,
-            }))
+            }));
         } catch (err) {
-
-            console.log(err)
-
-            const rawError = err.response.data.error?.details; 
-
+            const rawError = err.response?.data?.error?.details || "Email validation failed.";
             const match = rawError.match(/"(.*)"/);
             const cleanMessage = match ? match[1] : rawError;
 
-
-            setErrorMsgs(prev => ({
-                ...prev,
-                email: cleanMessage
-            }));
-            setFieldsValidationTracker(prev => ({
+            setErrorMsgs((prev) => ({ ...prev, email: cleanMessage }));
+            setFieldsValidationTracker((prev) => ({
                 ...prev,
                 emailIsValid: false,
-            }))
+            }));
         }
-    
-    }
-
-    if (email=="") {
-        setErrorMsgs(prev => ({
-            ...prev,
-            email: "",
-        }))
-        setFieldsValidationTracker(prev => ({
-            ...prev,
-            emailIsValid: false,
-        }))
-
-        return;
-    } 
-    
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        setErrorMsgs(prev => ({
-            ...prev,
-            email: "Invalid email address.",
-        }))
-        setFieldsValidationTracker(prev => ({
-            ...prev,
-            emailIsValid: false,
-        }))
-
-        return;
-    } 
-    
-    clearTimeout(debounceTimer);
-
-    debounceTimer = setTimeout(() => {
-        validateEmailUniqueness(email);
     }, 300);
-
 }
 
-export function onPasswordInput({ passwordField, setErrorMsgs, setFieldsValidationTracker, setPasswordRules }) {
-    const password = passwordField.current.value;
+export function onPasswordInput(
+    passwordValue,
+    confirmPasswordValue,
+    setFieldsValidationTracker,
+    setPasswordRules,
+    setErrorMsgs
+) {
+    const result = registerValidationStrategies.password(passwordValue);
 
-    let rules;
-
-    if (password.length === 0) {
-        rules = {
-            lengthIsValid: null,
-            hasUpperLower: null,
-            hasNumber: null
-        };
-    } else {
-        rules = {
-            lengthIsValid: password.length >= 8,
-            hasUpperLower: /(?=.*[a-z])(?=.*[A-Z])/.test(password),
-            hasNumber: /\d/.test(password)
-        };
-    }
-
-    setPasswordRules(rules);
-
-    const allRulesMet =
-        rules.lengthIsValid &&
-        rules.hasUpperLower &&
-        rules.hasNumber;
-
-    if (password === "" || allRulesMet) {
-        setErrorMsgs(prev => ({
-            ...prev,
-            password: "",
-        }));
-    } else {
-        setErrorMsgs(prev => ({
-            ...prev,
-            password: "Input is invalid.",
-        }));
-    }
-
-    setFieldsValidationTracker(prev => ({
+    setPasswordRules(result.rules);
+    setErrorMsgs((prev) => ({ ...prev, password: result.error }));
+    setFieldsValidationTracker((prev) => ({
         ...prev,
-        passwordIsValid: allRulesMet
+        passwordIsValid: result.isValid,
+    }));
+
+    onConfirmPasswordInput(confirmPasswordValue, passwordValue, setFieldsValidationTracker, setErrorMsgs);
+}
+
+export function onConfirmPasswordInput(
+    confirmPasswordValue, 
+    passwordValue,
+    setFieldsValidationTracker,
+    setErrorMsgs
+) {
+    const result = registerValidationStrategies.confirmPassword(
+        confirmPasswordValue,
+        passwordValue
+    );
+
+    setErrorMsgs((prev) => ({ ...prev, confirmPassword: result.error }));
+    setFieldsValidationTracker((prev) => ({
+        ...prev,
+        confirmPasswordIsValid: result.isValid,
     }));
 }
 
-export function onConfirmPasswordInput({ confirmPasswordField, passwordField, setErrorMsgs, setFieldsValidationTracker }) {
-    if (confirmPasswordField.current.value=="") {
-        setErrorMsgs(prev => ({
-            ...prev,
-            confirmPassword: "",
-        }))
-        setFieldsValidationTracker(prev => ({
-            ...prev,
-            confirmPasswordIsValid: false,
-        }))
-        return;
-    }
+export const registerValidationStrategies = {
+    firstname: (value) => ({
+        isValid: value.trim() !== "",
+        error: value.trim() !== "" ? "" : "First name is required.",
+    }),
 
-    if (passwordField.current.value=="") {
-        setErrorMsgs(prev => ({
-            ...prev,
-            confirmPassword: "Please set a password first.",
-        }))
-        setFieldsValidationTracker(prev => ({
-            ...prev,
-            confirmPasswordIsValid: false,
-        }))
-        return;
-    }
+    lastname: (value) => ({
+        isValid: value.trim() !== "",
+        error: value.trim() !== "" ? "" : "Last name is required.",
+    }),
 
-    if (confirmPasswordField.current.value !== passwordField.current.value) {
-        setErrorMsgs(prev => ({
-            ...prev,
-            confirmPassword: "Passwords do not match.",
-        }))
-        setFieldsValidationTracker(prev => ({
-            ...prev,
-            confirmPasswordIsValid: false,
-        }))
-    } else {
-        setErrorMsgs(prev => ({
-            ...prev,
-            confirmPassword: "",
-        }))
-        setFieldsValidationTracker(prev => ({
-            ...prev,
-            confirmPasswordIsValid: true,
-        }))
-    }
-}
+    emailFormat: (value) => {
+        if (value.trim() === "") {
+            return { isValid: false, error: "" };
+        }
+
+        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        return {
+            isValid,
+            error: isValid ? "" : "Invalid email address.",
+        };
+    },
+
+    password: (value) => {
+        const rules = {
+            lengthIsValid: value.length >= 8,
+            hasUpperLower: /(?=.*[a-z])(?=.*[A-Z])/.test(value),
+            hasNumber: /\d/.test(value),
+        };
+
+        const isEmpty = value.length === 0;
+
+        return {
+            isValid:
+                rules.lengthIsValid &&
+                rules.hasUpperLower &&
+                rules.hasNumber,
+            error:
+                isEmpty ||
+                (rules.lengthIsValid && rules.hasUpperLower && rules.hasNumber)
+                ? ""
+                : "Input is invalid.",
+            rules: isEmpty
+                ? {
+                    lengthIsValid: null,
+                    hasUpperLower: null,
+                    hasNumber: null,
+                }
+                : rules,
+        };
+    },
+
+    confirmPassword: (confirmValue, passwordValue) => {
+        if (confirmValue === "") {
+        return { isValid: false, error: "" };
+        }
+
+        if (passwordValue === "") {
+        return { isValid: false, error: "Please set a password first." };
+        }
+
+        if (confirmValue !== passwordValue) {
+        return { isValid: false, error: "Passwords do not match." };
+        }
+
+        return { isValid: true, error: "" };
+    },
+};
 
 export function clearForm({ fields, setErrorMsgs, setFieldsValidationTracker }) {
-    setErrorMsgs(prev => ({
-        ...prev,
+    setErrorMsgs({
+        firstname: "",
+        lastname: "",
         email: "",
         password: "",
         confirmPassword: "",
-    }));
+    });
 
     fields.forEach(field => {
         field.current.value = "";
     });
-
-    setFieldsValidationTracker(prev => ({ ...prev, emailIsValid: false, passwordIsValid: false }));
+    
+    setFieldsValidationTracker({
+        firstnameIsValid: false,
+        lastnameIsValid: false,
+        emailIsValid: false,
+        passwordIsValid: false,
+        confirmPasswordIsValid: false,
+    });
 }
