@@ -1,25 +1,22 @@
 
 
+export const loginValidationStrategies = {
+    email: (value) => value.trim() !== "",
+    password: (value) => value.trim() !== "",
+};
+
 export function onEmailInput(e, setFieldsValidationTracker) {
-    if (e.target.value !== "") {
-        setFieldsValidationTracker(prev => ({
-            ...prev,
-            emailIsValid: true
-        }));
-    } else {
-        setFieldsValidationTracker(prev => ({
-            ...prev,
-            emailIsValid: false
-        }));
-    }
+    setFieldsValidationTracker(prev => ({
+        ...prev,
+        emailIsValid: loginValidationStrategies.email(e.target.value),
+    }));
 }
 
 export function onPasswordInput(e, setFieldsValidationTracker) {
-    if (e.target.value !== "") {
-        setFieldsValidationTracker(prev => ({ ...prev, passwordIsValid: true }));
-    } else {
-        setFieldsValidationTracker(prev => ({ ...prev, passwordIsValid: false }));
-    }
+    setFieldsValidationTracker(prev => ({
+        ...prev,
+        passwordIsValid: loginValidationStrategies.password(e.target.value),
+    }));
 }
 
 
