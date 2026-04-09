@@ -1,0 +1,86 @@
+import styles from "./WalletDashboardOverlay.module.css";
+import ExitOverlayButton from "../../ExitOverlayButton/ExitOverlayButton";
+import RightArrow from "../../vector-assets/RightArrow";
+import TransactionItem from "../../TransactionItem/TransactionItem";
+import { formatBalance } from "../../../helper-functions/WalletHelpFunctions";
+import buttonStyles from "../../../global-styles/ButtonStyles.module.css";
+
+export default function WalletDashboardOverlay({
+    transactions, 
+    wallet,
+    onExit,
+    handleOnClickWalletDeposit,
+    handleOnClickWalletWithdrawal,
+    handleOnClickViewTransactions, 
+}) {
+
+    return (
+        <div className={styles.content}>
+            
+            <div className={`${styles.section} ${styles.walletBalance}`}>
+                <div className={styles.details}>
+                    <p>Wallet Balance</p>
+
+                    { wallet ?  
+                    <p
+                        style={{
+                            height: "1.5rem",
+                            fontSize: "1.25rem"
+                        }}
+                    >{`${wallet.currency} ${formatBalance(wallet.balance)}`}</p>
+                    :
+                    <div 
+                        className={styles.loading}
+                        style={{ 
+                            width: "45%", 
+                            height: "1.5rem",
+                        }}
+                    />
+                    }
+                </div>
+                <div className={styles.buttonsContainer}>
+                    <p 
+                        className={`${buttonStyles.smallButton} ${buttonStyles.green}`}
+                        onClick={handleOnClickWalletDeposit}
+                    >Deposit to wallet</p>
+                    <p 
+                        className={`${buttonStyles.smallButton} ${buttonStyles.green}`}
+                        onClick={handleOnClickWalletWithdrawal}
+                    >Withdraw from wallet</p>
+                </div>
+            </div>
+
+            <div className={`${styles.section} ${styles.transactionHistory}`}>
+                <div className={`${buttonStyles.smallButton} ${buttonStyles.mono} ${buttonStyles.withIcon}`}>
+                    <p>Transaction History</p>
+
+                    <RightArrow width={.6} height={.6}/>
+                </div>
+
+                <div 
+                    style={{
+                        borderBottom: "1.5px solid #C3C3C3", 
+                        width: "100%"
+                    }} 
+                />
+                
+                <div className={styles.transactionsList}>     
+                    { transactions &&
+                    transactions.map((transaction, i) => (
+                    <TransactionItem
+                        transactionId={transaction.id}
+                        direction={transaction.direction}
+                        amount={transaction.amount}
+                        reason={transaction.reason}
+                        date={transaction.date}
+                        isLast={i === transactions.length - 1}
+                    />
+                    ))
+                    }
+                </div>
+            </div>
+            
+            <ExitOverlayButton onClick={onExit}/>
+        </div>
+    );
+}
