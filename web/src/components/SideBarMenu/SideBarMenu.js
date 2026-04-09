@@ -8,6 +8,7 @@ import OverlayBackdrop from "../OverlayBackdrop/OverlayBackdrop";
 import WalletDashboardOverlay from "../overlays/WalletDashboardOverlay/WalletDashboardOverlay";
 import EditProfileOverlay from "../overlays/EditProfileOverlay/EditProfileOverlay";
 import WalletDepositOverlay from "../overlays/WalletDepositOverlay/WalletDepositOverlay";
+import WalletWithdrawalOverlay from "../overlays/WalletWithdrawalOverlay/WalletWithdrawalOverlay";
 import ReceiptOverlay from "../overlays/ReceiptOverlay/ReceiptOverlay";
 
 export default function SideBarMenu() {
@@ -27,6 +28,7 @@ export default function SideBarMenu() {
     const [editProfileOverlayIsOpen, setEditProfileOverlayIsOpen] = useState(false);
     const [walletDashboardOverlayIsOpen, setWalletDashboardOverIsOpen] = useState(false);
     const [walletDepositOverlayIsOpen, setWalletDepositOverlayIsOpen] = useState(false);
+    const [walletWithdrawalOverlayIsOpen, setWalletWithdrawalOverlayIsOpen] = useState(false);
     const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(false);
 
 
@@ -375,15 +377,19 @@ export default function SideBarMenu() {
                                     <WalletDashboardOverlay 
                                         onExit={() => setWalletDashboardOverIsOpen(false)}
                                         handleOnClickWalletDeposit={() => setWalletDepositOverlayIsOpen(true)}
+                                        handleOnClickWalletWithdrawal={() => setWalletWithdrawalOverlayIsOpen(true)}
                                         // handleOnClickWalletWithdrawal={() => setReceiptOverlayIsOpen(true)}
                                     />
                                 }
 
-                                { (walletDepositOverlayIsOpen || receiptOverlayIsOpen) &&
+                                { (walletDepositOverlayIsOpen || 
+                                    walletWithdrawalOverlayIsOpen ||
+                                    receiptOverlayIsOpen ) &&
                                     <OverlayBackdrop 
                                         background={"#4d4d4d33"}
                                         onClick={() => {
                                             setWalletDepositOverlayIsOpen(false)
+                                            setWalletWithdrawalOverlayIsOpen(false)
                                             setReceiptOverlayIsOpen(false)
                                         }} 
                                         zIndex={2}
@@ -393,6 +399,12 @@ export default function SideBarMenu() {
                                 { walletDepositOverlayIsOpen &&
                                     <WalletDepositOverlay
                                         onExit={() => setWalletDepositOverlayIsOpen(false)}
+                                    />
+                                }
+
+                                { walletWithdrawalOverlayIsOpen &&
+                                    <WalletWithdrawalOverlay 
+                                        onExit={() => setWalletWithdrawalOverlayIsOpen(false)}
                                     />
                                 }
 
