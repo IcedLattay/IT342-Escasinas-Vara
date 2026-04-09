@@ -38,7 +38,7 @@ export default function WalletDashboardOverlay({
                         onClick={handleOnClickWalletDeposit}
                     >Deposit to wallet</p>
                     <p className="small-button"
-                        // onClick={handleOnClickWalletWithdrawal}
+                        onClick={handleOnClickWalletWithdrawal}
                     >Withdraw from wallet</p>
                 </div>
             </div>
