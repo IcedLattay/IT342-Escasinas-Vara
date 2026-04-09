@@ -8,6 +8,7 @@ import WalletDashboardOverlay from "../overlays/WalletDashboardOverlay/WalletDas
 import EditProfileOverlay from "../overlays/EditProfileOverlay/EditProfileOverlay";
 import WalletDepositOverlay from "../overlays/WalletDepositOverlay/WalletDepositOverlay";
 import WalletWithdrawalOverlay from "../overlays/WalletWithdrawalOverlay/WalletWithdrawalOverlay";
+import AddPayoutAccountOverlay from "../overlays/AddPayoutAccountOverlay/AddPayoutAccountOverlay";
 import ReceiptOverlay from "../overlays/ReceiptOverlay/ReceiptOverlay";
 import Modal from "../overlays/Modal";
 
@@ -29,8 +30,9 @@ export default function SideBarMenu() {
     const [walletDashboardOverlayIsOpen, setWalletDashboardOverlayIsOpen] = useState(false);
     const [walletDepositOverlayIsOpen, setWalletDepositOverlayIsOpen] = useState(false);
     const [walletWithdrawalOverlayIsOpen, setWalletWithdrawalOverlayIsOpen] = useState(false);
-    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(true);
-
+    const [addPayoutAccountOverlayIsOpen, setAddPayoutAccountOverlayIsOpen] = useState(true);
+    const [payoutMethodToAdd, setPayoutMethodToAdd] = useState(null);
+    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(false);
 
 
     // useEffects
@@ -405,6 +407,8 @@ export default function SideBarMenu() {
                                 >
                                     <WalletWithdrawalOverlay
                                         onExit={() => setWalletWithdrawalOverlayIsOpen(false)}
+                                        setAddPayoutAccountOverlayIsOpen={setAddPayoutAccountOverlayIsOpen}
+                                        setPayoutMethodToAdd={setPayoutMethodToAdd}
                                     />
                                 </Modal>
 
@@ -419,6 +423,16 @@ export default function SideBarMenu() {
                                     />
                                 </Modal>
 
+                                <Modal
+                                    isOpen={addPayoutAccountOverlayIsOpen}
+                                    onClose={() => setAddPayoutAccountOverlayIsOpen(false)}
+                                    modalLevel={3}
+                                >
+                                    <AddPayoutAccountOverlay
+                                        onExit={() => setAddPayoutAccountOverlayIsOpen(false)}
+                                        payoutMethodToAdd={payoutMethodToAdd}
+                                    />
+                                </Modal>
                                     
                         </div>
                     </div>

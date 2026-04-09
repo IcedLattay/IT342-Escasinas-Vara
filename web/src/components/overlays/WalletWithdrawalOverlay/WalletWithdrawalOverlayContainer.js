@@ -4,7 +4,11 @@ import WalletWithdrawalOverlayView from "./WalletWithdrawalOverlayView";
 
 
 
-export default function WalletWithdrawalOverlayContainer({ onExit }) {
+export default function WalletWithdrawalOverlayContainer({ 
+    onExit,
+    setAddPayoutAccountOverlayIsOpen,
+    setPayoutMethodToAdd
+}) {
     const { wallet } = useContext(AuthContext);
     
     // DUMMY DATA FOR NOW since wa pako ka implement payout accounts in backend!
@@ -26,8 +30,6 @@ export default function WalletWithdrawalOverlayContainer({ onExit }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [balanceIsSufficient, setBalanceIsSufficient] = useState(true);
     const [selectedPayoutAccount, setSelectedPayoutAccount] = useState(payoutAccounts[0]?.id);
-    const [addPayoutAccountOverlayIsOpen, setAddPayoutAccountOverlayIsOpen] = useState(false);
-    const [payoutMethodToAdd, setPayoutMethodToAdd] = useState(null);
 
     // useRefs
     const amountToWithdrawField = useRef(null);

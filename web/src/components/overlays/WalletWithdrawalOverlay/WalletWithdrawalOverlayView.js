@@ -110,6 +110,7 @@ export default function WalletWithdrawalOverlay({
                         }
                         { supportedPayoutMethods.map((supportedPayout) => (
                             <div 
+                                key={supportedPayout.id}
                                 className={styles.payoutAccountsItem}
                                 onClick={() => handleAddPayoutAccount(supportedPayout.id)}
                             >
