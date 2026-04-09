@@ -1,4 +1,4 @@
-import "./WalletWithdrawalOverlay.css"
+import styles from "./WalletWithdrawalOverlay.module.css"
 import ExitOverlayButton from "../../ExitOverlayButton/ExitOverlayButton";
 import { formatBalance, handleAmountOnChange, handleAmountOnBlur } from "../../../helper-functions/WalletHelpFunctions";
 import { Loader2 } from "lucide-react";
@@ -26,8 +26,8 @@ export default function WalletWithdrawalOverlay({
 }) {
 
     return (
-        <div className="overlay" id="wallet-withdrawal">
-            <div className="overlay-header wallet-withdrawal">
+        <div className={styles.content}>
+            <div className={styles.header}>
                 <p
                     style={{
                         fontSize: "1.1rem"
@@ -35,11 +35,11 @@ export default function WalletWithdrawalOverlay({
                 >Withdraw from wallet</p>
             </div>
 
-            <div className="overlay-body wallet-withdrawal">
-                <div className="field amount wallet-withdrawal">
+            <div className={styles.body}>
+                <div className={`${styles.field} ${styles.amount}`}>
                     <p>Enter amount</p>
 
-                    <div className="input-field">
+                    <div className={styles.inputWrapper}>
                         <p>{ wallet?.currency }</p>
 
                         <input 
@@ -55,33 +55,37 @@ export default function WalletWithdrawalOverlay({
                     </div>
 
                     { (!balanceIsSufficient && wallet) && 
-                    <p style={{
-                        fontSize: ".7rem",
-                        color: "#a51111"
-                    }}>Insufficient balance</p>
+                    <p 
+                        style={{
+                            fontSize: ".7rem",
+                            color: "#a51111"
+                        }}
+                    >Insufficient balance</p>
                     }
 
-                    <p style={{
-                        fontSize: ".7rem",
-                        color: "#626262"
-                    }}>Wallet Balance: {`${wallet?.currency} ${formatBalance(wallet?.balance)}`}</p>
+                    <p 
+                        style={{
+                            fontSize: ".7rem",
+                            color: "#626262"
+                        }}
+                    >Wallet Balance: {`${wallet?.currency} ${formatBalance(wallet?.balance)}`}</p>
                 </div>
 
-                <div className="field account wallet-withdrawal">
+                <div className={`${styles.field} ${styles.payoutAccounts}`}>
                     <p>Select an account to transfer funds into</p>
 
-                    <div className="payout-accounts">
+                    <div className={styles.payoutAccountsList}>
                         { payoutAccounts ?
                         
                         (payoutAccounts.map((account) => (
                             <div
                                 key={account.id} 
-                                className="payout-account"
+                                className={styles.payoutAccountsItem}
                                 onClick={() => setselectedPayoutAccount(account.id)}
                             >
-                                <div className="details">
+                                <div className={styles.payoutAccountDetails}>
 
-                                    <div className="icon-container">
+                                    <div className={styles.payoutAccountIconWrapper}>
                                         { account.payoutMethod === "GCash" ? 
                                         <GCashLogo width={1} height={1}/>
                                         :
@@ -94,9 +98,9 @@ export default function WalletWithdrawalOverlay({
                                     <p style={{ fontSize: ".7rem "}}>{account.payoutMethod} {account.number}</p>
                                 </div>
 
-                                <div className="outer-circle wallet-withdrawal">
+                                <div className={styles.outerCircle}>
                                     { account.id === selectedPayoutAccount &&
-                                        <div className="inner-circle wallet-withdrawal" />
+                                        <div className={styles.innerCircle}/>
                                     }
                                 </div>
                             </div>
@@ -106,12 +110,12 @@ export default function WalletWithdrawalOverlay({
                         }
                         { supportedPayoutMethods.map((supportedPayout) => (
                             <div 
-                                className="payout-account"
+                                className={styles.payoutAccountsItem}
                                 onClick={() => handleAddPayoutAccount(supportedPayout.id)}
                             >
-                                <div className="details">
+                                <div className={styles.payoutAccountDetails}>
                                     <div 
-                                        className="icon-container"
+                                        className={styles.payoutAccountIconWrapper}
                                         style={{
                                             backgroundColor: "#d1d1d1",
                                         }}
@@ -127,7 +131,7 @@ export default function WalletWithdrawalOverlay({
                 </div>
 
                 <button 
-                    className="submit-button"
+                    className={styles.submitButton}
                     type="submit" 
                     style={{
                         fontSize: ".8rem",

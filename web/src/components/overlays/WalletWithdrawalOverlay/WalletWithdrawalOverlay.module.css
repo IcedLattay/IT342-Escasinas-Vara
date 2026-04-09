@@ -2,19 +2,12 @@
 
 
 
-.overlay#wallet-withdrawal {
-    z-index: 2;
-    border-radius: 1rem;
+.content {
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    overflow: hidden;
 }
 
-    .overlay#wallet-withdrawal .overlay-header.wallet-withdrawal {
+    .header {
         display: flex;
         justify-content: start;
         padding: 1.4rem 1rem .6rem 1rem;
@@ -23,7 +16,7 @@
         border-bottom: 1px solid #C3C3C3;
     }
 
-    .overlay#wallet-withdrawal .overlay-body.wallet-withdrawal {
+    .body {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -32,15 +25,18 @@
         /* border: 1px solid red; */
     }
 
-        .overlay#wallet-withdrawal .field.amount.wallet-withdrawal {
+        .field {
             display: flex;
+        }
+
+        .field.amount {
             flex-direction: column;
             gap: .6rem;
             width: 100%;
             /* border: 1px solid red; */
         }
 
-            .overlay#wallet-withdrawal .input-field {
+            .inputWrapper {
                 display: flex;
                 align-items: center;
                 padding: .7rem;
@@ -48,35 +44,34 @@
                 background-color: #f0f0f0;
                 gap: .5rem;
             }
-            .overlay#wallet-withdrawal .input-field:hover,
-            .input-field:has(input:focus) {
+            .inputWrapper:hover,
+            .inputWrapper:has(input:focus) {
                 box-shadow: inset 0 0 0 1px #424242;
             }
-            .overlay#wallet-withdrawal .input-field:has(input:disabled):hover {
+            .inputWrapper:has(input:disabled):hover {
                 box-shadow: none;
             }
 
-                .input-field input {
+                .inputWrapper input {
                     font-size: .8rem;
                     font-family: "Inter";
                     border: none;
                     background: none;
                     flex: 1;
                 }
-                .input-field input:focus {
+                .inputWrapper input:focus {
                     outline: none;
                 }
-                .input-field input::-webkit-outer-spin-button,
-                .input-field input::-webkit-inner-spin-button {
+                .inputWrapper input::-webkit-outer-spin-button,
+                .inputWrapper input::-webkit-inner-spin-button {
                     -webkit-appearance: none;
                     margin: 0;
                 }
-                .input-field input[type=number] {
+                .inputWrapper input[type=number] {
                     -moz-appearance: textfield;
                 }
 
-        .overlay#wallet-withdrawal .field.account.wallet-withdrawal {
-            display: flex;
+        .field.payoutAccounts {
             /* border: 1px solid red; */
             gap: 1rem;
             flex-direction: column;
@@ -84,7 +79,7 @@
             width: 100%;
         }
 
-            .overlay#wallet-withdrawal .payout-accounts {
+            .payoutAccountsList {
                 display: flex;
                 flex-direction: column;
                 min-height: 10rem;
@@ -93,7 +88,7 @@
                 /* border: 1px solid rgb(15, 138, 91); */
             }
 
-                .overlay#wallet-withdrawal .payout-account {
+                .payoutAccountsItem {
                     display: flex;
                     align-items: center;
                     justify-content: left;
@@ -103,21 +98,21 @@
                     height: 4rem;
                     cursor: pointer;
                 }
-                .overlay#wallet-withdrawal .payout-account:hover {
+                .payoutAccountsItem:hover {
                     background-color: #f0f0f0;
                 }
-                .overlay#wallet-withdrawal .payout-account:active {
+                .payoutAccountsItem:active {
                     background-color: #dcdcdc;
                 }
 
-                    .overlay#wallet-withdrawal .details {
+                    .payoutAccountDetails {
                         display: flex;
                         align-items: center;
                         /* border: 1px solid red; */
                         gap: .8rem;
                     } 
 
-                        .overlay#wallet-withdrawal .icon-container {
+                        .payoutAccountIconWrapper {
                             width: 1.5rem; 
                             height: 1.5rem;
                             display: flex;
@@ -126,7 +121,7 @@
                             justify-content: center;
                         }
 
-                    .overlay#wallet-withdrawal .outer-circle.wallet-withdrawal {
+                    .payoutAccountsItem .outerCircle {
                         background-color: #dcdcdc;
                         border-radius: 100rem;
                         width: 1.1rem;
@@ -138,14 +133,14 @@
                         align-items: center;
                     }
 
-                        .overlay#wallet-withdrawal .inner-circle.wallet-withdrawal {
+                        .outerCircle .innerCircle {
                             background-color: #93983D;
                             width: .7rem;
                             height: .7rem;
                             border-radius: 100rem;
                         }
 
-        .overlay#wallet-withdrawal .submit-button {
+        .submitButton {
             border-radius: 0.5rem;
             display: flex;
             height: 2.3rem;
@@ -160,11 +155,11 @@
             margin-top: 1rem;
             width: 100%;
         }
-        .overlay#wallet-withdrawal .submit-button:active {
+        .submitButton:active {
             opacity: .7;
             color: rgb(255, 255, 255, 0.7);
         }
-        .overlay#wallet-withdrawal .submit-button:disabled {
+        .submitButton:disabled {
             cursor: default;
             opacity: .3;
             color: rgb(255, 255, 255, 0.7);
