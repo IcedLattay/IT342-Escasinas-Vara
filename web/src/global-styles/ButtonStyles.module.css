@@ -1,0 +1,33 @@
+
+
+.smallButton {
+    border-radius: .3rem;
+    padding: .3rem .5rem; 
+    cursor: pointer;
+}
+
+.smallButton.mono {
+    color: #000000;
+}
+.smallButton.mono:hover {
+    background-color: #f0f0f0;
+}
+.smallButton.mono:active {
+    background-color: #eaeaea;
+}
+
+.smallButton.green {
+    color: #7d9357;
+}
+.smallButton.green:hover {
+    background-color: #eff1eb;
+}
+.smallButton.green:active {
+    background-color: #dfe7d1;
+}
+
+.smallButton.withIcon {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+}
