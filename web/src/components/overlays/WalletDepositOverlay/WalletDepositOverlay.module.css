@@ -1,17 +1,12 @@
 
 
-.overlay#wallet-deposit {
-    z-index: 2;
-    border-radius: 1rem;
+.content {
+    border-radius: 1px solid red;
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
-    .overlay#wallet-deposit .overlay-header.wallet-deposit {
+    .header {
         display: flex;
         justify-content: start;
         padding: 1.4rem 1rem .6rem 1rem;
@@ -20,7 +15,7 @@
         border-bottom: 1px solid #C3C3C3;
     }
 
-    .overlay#wallet-deposit .overlay-body.wallet-deposit {
+    .body {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -29,15 +24,18 @@
         /* border: 1px solid red; */
     }
 
-        .overlay#wallet-deposit .field.amount.wallet-deposit {
+        .field {
             display: flex;
+        }
+
+        .field.amount {
             flex-direction: column;
             gap: .6rem;
             width: 100%;
             /* border: 1px solid red; */
         }
 
-            .overlay#wallet-deposit .input-field {
+            .inputWrapper {
                 display: flex;
                 align-items: center;
                 padding: .7rem;
@@ -45,38 +43,34 @@
                 background-color: #f0f0f0;
                 gap: .5rem;
             }
-            .overlay#wallet-deposit .input-field:hover,
-            .input-field:has(input:focus) {
+            .inputWrapper:hover,
+            .inputWrapper:has(input:focus) {
                 box-shadow: inset 0 0 0 1px #424242;
             }
-            .overlay#wallet-deposit .input-field:has(input:disabled):hover {
+            .inputWrapper:has(input:disabled):hover {
                 box-shadow: none;
             }
 
-                .input-field input {
+                .inputWrapper input {
                     font-size: .8rem;
                     font-family: "Inter";
                     border: none;
                     background: none;
                     flex: 1;
                 }
-                .input-field input:focus {
+                .inputWrapper input:focus {
                     outline: none;
                 }
-                .input-field input::-webkit-outer-spin-button,
-                .input-field input::-webkit-inner-spin-button {
+                .inputWrapper input::-webkit-outer-spin-button,
+                .inputWrapper input::-webkit-inner-spin-button {
                     -webkit-appearance: none;
                     margin: 0;
                 }
-                .input-field input[type=number] {
+                .inputWrapper input[type=number] {
                     -moz-appearance: textfield;
                 }
-                .input-field input::placeholder {
-                    
-                }
 
-        .overlay#wallet-deposit .field.payment-method.wallet-deposit {
-            display: flex;
+        .field.paymentMethod {
             /* border: 1px solid red; */
             gap: 1.3rem;
             flex-direction: column;
@@ -84,28 +78,28 @@
             width: 100%;
         }
 
-            .overlay#wallet-deposit .payment-method-item {
+            .paymentMethodsList {
                 display: flex;
-                align-items: center;
-                padding: 1rem .3rem 1rem .7rem;
-                gap: .7rem;
-                border-radius: .5rem;
-                cursor: pointer;
-            }
-            .overlay#wallet-deposit .payment-method-item:hover {
-                background-color: #f0f0f0;
-            }
-            .overlay#wallet-deposit .payment-method-item:active {
-                background-color: #eaeaea;
+                flex-direction: column;
+                /* border: 1px solid red; */
             }
 
-                .overlay#wallet-deposit .payment-method-items {
+                .paymentMethodsItem {
                     display: flex;
-                    flex-direction: column;
-                    /* border: 1px solid red; */
+                    align-items: center;
+                    padding: 1rem .3rem 1rem .7rem;
+                    gap: .7rem;
+                    border-radius: .5rem;
+                    cursor: pointer;
+                }
+                .paymentMethodsItem:hover {
+                    background-color: #f0f0f0;
+                }
+                .paymentMethodsItem:active {
+                    background-color: #eaeaea;
                 }
 
-                    .overlay#wallet-deposit .outer-circle.wallet-deposit {
+                    .paymentMethodsItem .outerCircle {
                         background-color: #dcdcdc;
                         border-radius: 100rem;
                         width: 1.1rem;
@@ -117,27 +111,14 @@
                         align-items: center;
                     }
 
-                        .overlay#wallet-deposit .inner-circle.wallet-deposit {
+                        .outerCircle .innerCircle {
                             background-color: #93983D;
                             width: .7rem;
                             height: .7rem;
                             border-radius: 100rem;
                         }
 
-        .overlay#wallet-deposit .small-button {
-            color: #7d9357;
-            border-radius: .3rem;
-            padding: .3rem .5rem; 
-            cursor: pointer;
-        }
-        .overlay#wallet-deposit .small-button:hover {
-            background-color: #eff1eb;
-        }
-        .overlay#wallet-deposit .small-button:active {
-            background-color: #dfe7d1;
-        }
-
-        .overlay#wallet-deposit .submit-button {
+        .submitButton {
             border-radius: 0.5rem;
             display: flex;
             height: 2.3rem;
@@ -152,11 +133,11 @@
             margin-top: 1rem;
             width: 100%;
         }
-        .overlay#wallet-deposit .submit-button:active {
+        .submitButton:active {
             opacity: .7;
             color: rgb(255, 255, 255, 0.7);
         }
-        .overlay#wallet-deposit .submit-button:disabled {
+        .submitButton:disabled {
             cursor: default;
             opacity: .3;
             color: rgb(255, 255, 255, 0.7);

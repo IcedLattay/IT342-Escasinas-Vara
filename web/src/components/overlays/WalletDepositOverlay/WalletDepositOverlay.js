@@ -1,4 +1,3 @@
-import "./WalletDepositOverlay.css"
 import WalletDepositOverlayContainer from "./WalletDepositOverlayContainer";
 
 export default function WalletDepositOverlay({ onExit }) {

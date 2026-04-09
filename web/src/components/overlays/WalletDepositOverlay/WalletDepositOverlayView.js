@@ -1,9 +1,9 @@
-import "./WalletDepositOverlay.css"
 import ExitOverlayButton from "../../ExitOverlayButton/ExitOverlayButton";
 import MayaLogo from "../../vector-assets/MayaLogo"
 import GCashLogo from "../../vector-assets/GCashLogo"
 import { Loader2 } from "lucide-react";
 import { handleAmountOnChange, handleAmountOnBlur } from "../../../helper-functions/WalletHelpFunctions";
+import styles from "./WalletDepositOverlay.module.css";
 
 export default function WalletDepositOverlayView({ 
     onExit,
@@ -20,10 +20,10 @@ export default function WalletDepositOverlayView({
 }) {
 
     return (
-        <div className="overlay" id="wallet-deposit">
+        <div className={styles.content}>
             
 
-            <div className="overlay-header wallet-deposit">
+            <div className={styles.header}>
                 <p
                     style={{
                         fontSize: "1.1rem"
@@ -31,11 +31,11 @@ export default function WalletDepositOverlayView({
                 >Deposit to wallet</p>
             </div>
 
-            <div className="overlay-body wallet-deposit">
-                <div className="field amount wallet-deposit">
+            <div className={styles.body}>
+                <div className={`${styles.field} ${styles.amount}`}>
                     <p>Enter amount</p>
 
-                    <div className="input-field">
+                    <div className={styles.inputWrapper}>
                         <p>{ wallet?.currency }</p>
 
                         <input 
@@ -58,11 +58,12 @@ export default function WalletDepositOverlayView({
                     >Minimum Amount: PHP 10.00</p>
                 </div>
 
-                <div className="field payment-method wallet-deposit">
+                <div className={`${styles.field} ${styles.paymentMethod}`}>
                     <p>Select a payment method</p>
 
-                    <div className="payment-method-items">
-                        <div className="payment-method-item"
+                    <div className={styles.paymentMethodsList}>
+                        <div 
+                            className={styles.paymentMethodsItem}
                             onClick={() => setSelectedPaymentMethod("GCASH")}
                         >
                             <GCashLogo
@@ -72,14 +73,15 @@ export default function WalletDepositOverlayView({
 
                             <p>GCash</p>
 
-                            <div className="outer-circle wallet-deposit">
+                            <div className={styles.outerCircle}>
                                 { selectedPaymentMethod == "GCASH" &&
-                                    <div className="inner-circle wallet-deposit" />
+                                    <div className={styles.innerCircle}/>
                                 }
                             </div>
                         </div>
 
-                        <div className="payment-method-item"
+                        <div 
+                            className={styles.paymentMethodsItem}
                             onClick={() => setSelectedPaymentMethod("PAYMAYA")}
                         >
                             <MayaLogo
@@ -89,9 +91,9 @@ export default function WalletDepositOverlayView({
 
                             <p>Maya</p>
 
-                            <div className="outer-circle wallet-deposit">
+                            <div className={styles.outerCircle}>
                                 { selectedPaymentMethod == "PAYMAYA" &&
-                                    <div className="inner-circle wallet-deposit" />
+                                    <div className={styles.innerCircle}/>
                                 }
                             </div>
                         </div>
@@ -99,7 +101,7 @@ export default function WalletDepositOverlayView({
                 </div>
 
                 <button 
-                    className="submit-button" 
+                    className={styles.submitButton} 
                     type="submit" 
                     style={{
                         fontSize: ".8rem",

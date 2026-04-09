@@ -1,4 +1,3 @@
-import "./WalletDepositOverlay.css"
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../../security/AuthContext";
 import { deposit } from "../../../api/WalletService";
