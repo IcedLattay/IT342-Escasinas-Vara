@@ -9,3 +9,17 @@ export async function fetchMyWallet() {
         }
     );
 }
+
+
+export async function deposit(walletDepositData) {
+    return axios.post(
+        "http://localhost:8080/api/wallet/deposit",
+        walletDepositData,
+        {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+        }
+    );
+}
