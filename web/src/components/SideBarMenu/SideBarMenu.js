@@ -3,13 +3,13 @@ import "./SideBarMenu.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../security/AuthContext";
 import VaraIcon from "../vector-assets/VaraIcon"
-import ExitOverlayButton from "../ExitOverlayButton/ExitOverlayButton";
 import OverlayBackdrop from "../OverlayBackdrop/OverlayBackdrop";
 import WalletDashboardOverlay from "../overlays/WalletDashboardOverlay/WalletDashboardOverlay";
 import EditProfileOverlay from "../overlays/EditProfileOverlay/EditProfileOverlay";
 import WalletDepositOverlay from "../overlays/WalletDepositOverlay/WalletDepositOverlay";
 import WalletWithdrawalOverlay from "../overlays/WalletWithdrawalOverlay/WalletWithdrawalOverlay";
 import ReceiptOverlay from "../overlays/ReceiptOverlay/ReceiptOverlay";
+import Modal from "../overlays/Modal";
 
 export default function SideBarMenu() {
     
@@ -26,10 +26,10 @@ export default function SideBarMenu() {
     const [profileOverlayIsOpen, setProfileOverlayIsOpen] = useState(false);
     const [editProfileIsHovered, setEditProfileIsHovered] = useState(false);
     const [editProfileOverlayIsOpen, setEditProfileOverlayIsOpen] = useState(false);
-    const [walletDashboardOverlayIsOpen, setWalletDashboardOverIsOpen] = useState(false);
+    const [walletDashboardOverlayIsOpen, setWalletDashboardOverlayIsOpen] = useState(false);
     const [walletDepositOverlayIsOpen, setWalletDepositOverlayIsOpen] = useState(false);
     const [walletWithdrawalOverlayIsOpen, setWalletWithdrawalOverlayIsOpen] = useState(false);
-    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(false);
+    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(true);
 
 
 
@@ -40,7 +40,7 @@ export default function SideBarMenu() {
         if (receiptData) {
             setReceiptData(receiptData);
             setSidebarVisible(true);
-            setWalletDashboardOverIsOpen(true);
+            setWalletDashboardOverlayIsOpen(true);
             setReceiptOverlayIsOpen(true);
 
             window.history.replaceState({}, document.title);
@@ -330,7 +330,7 @@ export default function SideBarMenu() {
                                                 <button className="button"
                                                     onClick={() => {
                                                         setProfileOverlayIsOpen(false)
-                                                        setWalletDashboardOverIsOpen(true)
+                                                        setWalletDashboardOverlayIsOpen(true)
                                                     }}
                                                 >
                                                     Manage Wallet
@@ -354,12 +354,12 @@ export default function SideBarMenu() {
                                     </>
                                 }   
 
-                                { (editProfileOverlayIsOpen || walletDashboardOverlayIsOpen) && 
+                                {/* { (editProfileOverlayIsOpen || walletDashboardOverlayIsOpen) && 
                                     <OverlayBackdrop 
                                         background={"#4d4d4d33"}
                                         onClick={() => {
                                             setEditProfileOverlayIsOpen(false)
-                                            setWalletDashboardOverIsOpen(false)
+                                            setWalletDashboardOverlayIsOpen(false)
                                         }} 
                                     />
                                 }
@@ -371,49 +371,55 @@ export default function SideBarMenu() {
                                         authenticatedUser={authenticatedUser}
                                     />
 
-                                }
+                                } */}
 
-                                { walletDashboardOverlayIsOpen &&
+
+                                <Modal
+                                    isOpen={walletDashboardOverlayIsOpen}
+                                    onClose={() => setWalletDashboardOverlayIsOpen(false)}
+                                    modalLevel={1}
+                                >
                                     <WalletDashboardOverlay 
-                                        onExit={() => setWalletDashboardOverIsOpen(false)}
+                                        onExit={() => setWalletDashboardOverlayIsOpen(false)}
                                         handleOnClickWalletDeposit={() => setWalletDepositOverlayIsOpen(true)}
                                         handleOnClickWalletWithdrawal={() => setWalletWithdrawalOverlayIsOpen(true)}
                                         // handleOnClickWalletWithdrawal={() => setReceiptOverlayIsOpen(true)}
                                     />
-                                }
+                                </Modal> 
 
-                                { (walletDepositOverlayIsOpen || 
-                                    walletWithdrawalOverlayIsOpen ||
-                                    receiptOverlayIsOpen ) &&
-                                    <OverlayBackdrop 
-                                        background={"#4d4d4d33"}
-                                        onClick={() => {
-                                            setWalletDepositOverlayIsOpen(false)
-                                            setWalletWithdrawalOverlayIsOpen(false)
-                                            setReceiptOverlayIsOpen(false)
-                                        }} 
-                                        zIndex={2}
-                                    />
-                                }
-
-                                { walletDepositOverlayIsOpen &&
+                                <Modal
+                                    isOpen={walletDepositOverlayIsOpen}
+                                    onClose={() => setWalletDepositOverlayIsOpen(false)}
+                                    modalLevel={2}
+                                >
                                     <WalletDepositOverlay
                                         onExit={() => setWalletDepositOverlayIsOpen(false)}
                                     />
-                                }
+                                </Modal>
 
-                                { walletWithdrawalOverlayIsOpen &&
-                                    <WalletWithdrawalOverlay 
+
+                                <Modal
+                                    isOpen={walletWithdrawalOverlayIsOpen}
+                                    onClose={() => setWalletWithdrawalOverlayIsOpen(false)}
+                                    modalLevel={2}
+                                >
+                                    <WalletWithdrawalOverlay
                                         onExit={() => setWalletWithdrawalOverlayIsOpen(false)}
                                     />
-                                }
+                                </Modal>
 
-                                { receiptOverlayIsOpen &&
+                                <Modal
+                                    isOpen={receiptOverlayIsOpen}
+                                    onClose={() => setReceiptOverlayIsOpen(false)}
+                                    modalLevel={3}  
+                                >
                                     <ReceiptOverlay 
                                         receiptData={receiptData}
                                         onExit={() => setReceiptOverlayIsOpen(false)}
                                     />
-                                }
+                                </Modal>
+
+                                    
                         </div>
                     </div>
 
