@@ -91,3 +91,37 @@ export function handleAmountOnBlur(
 
     setAmount(parsedAmount.toFixed(2));
 }
+
+export function handlePayoutAccountNumberOnChange(
+    e,
+    setPayoutAccountNumber,
+    setFieldValidationTracker
+) {
+    let raw = e.target.value.replace(/\D/g, '');
+    
+    if (raw.length >= 2 && raw.startsWith('0')) {
+        raw = raw.substring(1);
+    }
+
+    const digitsOnly = raw.slice(0, 10);
+
+    let formatted = '';
+    if (digitsOnly.length > 0) {
+        formatted += digitsOnly.substring(0, 3);
+        if (digitsOnly.length > 3) {
+            formatted += ' ' + digitsOnly.substring(3, 6);
+        }
+        if (digitsOnly.length > 6) {
+            formatted += ' ' + digitsOnly.substring(6, 10);
+        }
+    }
+
+    setPayoutAccountNumber(formatted);
+
+    const isValid = digitsOnly.length === 10 && digitsOnly.startsWith('9');
+
+    setFieldValidationTracker((prev) => ({
+        ...prev,
+        payoutAccountNumberIsValid: isValid
+    }));
+}
