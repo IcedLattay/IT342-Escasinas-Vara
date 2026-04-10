@@ -125,3 +125,15 @@ export function handlePayoutAccountNumberOnChange(
         payoutAccountNumberIsValid: isValid
     }));
 }
+
+export function normalizePhoneNumber(input) {
+    let value = input.trim();
+
+    value = value.replace(/\D/g, "");
+
+    if (!value.startsWith("0")) {
+        value = "0" + value;
+    }
+
+    return value;
+}
