@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import AddPayoutAccountOverlayView from "./AddPayoutAccountOverlayView";
 import { normalizePhoneNumber } from "../../../helper-functions/WalletHelpFunctions";
+import { savePayoutAccount } from "../../../api/WalletService";
 
 
 
@@ -38,14 +39,11 @@ export default function AddPayoutAccountOverlayContainer({
         } 
 
         try {
-            // const res = await addPayoutAccount(payoutAccountToAddData);
+            const res = await savePayoutAccount(payoutAccountToAddData);
 
-            // const newlySavedPayoutAccount = res.data.data.payoutAccount;
+            const newlySavedPayoutAccount = res.data.data.payoutAccount;
 
-            // temporary test data
-            const payoutAccount = { id: 4, payoutMethod: "GCash", number: "63-9****51849" };
-
-            setSavedPayoutAccounts((prev) => [payoutAccount, ...prev]);
+            setSavedPayoutAccounts((prev) => [newlySavedPayoutAccount, ...prev]);
             setAddPayoutAccountOverlayIsOpen(false);
         } catch (err) {
             console.log("Error adding payout account:", err);
