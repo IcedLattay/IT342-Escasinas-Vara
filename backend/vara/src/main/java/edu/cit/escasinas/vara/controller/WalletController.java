@@ -103,29 +103,45 @@ public class WalletController {
             @AuthenticationPrincipal String email
     ) {
 
-        User owner = userService.getCurrentUser(email);
+        try {
+            User owner = userService.getCurrentUser(email);
 
-        WithdrawalAccount newAccount = walletService.createWithdrawalAccount(
-                owner,
-                req
-        );
+            WithdrawalAccount newAccount = walletService.createWithdrawalAccount(
+                    owner,
+                    req
+            );
 
-        ApiResponse res = new ApiResponse(
-                true,
-                Map.of(
-                        "payoutAccount", Map.of(
-                                "id", newAccount.withdrawalAccountId,
-                                "payoutMethod", newAccount.payoutMethod.getDisplayName(),
-                                "number", (newAccount.accountNumber != null && newAccount.accountNumber.startsWith("0"))
-                                        ? "63-" + newAccount.accountNumber.substring(1, 2) + "****" + newAccount.accountNumber.substring(newAccount.accountNumber.length() - 5)
-                                        : newAccount.accountNumber
-                        )
-                ),
-                null,
-                java.time.Instant.now().toString()
-        );
+            ApiResponse res = new ApiResponse(
+                    true,
+                    Map.of(
+                            "payoutAccount", Map.of(
+                                    "id", newAccount.withdrawalAccountId,
+                                    "payoutMethod", newAccount.payoutMethod.getDisplayName(),
+                                    "number", (newAccount.accountNumber != null && newAccount.accountNumber.startsWith("0"))
+                                            ? "63-" + newAccount.accountNumber.substring(1, 2) + "****" + newAccount.accountNumber.substring(newAccount.accountNumber.length() - 5)
+                                            : newAccount.accountNumber
+                            )
+                    ),
+                    null,
+                    java.time.Instant.now().toString()
+            );
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+            return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        } catch (Exception e) {
+            ApiResponse res = new ApiResponse(
+                    false,
+                    null,
+                    new ApiError(
+                            "DB-002",
+                            "Duplicate entry",
+                            e.getMessage()
+                    ),
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+        }
+
     }
 
     @GetMapping("/transaction")

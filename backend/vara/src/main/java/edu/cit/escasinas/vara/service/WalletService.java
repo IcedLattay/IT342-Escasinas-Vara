@@ -200,6 +200,19 @@ public class WalletService {
         PaymentMethod payoutMethod = req.payoutMethod;
         String accountNumber = req.accountNumber;
 
+        boolean exists = withdrawalAccountRepository.existsByOwnerAndPayoutMethodAndAccountNumber(
+                owner,
+                payoutMethod,
+                accountNumber
+        );
+
+        if (exists) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Payout account already exists."
+            );
+        }
+
         WithdrawalAccount newAccount = new WithdrawalAccount(
                 owner,
                 payoutMethod,
