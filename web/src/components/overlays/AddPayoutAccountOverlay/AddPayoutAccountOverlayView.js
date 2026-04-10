@@ -6,8 +6,8 @@ import { handlePayoutAccountNumberOnChange } from "../../../helper-functions/Wal
 export default function AddPayoutAccountOverlayView({
     onExit,
     payoutMethodToAdd,
-    payoutAccountNumber,
-    setPayoutAccountNumber,
+    payoutAccountNumberToAdd,
+    setPayoutAccountNumberToAdd,
     fieldValidationTracker,
     setFieldValidationTracker,
     payoutAccountNumberField,
@@ -33,7 +33,7 @@ export default function AddPayoutAccountOverlayView({
                     ( payoutMethodToAdd === "PAYMAYA" && 
                     "Paymaya"))}</p>
 
-                    <div className={`${styles.inputWrapper} ${inputStyles.inputWrapper} ${ (payoutAccountNumber.replace(/\s/g, '').length === 10 && !fieldValidationTracker.payoutAccountNumberIsValid) ? inputStyles.error : ''}`}>
+                    <div className={`${styles.inputWrapper} ${inputStyles.inputWrapper} ${ (payoutAccountNumberToAdd.replace(/\s/g, '').length === 10 && !fieldValidationTracker.payoutAccountNumberIsValid) ? inputStyles.error : ''}`}>
                         <p 
                             style={{ 
                                 fontWeight: "500",
@@ -43,13 +43,13 @@ export default function AddPayoutAccountOverlayView({
 
                         <input 
                             type="text"
-                            value={payoutAccountNumber} 
-                            onChange={(e) => handlePayoutAccountNumberOnChange(e, setPayoutAccountNumber, setFieldValidationTracker)}
+                            value={payoutAccountNumberToAdd} 
+                            onChange={(e) => handlePayoutAccountNumberOnChange(e, setPayoutAccountNumberToAdd, setFieldValidationTracker)}
                             ref={payoutAccountNumberField}
                         />
                     </div>
 
-                    {payoutAccountNumber.replace(/\s/g, '').length === 10 && !fieldValidationTracker.payoutAccountNumberIsValid && (
+                    {payoutAccountNumberToAdd.replace(/\s/g, '').length === 10 && !fieldValidationTracker.payoutAccountNumberIsValid && (
                     <p 
                         style={{
                             fontSize: ".7rem",
@@ -69,7 +69,7 @@ export default function AddPayoutAccountOverlayView({
                         fontSize: ".8rem",
                         fontFamily: "Inter"
                     }}
-                    // onClick={onSubmit} <-- calls api to create payoutAccount and save in user's payoutAccounts list in database
+                    onClick={onSubmit} 
                     disabled={
                         isSubmitting ||
                         !fieldValidationTracker.payoutAccountNumberIsValid
