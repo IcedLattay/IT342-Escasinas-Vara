@@ -23,3 +23,17 @@ export async function deposit(walletDepositData) {
         }
     );
 }
+
+
+export async function savePayoutAccount(payoutAccountData) {
+    return axios.post(
+        "http://localhost:8080/api/wallet/withdrawal-account",
+        payoutAccountData,
+        {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+        }
+    );
+}
