@@ -10,7 +10,6 @@ export default function WalletWithdrawalOverlay({
     onExit,
     wallet,
     amountToWithdrawField,
-    payoutAccounts,
     supportedPayoutMethods,
     amountToWithdraw,
     setAmountToWithdraw,
@@ -19,10 +18,11 @@ export default function WalletWithdrawalOverlay({
     balanceIsSufficient,
     setBalanceIsSufficient,
     selectedPayoutAccount,
-    setselectedPayoutAccount,
+    setSelectedPayoutAccount,
     onSubmit,
     isSubmitting,
-    handleAddPayoutAccount
+    handleAddPayoutAccount,
+    savedPayoutAccounts
 }) {
 
     return (
@@ -75,13 +75,13 @@ export default function WalletWithdrawalOverlay({
                     <p>Select an account to transfer funds into</p>
 
                     <div className={styles.payoutAccountsList}>
-                        { payoutAccounts ?
+                        { savedPayoutAccounts ?
                         
-                        (payoutAccounts.map((account) => (
+                        (savedPayoutAccounts.map((account) => (
                             <div
                                 key={account.id} 
                                 className={styles.payoutAccountsItem}
-                                onClick={() => setselectedPayoutAccount(account.id)}
+                                onClick={() => setSelectedPayoutAccount(account.id)}
                             >
                                 <div className={styles.payoutAccountDetails}>
 
@@ -106,7 +106,7 @@ export default function WalletWithdrawalOverlay({
                             </div>
                         )))
                         :
-                        <></>
+                        <></> // IMPLEMENT A LOADING STATE
                         }
                         { supportedPayoutMethods.map((supportedPayout) => (
                             <div 

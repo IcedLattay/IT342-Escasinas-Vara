@@ -9,7 +9,8 @@ export default function AddPayoutAccountOverlayContainer({
     onExit,
     payoutMethodToAdd,
     setSavedPayoutAccounts,
-    setAddPayoutAccountOverlayIsOpen  
+    setAddPayoutAccountOverlayIsOpen,
+    setSelectedPayoutAccount
 }) {
 
     // useStates
@@ -47,6 +48,7 @@ export default function AddPayoutAccountOverlayContainer({
             const newlySavedPayoutAccount = res.data.data.payoutAccount;
 
             setSavedPayoutAccounts((prev) => [newlySavedPayoutAccount, ...prev]);
+            setSelectedPayoutAccount(newlySavedPayoutAccount.id);
             setAddPayoutAccountOverlayIsOpen(false);
         } catch (err) {
             console.log("Error adding payout account:", err);

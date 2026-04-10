@@ -4,7 +4,8 @@ export default function AddPayoutAccountOverlay({
     onExit,
     payoutMethodToAdd,
     setSavedPayoutAccounts,
-    setAddPayoutAccountOverlayIsOpen
+    setAddPayoutAccountOverlayIsOpen,
+    setSelectedPayoutAccount
 }) {
     return (
         <AddPayoutAccountOverlayContainer 
@@ -12,6 +13,7 @@ export default function AddPayoutAccountOverlay({
             payoutMethodToAdd={payoutMethodToAdd}
             setSavedPayoutAccounts={setSavedPayoutAccounts}
             setAddPayoutAccountOverlayIsOpen={setAddPayoutAccountOverlayIsOpen}
+            setSelectedPayoutAccount={setSelectedPayoutAccount}
         />
     );
 }

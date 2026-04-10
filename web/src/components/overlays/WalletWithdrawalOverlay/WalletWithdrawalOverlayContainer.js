@@ -6,17 +6,14 @@ import WalletWithdrawalOverlayView from "./WalletWithdrawalOverlayView";
 
 export default function WalletWithdrawalOverlayContainer({ 
     onExit,
+    savedPayoutAccounts,
     setAddPayoutAccountOverlayIsOpen,
-    setPayoutMethodToAdd
+    setPayoutMethodToAdd,
+    selectedPayoutAccount,
+    setSelectedPayoutAccount
 }) {
     const { wallet } = useContext(AuthContext);
     
-    // DUMMY DATA FOR NOW since wa pako ka implement payout accounts in backend!
-    const payoutAccounts = [
-        // { id: 1, payoutMethod: "GCash", number: "63-9****51849" },
-        // { id: 2, payoutMethod: "GCash", number: "63-9****23952" },
-        // { id: 3, payoutMethod: "Maya", number: "63-9****12345" },
-    ];
     const supportedPayoutMethods = [
         {id: "GCASH", payoutMethod: "GCash",},
         {id: "PAYMAYA", payoutMethod: "Paymaya"}
@@ -29,7 +26,6 @@ export default function WalletWithdrawalOverlayContainer({
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [balanceIsSufficient, setBalanceIsSufficient] = useState(true);
-    const [selectedPayoutAccount, setSelectedPayoutAccount] = useState(payoutAccounts[0]?.id);
 
     // useRefs
     const amountToWithdrawField = useRef(null);
@@ -38,6 +34,12 @@ export default function WalletWithdrawalOverlayContainer({
     useEffect(() => {
         amountToWithdrawField.current.focus();
     }, [])
+
+    useEffect(() => {
+        if (savedPayoutAccounts.length > 0 && !selectedPayoutAccount) {
+            setSelectedPayoutAccount(savedPayoutAccounts[0].id);
+        }
+    }, [savedPayoutAccounts, selectedPayoutAccount]);
 
     async function handleWithdrawal(e) {
         setIsSubmitting(true);
@@ -67,7 +69,6 @@ export default function WalletWithdrawalOverlayContainer({
                 setAddPayoutAccountOverlayIsOpen(true);
             }}
             amountToWithdrawField={amountToWithdrawField}
-            payoutAccounts={payoutAccounts}
             supportedPayoutMethods={supportedPayoutMethods}
             amountToWithdraw={amountToWithdraw}
             setAmountToWithdraw={setAmountToWithdraw}
@@ -78,7 +79,8 @@ export default function WalletWithdrawalOverlayContainer({
             isSubmitting={isSubmitting}
             onSubmit={handleWithdrawal}
             selectedPayoutAccount={selectedPayoutAccount}
-            setselectedPayoutAccount={setSelectedPayoutAccount}
+            setSelectedPayoutAccount={setSelectedPayoutAccount}
+            savedPayoutAccounts={savedPayoutAccounts}
         />
     );
 }

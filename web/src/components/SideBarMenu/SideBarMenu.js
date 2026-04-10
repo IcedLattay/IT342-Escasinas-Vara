@@ -31,6 +31,7 @@ export default function SideBarMenu() {
     const [savedPayoutAccounts, setSavedPayoutAccounts] = useState([]);
     const [walletDepositOverlayIsOpen, setWalletDepositOverlayIsOpen] = useState(false);
     const [walletWithdrawalOverlayIsOpen, setWalletWithdrawalOverlayIsOpen] = useState(false);
+    const [selectedPayoutAccount, setSelectedPayoutAccount] = useState(null);
     const [addPayoutAccountOverlayIsOpen, setAddPayoutAccountOverlayIsOpen] = useState(false);
     const [payoutMethodToAdd, setPayoutMethodToAdd] = useState(null);
     const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(false);
@@ -408,8 +409,11 @@ export default function SideBarMenu() {
                                 >
                                     <WalletWithdrawalOverlay
                                         onExit={() => setWalletWithdrawalOverlayIsOpen(false)}
+                                        savedPayoutAccounts={savedPayoutAccounts}
                                         setAddPayoutAccountOverlayIsOpen={setAddPayoutAccountOverlayIsOpen}
                                         setPayoutMethodToAdd={setPayoutMethodToAdd}
+                                        selectedPayoutAccount={selectedPayoutAccount}
+                                        setSelectedPayoutAccount={setSelectedPayoutAccount}
                                     />
                                 </Modal>
 
@@ -434,6 +438,7 @@ export default function SideBarMenu() {
                                         payoutMethodToAdd={payoutMethodToAdd}
                                         setSavedPayoutAccounts={setSavedPayoutAccounts}
                                         setAddPayoutAccountOverlayIsOpen={setAddPayoutAccountOverlayIsOpen}
+                                        setSelectedPayoutAccount={setSelectedPayoutAccount}
                                     />
                                 </Modal>
                                     
