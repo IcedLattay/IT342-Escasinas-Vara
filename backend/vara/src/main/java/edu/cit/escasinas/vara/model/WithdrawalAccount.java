@@ -9,7 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="withdrawal_accounts")
+@Table(
+        name="withdrawal_accounts",
+        uniqueConstraints = {
+            @UniqueConstraint(columnNames = {"owner_id", "payout_method", "account_number"})
+        }
+)
 public class WithdrawalAccount {
 
     @Id
