@@ -1,12 +1,10 @@
 package edu.cit.escasinas.vara.controller;
 
-import edu.cit.escasinas.vara.dto.ApiError;
-import edu.cit.escasinas.vara.dto.ApiResponse;
-import edu.cit.escasinas.vara.dto.WalletDepositRequest;
-import edu.cit.escasinas.vara.dto.WalletTransactionRetrievalRequest;
+import edu.cit.escasinas.vara.dto.*;
 import edu.cit.escasinas.vara.model.User;
 import edu.cit.escasinas.vara.model.Wallet;
 import edu.cit.escasinas.vara.model.WalletTransaction;
+import edu.cit.escasinas.vara.model.WithdrawalAccount;
 import edu.cit.escasinas.vara.service.UserService;
 import edu.cit.escasinas.vara.service.WalletService;
 import org.checkerframework.checker.units.qual.A;
@@ -92,6 +90,37 @@ public class WalletController {
         ApiResponse res = new ApiResponse(
                 true,
                 data,
+                null,
+                java.time.Instant.now().toString()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    }
+
+    @PostMapping("/withdrawal-account")
+    public ResponseEntity<?> saveWithdrawalAccount(
+            @RequestBody WithdrawalAccountSaveRequest req,
+            @AuthenticationPrincipal String email
+    ) {
+
+        User owner = userService.getCurrentUser(email);
+
+        WithdrawalAccount newAccount = walletService.createWithdrawalAccount(
+                owner,
+                req
+        );
+
+        ApiResponse res = new ApiResponse(
+                true,
+                Map.of(
+                        "payoutAccount", Map.of(
+                                "id", newAccount.withdrawalAccountId,
+                                "payoutMethod", newAccount.payoutMethod.getDisplayName(),
+                                "number", (newAccount.accountNumber != null && newAccount.accountNumber.startsWith("0"))
+                                        ? "63-" + newAccount.accountNumber.substring(1, 2) + "****" + newAccount.accountNumber.substring(newAccount.accountNumber.length() - 5)
+                                        : newAccount.accountNumber
+                        )
+                ),
                 null,
                 java.time.Instant.now().toString()
         );

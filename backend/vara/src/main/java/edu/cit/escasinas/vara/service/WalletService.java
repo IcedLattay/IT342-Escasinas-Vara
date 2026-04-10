@@ -2,14 +2,17 @@ package edu.cit.escasinas.vara.service;
 
 import edu.cit.escasinas.vara.dto.WalletDepositRequest;
 import edu.cit.escasinas.vara.dto.WalletTransactionRetrievalRequest;
+import edu.cit.escasinas.vara.dto.WithdrawalAccountSaveRequest;
 import edu.cit.escasinas.vara.enums.PaymentMethod;
 import edu.cit.escasinas.vara.enums.WalletTransactionStatus;
 import edu.cit.escasinas.vara.model.User;
 import edu.cit.escasinas.vara.model.Wallet;
 import edu.cit.escasinas.vara.model.WalletTransaction;
+import edu.cit.escasinas.vara.model.WithdrawalAccount;
 import edu.cit.escasinas.vara.repository.UserRepository;
 import edu.cit.escasinas.vara.repository.WalletRepository;
 import edu.cit.escasinas.vara.repository.WalletTransactionRepository;
+import edu.cit.escasinas.vara.repository.WithdrawalAccountRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -29,6 +32,7 @@ public class WalletService {
     public WalletRepository walletRepository;
     public WalletTransactionRepository walletTransactionRepository;
     public UserRepository userRepository;
+    public WithdrawalAccountRepository withdrawalAccountRepository;
 
     @Value("${paymongo.secret.key}")
     private String paymongoSecretKey;
@@ -36,10 +40,13 @@ public class WalletService {
     public WalletService(
             WalletRepository walletRepository,
             WalletTransactionRepository walletTransactionRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            WithdrawalAccountRepository withdrawalAccountRepository
+    ) {
         this.walletRepository = walletRepository;
         this.walletTransactionRepository = walletTransactionRepository;
         this.userRepository = userRepository;
+        this.withdrawalAccountRepository = withdrawalAccountRepository;
     }
 
     public Wallet getWallet(User owner) {
@@ -184,6 +191,24 @@ public class WalletService {
 
         walletTransactionRepository.save(transaction);
         walletRepository.save(wallet);
+    }
+
+    public WithdrawalAccount createWithdrawalAccount(
+            User owner,
+            WithdrawalAccountSaveRequest req
+    ) {
+        PaymentMethod payoutMethod = req.payoutMethod;
+        String accountNumber = req.accountNumber;
+
+        WithdrawalAccount newAccount = new WithdrawalAccount(
+                owner,
+                payoutMethod,
+                accountNumber
+        );
+
+        withdrawalAccountRepository.save(newAccount);
+
+        return newAccount;
     }
 
     public WalletTransaction retrieveWalletTransaction(WalletTransactionRetrievalRequest req) {
