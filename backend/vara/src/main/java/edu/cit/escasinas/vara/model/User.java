@@ -51,9 +51,12 @@ public class User {
         this.password = password;
     }
 
+    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
+    public Wallet wallet;
+
     @OneToMany(mappedBy = "owner")
     public List<WalletTransaction> walletTransactions = new ArrayList<>();
 
-    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
-    public Wallet wallet;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<WithdrawalAccount> withdrawalAccounts = new ArrayList<>();
 }
