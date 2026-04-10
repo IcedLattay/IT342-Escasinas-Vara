@@ -94,8 +94,10 @@ export function handleAmountOnBlur(
 
 export function handlePayoutAccountNumberOnChange(
     e,
+    payoutMethodToAdd,
     setPayoutAccountNumber,
-    setFieldValidationTracker
+    setFieldValidationTracker,
+    setFieldErrorMsgs
 ) {
     let raw = e.target.value.replace(/\D/g, '');
     
@@ -124,6 +126,28 @@ export function handlePayoutAccountNumberOnChange(
         ...prev,
         payoutAccountNumberIsValid: isValid
     }));
+
+    if (digitsOnly.length === 0) {
+        setFieldErrorMsgs((prev) => ({
+            ...prev,
+            accountNumberToAddError: ""
+        }));
+    } else if (digitsOnly.length < 10) {
+        setFieldErrorMsgs((prev) => ({
+            ...prev,
+            accountNumberToAddError: ""
+        }));
+    } else if (!isValid) {
+        setFieldErrorMsgs((prev) => ({
+            ...prev,
+            accountNumberToAddError: `Invalid ${payoutMethodToAdd === "GCASH" ? "GCash" : "Paymaya"} number`
+        }));
+    } else {
+        setFieldErrorMsgs((prev) => ({
+            ...prev,
+            accountNumberToAddError: ""
+        }));
+    }
 }
 
 export function normalizePhoneNumber(input) {

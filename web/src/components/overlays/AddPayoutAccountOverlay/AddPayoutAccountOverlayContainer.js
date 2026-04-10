@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import AddPayoutAccountOverlayView from "./AddPayoutAccountOverlayView";
-import { normalizePhoneNumber } from "../../../helper-functions/WalletHelpFunctions";
+import { handlePayoutAccountNumberOnChange, normalizePhoneNumber } from "../../../helper-functions/WalletHelpFunctions";
 import { savePayoutAccount } from "../../../api/WalletService";
 
 
@@ -14,6 +14,9 @@ export default function AddPayoutAccountOverlayContainer({
 
     // useStates
     const [payoutAccountNumberToAdd, setPayoutAccountNumberToAdd] = useState("");
+    const [fieldErrorMsgs, setFieldErrorMsgs] = useState({
+        accountNumberToAddError: ""
+    });
     const [fieldValidationTracker, setFieldValidationTracker] = useState({
         payoutAccountNumberIsValid: false,
     });
@@ -47,9 +50,28 @@ export default function AddPayoutAccountOverlayContainer({
             setAddPayoutAccountOverlayIsOpen(false);
         } catch (err) {
             console.log("Error adding payout account:", err);
+
+            const rawError = err.response?.data?.error?.details || "Saving payout account failed.";
+            const match = rawError.match(/"(.*)"/);
+            const cleanMessage = match ? match[1] : rawError;
+
+            setFieldErrorMsgs((prev) => ({
+                ...prev,
+                accountNumberToAddError: cleanMessage
+            }));
         } finally {
             setIsSubmitting(false);
         }
+    }
+
+    function onPayoutAccountNumberChange(e) {
+        handlePayoutAccountNumberOnChange(
+            e,
+            payoutMethodToAdd,
+            setPayoutAccountNumberToAdd,
+            setFieldValidationTracker,
+            setFieldErrorMsgs
+        );
     }
 
     return (
@@ -57,11 +79,11 @@ export default function AddPayoutAccountOverlayContainer({
             onExit={onExit}
             payoutMethodToAdd={payoutMethodToAdd}
             payoutAccountNumberToAdd={payoutAccountNumberToAdd}
-            setPayoutAccountNumberToAdd={setPayoutAccountNumberToAdd}
+            fieldErrorMsgs={fieldErrorMsgs}
             fieldValidationTracker={fieldValidationTracker}
-            setFieldValidationTracker={setFieldValidationTracker}
             payoutAccountNumberField={payoutAccountNumberField}
             isSubmitting={isSubmitting}
+            onPayoutAccountNumberChange={onPayoutAccountNumberChange}
             onSubmit={handleAddPayoutAccount}
         />
     );

@@ -7,13 +7,20 @@ export default function AddPayoutAccountOverlayView({
     onExit,
     payoutMethodToAdd,
     payoutAccountNumberToAdd,
-    setPayoutAccountNumberToAdd,
+    fieldErrorMsgs,
     fieldValidationTracker,
-    setFieldValidationTracker,
     payoutAccountNumberField,
+    onPayoutAccountNumberChange,
     isSubmitting,
     onSubmit
 }) {
+    const payoutMethodLabel =
+        payoutMethodToAdd === "GCASH"
+            ? "GCash"
+            : payoutMethodToAdd === "PAYMAYA"
+            ? "Paymaya"
+            : "";
+
     return (
         <div className={styles.content}>
             <div className={styles.header}>
@@ -21,19 +28,14 @@ export default function AddPayoutAccountOverlayView({
                     style={{
                         fontSize: "1.1rem"
                     }}
-                >Add a {payoutMethodToAdd && (payoutMethodToAdd === "GCASH" ? 
-                "GCash" : 
-                ( payoutMethodToAdd === "PAYMAYA" && "Paymaya"))} wallet</p>
+                >Add a {payoutMethodLabel} wallet</p>
             </div>
             
             <div className={styles.body}>
                 <div className={`${styles.field} ${styles.number}`}>
-                    <p>Enter your {payoutMethodToAdd && (payoutMethodToAdd === "GCASH" ? 
-                    "GCash" : 
-                    ( payoutMethodToAdd === "PAYMAYA" && 
-                    "Paymaya"))}</p>
+                    <p>Enter your {payoutMethodLabel} number</p>
 
-                    <div className={`${styles.inputWrapper} ${inputStyles.inputWrapper} ${ (payoutAccountNumberToAdd.replace(/\s/g, '').length === 10 && !fieldValidationTracker.payoutAccountNumberIsValid) ? inputStyles.error : ''}`}>
+                    <div className={`${styles.inputWrapper} ${inputStyles.inputWrapper} ${ fieldErrorMsgs?.accountNumberToAddError ? inputStyles.error : ""}`}>
                         <p 
                             style={{ 
                                 fontWeight: "500",
@@ -44,21 +46,20 @@ export default function AddPayoutAccountOverlayView({
                         <input 
                             type="text"
                             value={payoutAccountNumberToAdd} 
-                            onChange={(e) => handlePayoutAccountNumberOnChange(e, setPayoutAccountNumberToAdd, setFieldValidationTracker)}
+                            onChange={onPayoutAccountNumberChange}
                             ref={payoutAccountNumberField}
                         />
                     </div>
 
-                    {payoutAccountNumberToAdd.replace(/\s/g, '').length === 10 && !fieldValidationTracker.payoutAccountNumberIsValid && (
+                    {fieldErrorMsgs?.accountNumberToAddError && (
                     <p 
                         style={{
                             fontSize: ".7rem",
                             color: "#a51111"
                         }}
-                    >Invalid {payoutMethodToAdd && (payoutMethodToAdd === "GCASH" ? 
-                    "GCash" : 
-                    ( payoutMethodToAdd === "PAYMAYA" && 
-                    "Paymaya"))} number</p>
+                    > 
+                        { fieldErrorMsgs.accountNumberToAddError }
+                    </p>
                     )}
                 </div>
 
