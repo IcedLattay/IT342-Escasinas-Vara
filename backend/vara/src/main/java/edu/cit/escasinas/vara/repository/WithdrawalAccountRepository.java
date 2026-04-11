@@ -6,6 +6,8 @@ import edu.cit.escasinas.vara.model.WithdrawalAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface WithdrawalAccountRepository extends JpaRepository<WithdrawalAccount, Long> {
     boolean existsByOwnerAndPayoutMethodAndAccountNumber(
@@ -13,4 +15,5 @@ public interface WithdrawalAccountRepository extends JpaRepository<WithdrawalAcc
             PaymentMethod payoutMethod,
             String accountNumber
     );
+    List<WithdrawalAccount> findByOwnerOrderByCreatedAtDesc(User owner);
 }

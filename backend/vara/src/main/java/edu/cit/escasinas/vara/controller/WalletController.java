@@ -7,6 +7,7 @@ import edu.cit.escasinas.vara.model.WalletTransaction;
 import edu.cit.escasinas.vara.model.WithdrawalAccount;
 import edu.cit.escasinas.vara.service.UserService;
 import edu.cit.escasinas.vara.service.WalletService;
+import edu.cit.escasinas.vara.service.WithdrawalAccountService;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,10 +27,16 @@ import java.util.UUID;
 public class WalletController {
     public WalletService walletService;
     public UserService userService;
+    public WithdrawalAccountService withdrawalAccountService;
 
-    public WalletController(WalletService walletService, UserService userService) {
+    public WalletController(
+            WalletService walletService,
+            UserService userService,
+            WithdrawalAccountService withdrawalAccountService
+    ) {
         this.walletService = walletService;
         this.userService = userService;
+        this.withdrawalAccountService = withdrawalAccountService;
     }
 
     @GetMapping("/me")
@@ -95,6 +103,44 @@ public class WalletController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    }
+
+    @GetMapping("/withdrawal-accounts/me")
+    public ResponseEntity<?> retrieveWithdrawalAccounts(@AuthenticationPrincipal String email) {
+        try {
+            User owner = userService.getCurrentUser(email);
+            List<WithdrawalAccount> withdrawalAccounts = withdrawalAccountService.retrieveWithdrawalAccounts(owner);
+
+            List<Map<String, Object>> payoutAccounts = withdrawalAccounts.stream()
+                    .map(acc -> Map.<String, Object>of(
+                            "id", acc.withdrawalAccountId,
+                            "payoutMethod", acc.payoutMethod.getDisplayName(),
+                            "number", acc.accountNumber
+                    ))
+                    .toList();
+
+            ApiResponse res = new ApiResponse(
+                    true,
+                    Map.of("payoutAccounts", payoutAccounts),
+                    null,
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.ok(res);
+        } catch (Exception e) {
+            ApiResponse res = new ApiResponse(
+                    false,
+                    null,
+                    new ApiError(
+                            "DB-001",
+                            "Resource not found",
+                            e.getMessage()
+                    ),
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+        }
     }
 
     @PostMapping("/withdrawal-account")
