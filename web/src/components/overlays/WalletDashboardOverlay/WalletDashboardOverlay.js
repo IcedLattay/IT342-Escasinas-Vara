@@ -2,6 +2,7 @@ import WalletDashboardOverlayContainer from "./WalletDashboardOverlayContainer";
 
 export default function WalletDashboardOverlay({ 
     onExit,
+    setSavedPayoutAccounts,
     handleOnClickWalletDeposit,
     handleOnClickWalletWithdrawal,
     handleOnClickViewTransactions, 
@@ -10,6 +11,7 @@ export default function WalletDashboardOverlay({
     return (
         <WalletDashboardOverlayContainer
             onExit={onExit}
+            setSavedPayoutAccounts={setSavedPayoutAccounts}
             handleOnClickWalletDeposit={handleOnClickWalletDeposit}
             handleOnClickWalletWithdrawal={handleOnClickWalletWithdrawal}
             handleOnClickViewTransactions={handleOnClickViewTransactions}

@@ -385,6 +385,7 @@ export default function SideBarMenu() {
                                 >
                                     <WalletDashboardOverlay 
                                         onExit={() => setWalletDashboardOverlayIsOpen(false)}
+                                        setSavedPayoutAccounts={setSavedPayoutAccounts}
                                         handleOnClickWalletDeposit={() => setWalletDepositOverlayIsOpen(true)}
                                         handleOnClickWalletWithdrawal={() => setWalletWithdrawalOverlayIsOpen(true)}
                                         // handleOnClickWalletWithdrawal={() => setReceiptOverlayIsOpen(true)}

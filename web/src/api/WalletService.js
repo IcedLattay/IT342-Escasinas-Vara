@@ -37,3 +37,13 @@ export async function savePayoutAccount(payoutAccountData) {
         }
     );
 }
+
+
+export async function fetchMyPayoutAccounts() {
+    return axios.get(
+        "http://localhost:8080/api/wallet/withdrawal-accounts/me",
+        {
+            withCredentials: true,
+        }
+    );
+}
