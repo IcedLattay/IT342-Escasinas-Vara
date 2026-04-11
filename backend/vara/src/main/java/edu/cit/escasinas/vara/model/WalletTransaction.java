@@ -4,6 +4,7 @@ import edu.cit.escasinas.vara.enums.PaymentMethod;
 import edu.cit.escasinas.vara.enums.WalletTransactionStatus;
 import edu.cit.escasinas.vara.enums.WalletTransactionType;
 import edu.cit.escasinas.vara.service.UserService;
+import edu.cit.escasinas.vara.utils.ReferenceGenerator;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -35,11 +36,11 @@ public class WalletTransaction {
     @Enumerated(EnumType.STRING)
     public WalletTransactionType type;
 
-    @Column(name = "external_reference_id")
+    @Column(name = "external_reference_id", unique = true)
     public String externalReferenceId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_method")
+    @Column(name = "payment_method", nullable = true)
     public PaymentMethod paymentMethod;
 
     public BigDecimal amount;
@@ -67,6 +68,20 @@ public class WalletTransaction {
         type = WalletTransactionType.DEPOSIT;
         this.externalReferenceId = externalReferenceId;
         this.paymentMethod = paymentMethod;
+        this.amount = amount;
+        status = WalletTransactionStatus.PENDING;
+    }
+
+    public WalletTransaction(
+        User owner,
+        String externalReferenceId,
+        WithdrawalAccount withdrawalAccount,
+        BigDecimal amount
+    ) {
+        this.owner = owner;
+        type = WalletTransactionType.WITHDRAWAL;
+        this.externalReferenceId = externalReferenceId;
+        this.withdrawalAccount = withdrawalAccount;
         this.amount = amount;
         status = WalletTransactionStatus.PENDING;
     }
