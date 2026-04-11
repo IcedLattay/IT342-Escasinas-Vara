@@ -2,6 +2,7 @@ package edu.cit.escasinas.vara.service;
 
 import edu.cit.escasinas.vara.dto.WalletDepositRequest;
 import edu.cit.escasinas.vara.dto.WalletTransactionRetrievalRequest;
+import edu.cit.escasinas.vara.dto.WalletWithdrawalRequest;
 import edu.cit.escasinas.vara.dto.WithdrawalAccountSaveRequest;
 import edu.cit.escasinas.vara.enums.PaymentMethod;
 import edu.cit.escasinas.vara.enums.WalletTransactionStatus;
@@ -13,6 +14,7 @@ import edu.cit.escasinas.vara.repository.UserRepository;
 import edu.cit.escasinas.vara.repository.WalletRepository;
 import edu.cit.escasinas.vara.repository.WalletTransactionRepository;
 import edu.cit.escasinas.vara.repository.WithdrawalAccountRepository;
+import edu.cit.escasinas.vara.utils.ReferenceGenerator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -236,5 +238,45 @@ public class WalletService {
         }
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No identifier provided in request.");
+    }
+
+    public WalletTransaction createWithdrawal(
+            User owner,
+            String externalReferenceId,
+            WalletWithdrawalRequest req
+    ) {
+        WithdrawalAccount withdrawalAccount = withdrawalAccountRepository.findById(req.payoutAccountId).
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction not found by ID."));
+
+        WalletTransaction newWalletTransaction = new WalletTransaction(
+                owner,
+                externalReferenceId,
+                withdrawalAccount,
+                req.amount
+        );
+
+        newWalletTransaction.status = WalletTransactionStatus.SUCCESS;
+
+        return walletTransactionRepository.save(newWalletTransaction);
+    }
+
+    public void deductWalletBalance(
+            Wallet wallet,
+            BigDecimal amount
+    ) {
+
+        wallet.balance = wallet.balance.subtract(amount);
+
+        walletRepository.save(wallet);
+    }
+
+    public String generateReferenceId(String prefix) {
+        String ref;
+
+        do {
+            ref = ReferenceGenerator.generateReference(prefix);
+        } while (walletTransactionRepository.existsByExternalReferenceId(ref));
+
+        return ref;
     }
 }

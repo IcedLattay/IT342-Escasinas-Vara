@@ -8,6 +8,8 @@ import edu.cit.escasinas.vara.model.WithdrawalAccount;
 import edu.cit.escasinas.vara.service.UserService;
 import edu.cit.escasinas.vara.service.WalletService;
 import edu.cit.escasinas.vara.service.WithdrawalAccountService;
+import edu.cit.escasinas.vara.utils.ReferenceGenerator;
+import jakarta.transaction.Transactional;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -231,5 +234,67 @@ public class WalletController {
         System.out.println("Sending wallet transaction...");
 
         return ResponseEntity.ok(res);
+    }
+
+    @Transactional
+    @PostMapping("/withdraw")
+    public ResponseEntity<?> withdraw(
+            @RequestBody WalletWithdrawalRequest req,
+            @AuthenticationPrincipal String email
+    ) {
+
+        try {
+            User owner = userService.getCurrentUser(email);
+
+            String externalReferenceId = walletService.generateReferenceId("WD");
+
+            WalletTransaction newWalletTransaction = walletService.createWithdrawal(
+                    owner,
+                    externalReferenceId,
+                    req
+            );
+
+            Wallet wallet = walletService.getWallet(owner);
+
+            walletService.deductWalletBalance(
+                    wallet,
+                    req.amount
+            );
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+
+            ApiResponse res = new ApiResponse(
+                    true,
+                    Map.of(
+                            "type", newWalletTransaction.type.getDisplayName(),
+                            "walletTransaction", Map.of(
+                                    "payoutAccount", Map.of(
+                                            "payoutMethod", newWalletTransaction.withdrawalAccount.payoutMethod.getDisplayName(),
+                                            "number", newWalletTransaction.withdrawalAccount.accountNumber
+                                    ),
+                                    "amount", newWalletTransaction.amount.toString(),
+                                    "transactionId", newWalletTransaction.externalReferenceId,
+                                    "createdAt", newWalletTransaction.createdAt.format(formatter)
+                            )
+                    ),
+                    null,
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        } catch (Exception e) {
+            ApiResponse res = new ApiResponse(
+                    false,
+                    null,
+                    new ApiError(
+                            "DB-002",
+                            "Duplicate entry",
+                            e.getMessage()
+                    ),
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+        }
     }
 }

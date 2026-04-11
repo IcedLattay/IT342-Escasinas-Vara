@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface WalletTransactionRepository extends JpaRepository<WalletTransaction, Long> {
     Optional<WalletTransaction> findByExternalReferenceId(String externalReferenceId);
+    boolean existsByExternalReferenceId(String externalReferenceId);
 }
