@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import "./SideBarMenu.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../security/AuthContext";
