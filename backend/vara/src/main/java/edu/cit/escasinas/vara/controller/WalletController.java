@@ -84,7 +84,7 @@ public class WalletController {
             @AuthenticationPrincipal String email
     ) {
 
-        String externalReferenceId = UUID.randomUUID().toString();
+        String externalReferenceId = walletService.generateReferenceId("DP");
 
         String checkoutUrl = walletService.createDeposit(req, externalReferenceId);
 
@@ -212,21 +212,26 @@ public class WalletController {
         System.out.println("wallet transaction retrieved.");
 
         Map<String, Object> walletTransactionData = new HashMap<>();
-        walletTransactionData.put("type", walletTransaction.type.getDisplayName());
-        walletTransactionData.put("amount", walletTransaction.amount.toString());
-        walletTransactionData.put("externalReferenceId", walletTransaction.externalReferenceId);
         walletTransactionData.put("paymentMethod", walletTransaction.paymentMethod.getDisplayName());
         walletTransactionData.put("status", walletTransaction.status.getDisplayName());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
-        walletTransactionData.put("createdAt", walletTransaction.createdAt.format(formatter));
 
         Map<String, Object> data = new HashMap<>();
         data.put("walletTransaction", walletTransactionData);
 
         ApiResponse res = new ApiResponse(
                 true,
-                data,
+                Map.of(
+                        "type", walletTransaction.type.getDisplayName(),
+                        "walletTransaction", Map.of(
+                                "paymentMethod", walletTransaction.paymentMethod.getDisplayName(),
+                                "amount", walletTransaction.amount.toString(),
+                                "transactionId", walletTransaction.externalReferenceId,
+                                "status", walletTransaction.status.getDisplayName(),
+                                "createdAt", walletTransaction.createdAt.format(formatter)
+                        )
+                ),
                 null,
                 java.time.Instant.now().toString()
         );
