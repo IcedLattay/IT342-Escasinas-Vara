@@ -47,3 +47,17 @@ export async function fetchMyPayoutAccounts() {
         }
     );
 }
+
+
+export async function withdraw(walletWithdrawalData) {
+    return axios.post(
+        "http://localhost:8080/api/wallet/withdraw",
+        walletWithdrawalData,
+        {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+        }
+    );
+}

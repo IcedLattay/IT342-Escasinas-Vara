@@ -1,13 +1,15 @@
 import ReceiptOverlayContainer from "./ReceiptOverlayContainer";
 
 export default function ReceiptOverlay({ 
-        receiptData,
-        onExit,
-    }) {
+    setTransaction,
+    transaction,
+    onExit,
+}) {
     
     return (
         <ReceiptOverlayContainer
-            receiptData={receiptData}
+            setTransaction={setTransaction}
+            transaction={transaction}
             onExit={onExit}
         />
     );

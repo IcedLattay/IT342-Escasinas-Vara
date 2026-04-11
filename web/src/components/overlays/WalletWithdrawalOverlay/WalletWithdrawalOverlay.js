@@ -6,7 +6,8 @@ export default function WalletWithdrawalOverlay({
     setAddPayoutAccountOverlayIsOpen,
     setPayoutMethodToAdd,
     selectedPayoutAccount,
-    setSelectedPayoutAccount
+    setSelectedPayoutAccount,
+    setTransaction
 }) {
     
     return (
@@ -17,6 +18,7 @@ export default function WalletWithdrawalOverlay({
             setPayoutMethodToAdd={setPayoutMethodToAdd}
             selectedPayoutAccount={selectedPayoutAccount}
             setSelectedPayoutAccount={setSelectedPayoutAccount}
+            setTransaction={setTransaction}
         />
     );
 }

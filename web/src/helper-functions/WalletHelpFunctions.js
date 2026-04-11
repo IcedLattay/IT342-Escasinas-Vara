@@ -150,6 +150,50 @@ export function handlePayoutAccountNumberOnChange(
     }
 }
 
+export function buildReceiptData(
+    transaction,
+    currency
+) {
+    
+    switch (transaction.type) {
+        case "Payment":
+            return {
+                title: "Payment Receipt",
+                fields: [
+                    { label: "Account Name", type: "text", value: transaction.accountName },
+                    { label: "Amount Sent", type: "text", value: `${currency} ${formatBalance(transaction.amount)}` },
+                    { label: "Transaction ID", type: "text", value: transaction.transactionId },
+                    { label: "Date", type: "text", value: transaction.createdAt },
+                ],
+            };
+
+            case "Withdrawal":
+            return {
+                title: "Payout Receipt",
+                fields: [
+                    { label: "Payout Account", type: "payout account", value: transaction.payoutAccount },
+                    { label: "Amount Sent", type: "text", value: `${currency} ${formatBalance(transaction.amount)}` },
+                    { label: "Transaction ID", type: "text", value: transaction.transactionId },
+                    { label: "Date", type: "text", value: transaction.createdAt },
+                ],
+            };
+
+            case "Deposit":
+            return {
+                title: "Deposit Receipt",
+                fields: [
+                    { label: "Amount", type: "text", value: `${currency} ${formatBalance(transaction.amount)}` },
+                    { label: "Transaction ID", type: "text", value: transaction.transactionId },
+                    { label: "Payment Method", type: "payment method", value: transaction.paymentMethod },
+                    { label: "Date", type: "text", value: transaction.createdAt },
+                ],
+            };
+
+            default:
+            return null;
+    }
+}
+
 export function normalizePhoneNumber(input) {
     let value = input.trim();
 
@@ -160,4 +204,22 @@ export function normalizePhoneNumber(input) {
     }
 
     return value;
+}
+
+export function formatAndMaskPhone(input) {
+    let digits = input.replace(/\D/g, "");
+
+    if (digits.startsWith("0")) {
+        digits = "63" + digits.substring(1);
+    }
+
+    if (digits.length >= 12) {
+        const countryCode = digits.substring(0, 2);
+        const firstMobileDigit = digits.substring(2, 3);
+        const lastFive = digits.slice(-5);
+        
+        return `${countryCode}-${firstMobileDigit}****${lastFive}`;
+    }
+
+    return digits;
 }

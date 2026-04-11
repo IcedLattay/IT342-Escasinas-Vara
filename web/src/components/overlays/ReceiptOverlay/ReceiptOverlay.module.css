@@ -23,7 +23,7 @@
         align-items: start;
         padding: 1.6rem 1.2rem;
         gap: 1.5rem;
-        /* border: 1px solid red; */
+        border: 1px solid red;
     }
 
         .details {
@@ -31,24 +31,32 @@
             flex-direction: column;
             width: 100%;
         }
+        .details:has(.loadingDetail) {
+            gap: .5rem;
+        }
 
             .detail {
-                padding: 1.2rem 0;
+                height: 3.8rem;
                 display: flex;
+                flex-direction: row;
+                align-items: center;
                 border-bottom: 1px solid #C3C3C3;
             }
             .detail.last {
                 border-bottom: none;
             }
+            .loadingDetail {
+                height: 3.425rem;
+                border-bottom: none;
+                composes: loading from "../../../global-styles/LoadingComponents.module.css";
+            }
 
                 .value {
                     margin-left: auto;
                 }
-                .value.paymentMethod {
+                .value.wrapper {
                     display: flex;
                     align-items: center;
                     gap: .5rem;
                 }
-                .loading {
-                    composes: loading from "../../../global-styles/LoadingComponents.module.css";
-                }
+                

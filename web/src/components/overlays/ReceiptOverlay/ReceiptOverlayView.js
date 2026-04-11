@@ -3,13 +3,11 @@ import Checkmark from "../../vector-assets/Checkmark";
 import GCashLogo from "../../vector-assets/GCashLogo";
 import MayaLogo from "../../vector-assets/MayaLogo";
 import styles from "./ReceiptOverlay.module.css";
-import { formatBalance } from "../../../helper-functions/WalletHelpFunctions";
-
+import { formatAndMaskPhone } from "../../../helper-functions/WalletHelpFunctions";
 
 export default function ReceiptOverlayView({
     receiptData,
-    onExit,
-    wallet
+    onExit
 }) {
 
     return (
@@ -43,78 +41,76 @@ export default function ReceiptOverlayView({
                 <p>Transaction Details</p>
 
                 <div className={styles.details}>
-                    <div className={styles.detail}>
-                        <p>Amount</p>
 
-                        { receiptData ? 
-                        <p className={styles.value}>{`${wallet.currency} ${formatBalance(receiptData.amount)}`} </p>
-                        :
-                        <div 
-                            className={`${styles.value} ${styles.loading}`}
-                            style={{ 
-                                width: "25%"
-                            }}
-                        />
-                        }
-                    </div>
-                    <div className={styles.detail}>
-                        <p>Transaction ID</p>
-
-                        { receiptData ? 
-                        <p className={styles.value}> {receiptData.externalReferenceId} </p>
-                        :
-                        <div 
-                            className={`${styles.value} ${styles.loading}`}
-                            style={{ 
-                                width: "50%"
-                            }}
-                        />
-                        }
+                    { receiptData ? 
+                    ( receiptData.fields.map((field, i) => (
+                    <div 
+                        key={`${field.label}-${i}`}
+                        className={`${styles.detail} ${i === receiptData.fields.length - 1 ? styles.last : ""}`}
+                    >
+                        <p>{field.label}</p>
                         
-                    </div>
-                    <div className={styles.detail}>
-                        <p>Payment Method</p>
-                        
-                        { receiptData ?
-                        <div className={`${styles.value} ${styles.paymentMethod}`}>
-                            
-                            <p>{ receiptData.paymentMethod }</p>
-
-                            { receiptData.paymentMethod == "GCash" ? 
-                            <GCashLogo width={1} height={1} />
-                            :
-                                ( receiptData.paymentMethod == "Paymaya" &&
-                                    <MayaLogo width={1} height={1} />
-                                )
-                            } 
-                        </div>
-                        :
-                        <div 
-                            className={`${styles.value} ${styles.loading}`}
-                            style={{ 
-                                width: "40%"
-                            }}
+                        <ReceiptField 
+                            field={field}
                         />
-                        }
                     </div>
-                    <div className={`${styles.detail} ${styles.last}`}>
-                        <p>Date of Transaction</p>
-
-                        { receiptData ? 
-                        <p className={styles.value} > {receiptData.createdAt} </p>
-                        :
+                    )) )
+                    :
+                    Array.from({ length: 4 }).map((_, i) => (
                         <div
-                            className={`${styles.value} ${styles.loading}`}
-                            style={{
-                                width: "50%",
-                            }}
+                        key={i}
+                        className={`${styles.detail} ${styles.loadingDetail}`}
                         />
-                        }
-                    </div>
+                    ))
+                    }
+                    
                 </div>
             </div>
             
             <ExitOverlayButton onClick={onExit} />
         </div>
     );
+}
+
+function ReceiptField({ field }) {
+    switch (field.type) {
+        case "payout account":
+            return (
+                <div className={`${styles.value} ${styles.wrapper}`}>
+                    <p>{formatAndMaskPhone(field.value.number)}</p>
+                    { field.value.payoutMethod === "GCash" ? 
+                        <GCashLogo width={1} height={1} />
+                    :
+                    ( field.value.payoutMethod === "Paymaya" &&
+                        <MayaLogo width={1} height={1} />
+                    )
+                    }
+                </div>
+            );
+
+        case "payment method":
+            return (
+                <div className={`${styles.value} ${styles.wrapper}`}>
+                    <p>
+                    { field.value === "GCash" ? 
+                    "GCash"                    
+                    :
+                    ( field.value === "Paymaya" &&
+                    "Paymaya"
+                    )
+                    }
+                    </p>
+                    { field.value === "GCash" ? 
+                        <GCashLogo width={1} height={1} />
+                    :
+                    ( field.value === "Paymaya" &&
+                        <MayaLogo width={1} height={1} />
+                    )
+                    }
+                </div>
+            );
+
+        default:
+            return <p className={styles.value}>{field.value}</p>;
+    }
 }

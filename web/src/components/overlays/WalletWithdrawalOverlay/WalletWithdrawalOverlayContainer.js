@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../../security/AuthContext";
 import WalletWithdrawalOverlayView from "./WalletWithdrawalOverlayView";
-
+import { withdraw } from "../../../api/WalletService";
 
 
 export default function WalletWithdrawalOverlayContainer({ 
@@ -10,7 +10,8 @@ export default function WalletWithdrawalOverlayContainer({
     setAddPayoutAccountOverlayIsOpen,
     setPayoutMethodToAdd,
     selectedPayoutAccount,
-    setSelectedPayoutAccount
+    setSelectedPayoutAccount,
+    setTransaction,
 }) {
     const { wallet } = useContext(AuthContext);
     
@@ -46,13 +47,19 @@ export default function WalletWithdrawalOverlayContainer({
 
         e.preventDefault();
 
-        // define form data
+        const walletWithdrawalData = {
+            amount: parseFloat(amountToWithdraw),
+            payoutAccountId: selectedPayoutAccount
+        };
 
         try {
-            // call withdraw api which will deduct the balance and create a transaction
-            // const res = await withdraw(formData);  
+            const res = await withdraw(walletWithdrawalData);  
 
+            const transaction = res.data.data.walletTransaction;
             
+            console.log("Withdrawal Transaction data", transaction);
+            
+            setTransaction(transaction);
         } catch (err) {
             console.log("Withdrawal error:", err);
         } finally {

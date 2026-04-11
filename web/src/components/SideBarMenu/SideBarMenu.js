@@ -34,8 +34,11 @@ export default function SideBarMenu() {
     const [selectedPayoutAccount, setSelectedPayoutAccount] = useState(null);
     const [addPayoutAccountOverlayIsOpen, setAddPayoutAccountOverlayIsOpen] = useState(false);
     const [payoutMethodToAdd, setPayoutMethodToAdd] = useState(null);
-    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(false);
+    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(true);
+    const [transaction, setTransaction] = useState(null);
 
+    // useRefs
+    const fetched = useRef(false);
 
     // useEffects
     useEffect(() => {
@@ -52,8 +55,38 @@ export default function SideBarMenu() {
     }, [location.state]);
 
     useEffect(() => {
-        console.log("Receipt data:", receiptData)
-    }, [receiptData])
+        if (fetched.current) return;
+
+        console.log("Transaction data:", receiptData);
+
+        if (transaction) {
+
+            fetched.current = true;
+            
+            switch (transaction.type) {
+                case "Deposit":
+                    setSidebarVisible(true);
+                    setWalletDashboardOverlayIsOpen(true);
+                    setReceiptOverlayIsOpen(true);
+
+                    break;
+                case "Withdrawal":
+                    setWalletWithdrawalOverlayIsOpen(false);
+                    setReceiptOverlayIsOpen(true);
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    }, [transaction]);
+
+
+    useEffect(() => {
+        if (!receiptOverlayIsOpen) {
+            setTransaction(null);
+        }
+    }, [receiptOverlayIsOpen])
 
 
 
@@ -415,6 +448,7 @@ export default function SideBarMenu() {
                                         setPayoutMethodToAdd={setPayoutMethodToAdd}
                                         selectedPayoutAccount={selectedPayoutAccount}
                                         setSelectedPayoutAccount={setSelectedPayoutAccount}
+                                        setTransaction={setTransaction}
                                     />
                                 </Modal>
 
@@ -424,7 +458,8 @@ export default function SideBarMenu() {
                                     modalLevel={3}  
                                 >
                                     <ReceiptOverlay 
-                                        receiptData={receiptData}
+                                        setTransaction={setTransaction}
+                                        transaction={transaction}
                                         onExit={() => setReceiptOverlayIsOpen(false)}
                                     />
                                 </Modal>
