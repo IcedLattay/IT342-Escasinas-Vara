@@ -223,8 +223,8 @@ public class WalletController {
         ApiResponse res = new ApiResponse(
                 true,
                 Map.of(
-                        "type", walletTransaction.type.getDisplayName(),
                         "walletTransaction", Map.of(
+                                "type", walletTransaction.type.getDisplayName(),
                                 "paymentMethod", walletTransaction.paymentMethod.getDisplayName(),
                                 "amount", walletTransaction.amount.toString(),
                                 "transactionId", walletTransaction.externalReferenceId,
@@ -271,8 +271,8 @@ public class WalletController {
             ApiResponse res = new ApiResponse(
                     true,
                     Map.of(
-                            "type", newWalletTransaction.type.getDisplayName(),
                             "walletTransaction", Map.of(
+                                    "type", newWalletTransaction.type.getDisplayName(),
                                     "payoutAccount", Map.of(
                                             "payoutMethod", newWalletTransaction.withdrawalAccount.payoutMethod.getDisplayName(),
                                             "number", newWalletTransaction.withdrawalAccount.accountNumber
