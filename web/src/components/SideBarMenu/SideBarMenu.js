@@ -38,7 +38,6 @@ export default function SideBarMenu() {
     const [transaction, setTransaction] = useState(null);
 
     // useRefs
-    const fetched = useRef(false);
 
     // useEffects
     useEffect(() => {
@@ -55,13 +54,10 @@ export default function SideBarMenu() {
     }, [location.state]);
 
     useEffect(() => {
-        if (fetched.current) return;
 
         console.log("Transaction data:", receiptData);
 
         if (transaction) {
-
-            fetched.current = true;
             
             switch (transaction.type) {
                 case "Deposit":
@@ -73,6 +69,7 @@ export default function SideBarMenu() {
                 case "Withdrawal":
                     setWalletWithdrawalOverlayIsOpen(false);
                     setReceiptOverlayIsOpen(true);
+                    setSelectedPayoutAccount(null);
 
                     break;
                 default:
@@ -438,11 +435,17 @@ export default function SideBarMenu() {
 
                                 <Modal
                                     isOpen={walletWithdrawalOverlayIsOpen}
-                                    onClose={() => setWalletWithdrawalOverlayIsOpen(false)}
+                                    onClose={() => {
+                                        setWalletWithdrawalOverlayIsOpen(false);
+                                        setSelectedPayoutAccount(null);
+                                    }}
                                     modalLevel={2}
                                 >
                                     <WalletWithdrawalOverlay
-                                        onExit={() => setWalletWithdrawalOverlayIsOpen(false)}
+                                        onExit={() => {
+                                            setWalletWithdrawalOverlayIsOpen(false);
+                                            setSelectedPayoutAccount(null);
+                                        }}
                                         savedPayoutAccounts={savedPayoutAccounts}
                                         setAddPayoutAccountOverlayIsOpen={setAddPayoutAccountOverlayIsOpen}
                                         setPayoutMethodToAdd={setPayoutMethodToAdd}
