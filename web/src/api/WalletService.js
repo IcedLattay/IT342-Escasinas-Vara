@@ -61,3 +61,18 @@ export async function withdraw(walletWithdrawalData) {
         }
     );
 }
+
+export async function fetchMyRecentTransactions() {
+    return axios.get(
+        "http://localhost:8080/api/wallet/transactions",
+        {
+            params: {
+                recent: true
+            },
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true
+        }
+    );
+}

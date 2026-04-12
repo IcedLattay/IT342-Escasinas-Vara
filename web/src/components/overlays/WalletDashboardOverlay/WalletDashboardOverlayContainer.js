@@ -11,14 +11,18 @@ export default function WalletDashboardOverlay({
     handleOnClickViewTransactions, 
 }) {
 
+    const { wallet } = useContext(AuthContext);
+
     const transactions = [
         {id: 1, direction: "Debit", amount: "2,000.00", reason: "Wallet Deposit", date: "Jan 20 2026"},
         {id: 2, direction: "Debit", amount: "4,100.00", reason: "Wallet Deposit", date: "Sept 22 2025"},
         {id: 3, direction: "Debit", amount: "1,500.00", reason: "Wallet Deposit", date: "June 2 2025"}
     ]
-
     
     const fetched = useRef(false);
+
+    // useStates
+    const [recentTransactions, setRecentTransactions] = useState(null);
 
     // useEffects
     useEffect(() => {
@@ -43,14 +47,27 @@ export default function WalletDashboardOverlay({
             }
         }
 
+        async function fetchMyRecentTransactionsOnMount() {
+            try {
+                const res = await fetchMyRecentTransactionsOnMount();
+
+                const retrievedRecentTransactions = res.data.data.recentTransactions;
+
+                console.log("Retrieved recent transactions:", retrievedRecentTransactions);
+
+                setRecentTransactions(retrievedRecentTransactions);
+            } catch (err) {
+                console.log("Something went wrong.", err);
+            }
+        }
+
+        fetchMyRecentTransactionsOnMount();
         fetchMyPayoutAccountsOnMount();
     }, []);
 
-    const { wallet } = useContext(AuthContext);
-
     return (
         <WalletDashboardOverlayView 
-            transactions={transactions}
+            recentTransactions={recentTransactions}
             wallet={wallet}
             onExit={onExit}
             handleOnClickWalletDeposit={handleOnClickWalletDeposit}

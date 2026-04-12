@@ -1,5 +1,5 @@
 
-import "./TransactionItem.css"
+import styles from "./TransactionItem.module.css"
 
 export default function TransactionItem({ 
     onClick,
@@ -8,19 +8,19 @@ export default function TransactionItem({
     amount, 
     reason, 
     date, 
-    isLast=false 
+    isLast=false,
 }) {
     return (
         <div 
             key={transactionId}
-            className="transaction-item"
+            className={styles.transactionItem}
             style={{
                 borderBottom: isLast ? "none" : "1px solid #C3C3C3"
             }}
         >
-            <div className="details transaction">
+            <div className={styles.details}>
 
-                <div className="payment transaction">
+                <div className={styles.payment}>
                     <p>{ direction }</p>
                     <p 
                         style={{

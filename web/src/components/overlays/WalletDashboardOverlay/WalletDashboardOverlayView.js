@@ -4,9 +4,10 @@ import RightArrow from "../../vector-assets/RightArrow";
 import TransactionItem from "../../TransactionItem/TransactionItem";
 import { formatBalance } from "../../../helper-functions/WalletHelpFunctions";
 import buttonStyles from "../../../global-styles/ButtonStyles.module.css";
+import transactionItemStyles from "../../TransactionItem/TransactionItem.module.css";
 
 export default function WalletDashboardOverlay({
-    transactions, 
+    recentTransactions, 
     wallet,
     onExit,
     handleOnClickWalletDeposit,
@@ -65,16 +66,27 @@ export default function WalletDashboardOverlay({
                 />
                 
                 <div className={styles.transactionsList}>     
-                    { transactions &&
-                    transactions.map((transaction, i) => (
+                    { recentTransactions ?
+                    recentTransactions.map((transaction, i) => (
                     <TransactionItem
                         transactionId={transaction.id}
                         direction={transaction.direction}
                         amount={transaction.amount}
                         reason={transaction.reason}
                         date={transaction.date}
-                        isLast={i === transactions.length - 1}
+                        isLast={i === recentTransactions.length - 1}
                     />
+                    ))
+                    :
+                    Array.from({ length: 3 }).map((_, i) => (
+                    <div
+                    className={transactionItemStyles.transactionItem}
+                    style={{
+                        borderBottom: isLast ? "none" : "1px solid #C3C3C3"
+                    }}
+                    >
+                        <div className={`${transactionItemStyles.details} ${transactionItemStyles.isLoading}`} />
+                    </div>
                     ))
                     }
                 </div>
