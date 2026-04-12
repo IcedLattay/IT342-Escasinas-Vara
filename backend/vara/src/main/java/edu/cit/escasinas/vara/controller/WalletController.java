@@ -1,13 +1,12 @@
 package edu.cit.escasinas.vara.controller;
 
 import edu.cit.escasinas.vara.dto.*;
+import edu.cit.escasinas.vara.enums.WalletTransactionType;
 import edu.cit.escasinas.vara.model.User;
 import edu.cit.escasinas.vara.model.Wallet;
 import edu.cit.escasinas.vara.model.WalletTransaction;
 import edu.cit.escasinas.vara.model.WithdrawalAccount;
-import edu.cit.escasinas.vara.service.UserService;
-import edu.cit.escasinas.vara.service.WalletService;
-import edu.cit.escasinas.vara.service.WithdrawalAccountService;
+import edu.cit.escasinas.vara.service.*;
 import edu.cit.escasinas.vara.utils.ReferenceGenerator;
 import jakarta.transaction.Transactional;
 import org.checkerframework.checker.units.qual.A;
@@ -20,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/wallet")
@@ -31,15 +27,21 @@ public class WalletController {
     public WalletService walletService;
     public UserService userService;
     public WithdrawalAccountService withdrawalAccountService;
+    public WalletTransactionService walletTransactionService;
+    public TransactionService transactionService;
 
     public WalletController(
             WalletService walletService,
             UserService userService,
-            WithdrawalAccountService withdrawalAccountService
+            WithdrawalAccountService withdrawalAccountService,
+            WalletTransactionService walletTransactionService,
+            TransactionService transactionService
     ) {
         this.walletService = walletService;
         this.userService = userService;
         this.withdrawalAccountService = withdrawalAccountService;
+        this.walletTransactionService = walletTransactionService;
+        this.transactionService = transactionService;
     }
 
     @GetMapping("/me")
@@ -239,6 +241,59 @@ public class WalletController {
         System.out.println("Sending wallet transaction...");
 
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/transactions")
+    public ResponseEntity<?> retrieveWalletTransactions(
+            @RequestParam(required = false) Boolean recent,
+            @AuthenticationPrincipal String email
+    ) {
+        try {
+            User owner = userService.getCurrentUser(email);
+
+            if (recent != null) {
+                List<WalletTransaction> recentWalletTransactions = walletTransactionService.retrieve3RecentWalletTransactions(owner);
+                List<TransactionResponse> normalisedRecentWalletTransactions = recentWalletTransactions.stream()
+                        .map(transaction -> transactionService.normaliseWalletTransaction(transaction))
+                        .toList();
+
+                List<TransactionResponse> combined = new ArrayList<>();
+
+                combined.addAll(normalisedRecentWalletTransactions);
+
+                combined.sort(Comparator.comparing(TransactionResponse::getCreatedAt).reversed());
+
+                List<TransactionResponse> recentTransactions = combined.stream()
+                        .limit(3)
+                        .toList();
+
+                ApiResponse res = new ApiResponse(
+                        true,
+                        Map.of("recentTransactions", recentTransactions),
+                        null,
+                        java.time.Instant.now().toString()
+                );
+
+                return ResponseEntity.ok(res);
+            } else {
+//                logic flow to retrieve all transactions
+
+                return ResponseEntity.ok().build();
+            }
+        } catch (Exception e) {
+            ApiResponse res = new ApiResponse(
+                    false,
+                    null,
+                    new ApiError(
+                            "DB-001",
+                            "Resource not found.",
+                            e.getMessage()
+                    ),
+                    java.time.Instant.now().toString()
+            );
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+        }
     }
 
     @Transactional
