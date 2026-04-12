@@ -5,7 +5,6 @@ import ReceiptOverlayView from "./ReceiptOverlayView";
 
 
 export default function ReceiptOverlayContainer({ 
-    setTransaction,
     transaction,
     onExit,
 }) {
@@ -18,7 +17,6 @@ export default function ReceiptOverlayContainer({
         <ReceiptOverlayView
             receiptData={receiptData}
             onExit={onExit}
-            wallet={wallet}
         />
     )
 }

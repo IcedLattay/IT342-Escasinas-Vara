@@ -1,5 +1,6 @@
-import { createContext, useState, useEffect, use } from "react";
-import axios from "axios";
+import { createContext, useState, useEffect } from "react";
+import { fetchMyWallet } from "../api/WalletService";
+import { fetchCurrentUser } from "../api/UserService";
 
 export const AuthContext = createContext();
 
@@ -11,45 +12,39 @@ export function AuthProvider({ children }) {
     const [wallet, setWallet] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    async function refreshUserData() {
+        setIsLoading(true);
+        try {
+            const res = await fetchCurrentUser();
 
+            const data = res.data.data.user;
+            
+            setUser(data);
+            setUserIsAuthenticated(true);
+        } catch (err) {
+            setUserIsAuthenticated(false);
+            setUser(null)
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function refreshWalletData() {
+        try {
+            const res = await fetchMyWallet();
+
+            const data = res.data.data.wallet;
+
+            setWallet(data);
+        } catch (err) {
+            setWallet(null);
+        }
+    }
 
     // useEffects
     useEffect(() => {
-
-        async function fetchUser() {
-            setIsLoading(true);
-            try {
-                const res = await axios.get(
-                    "http://localhost:8080/api/users/me", 
-                    { 
-                        withCredentials: true,
-                    });
-
-                const userData = res.data.data.user;
-                setUser(userData);
-                setUserIsAuthenticated(true);
-
-                const walletRes = await axios.get(
-                    "http://localhost:8080/api/wallet/me",
-                    {
-                        withCredentials: true,
-                    });
-
-                const walletData = walletRes.data.data.wallet;
-
-                console.log("Wallet data", walletData);
-
-                setWallet(walletData);
-            } catch (err) {
-                setUserIsAuthenticated(false);
-                setUser(null)
-                setWallet(null)
-            } finally {
-                setIsLoading(false);
-            }
-        }
-
-        fetchUser();
+        refreshUserData();
+        refreshWalletData();
     }, []);
 
     useEffect(() => {
@@ -62,7 +57,9 @@ export function AuthProvider({ children }) {
             userIsAuthenticated, setUserIsAuthenticated, 
             user, setUser, 
             wallet, setWallet,
-            isLoading, setIsLoading }}>
+            isLoading, setIsLoading, 
+            refreshWalletData
+        }}>
         {children}
         </AuthContext.Provider>
     );
