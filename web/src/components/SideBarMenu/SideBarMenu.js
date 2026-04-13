@@ -34,7 +34,7 @@ export default function SideBarMenu() {
     const [selectedPayoutAccount, setSelectedPayoutAccount] = useState(null);
     const [addPayoutAccountOverlayIsOpen, setAddPayoutAccountOverlayIsOpen] = useState(false);
     const [payoutMethodToAdd, setPayoutMethodToAdd] = useState(null);
-    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(true);
+    const [receiptOverlayIsOpen, setReceiptOverlayIsOpen] = useState(false);
     const [transaction, setTransaction] = useState(null);
 
     // useRefs
