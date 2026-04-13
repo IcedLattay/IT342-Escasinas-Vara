@@ -11,9 +11,9 @@ export default function WalletWithdrawalOverlayContainer({
     setPayoutMethodToAdd,
     selectedPayoutAccount,
     setSelectedPayoutAccount,
-    setTransaction,
+    setTransaction
 }) {
-    const { wallet, refreshWalletData } = useContext(AuthContext);
+    const { wallet, refreshWalletData, refreshRecentTransactions } = useContext(AuthContext);
     
     const supportedPayoutMethods = [
         {id: "GCASH", payoutMethod: "GCash",},
@@ -60,6 +60,7 @@ export default function WalletWithdrawalOverlayContainer({
             console.log("Withdrawal Transaction data", transaction);
 
             await refreshWalletData();
+            await refreshRecentTransactions();
             setTransaction(transaction);
         } catch (err) {
             console.log("Withdrawal error:", err);

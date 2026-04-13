@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { fetchMyWallet } from "../api/WalletService";
+import { fetchMyWallet, fetchMyRecentTransactions } from "../api/WalletService";
 import { fetchCurrentUser } from "../api/UserService";
 
 export const AuthContext = createContext();
@@ -10,6 +10,7 @@ export function AuthProvider({ children }) {
     const [userIsAuthenticated, setUserIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
     const [wallet, setWallet] = useState(null);
+    const [recentTransactions, setRecentTransactions] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     async function refreshUserData() {
@@ -41,10 +42,23 @@ export function AuthProvider({ children }) {
         }
     }
 
+    async function refreshRecentTransactions() {
+        try {
+            const res = await fetchMyRecentTransactions();
+            
+            const data = res.data.data.recentTransactions;
+
+            setRecentTransactions(data);
+        } catch (err) {
+            setRecentTransactions(null);
+        }
+    }
+
     // useEffects
     useEffect(() => {
         refreshUserData();
         refreshWalletData();
+        refreshRecentTransactions();
     }, []);
 
     useEffect(() => {
@@ -57,8 +71,9 @@ export function AuthProvider({ children }) {
             userIsAuthenticated, setUserIsAuthenticated, 
             user, setUser, 
             wallet, setWallet,
+            recentTransactions, setRecentTransactions,
             isLoading, setIsLoading, 
-            refreshWalletData
+            refreshWalletData, refreshRecentTransactions
         }}>
         {children}
         </AuthContext.Provider>

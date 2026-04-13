@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../../security/AuthContext";
 import WalletDashboardOverlayView from "./WalletDashboardOverlayView";
-import { fetchMyPayoutAccounts } from "../../../api/WalletService";
+import { fetchMyPayoutAccounts, fetchMyRecentTransactions } from "../../../api/WalletService";
 
 export default function WalletDashboardOverlay({ 
     onExit,
@@ -11,18 +11,9 @@ export default function WalletDashboardOverlay({
     handleOnClickViewTransactions, 
 }) {
 
-    const { wallet } = useContext(AuthContext);
-
-    const transactions = [
-        {id: 1, direction: "Debit", amount: "2,000.00", reason: "Wallet Deposit", date: "Jan 20 2026"},
-        {id: 2, direction: "Debit", amount: "4,100.00", reason: "Wallet Deposit", date: "Sept 22 2025"},
-        {id: 3, direction: "Debit", amount: "1,500.00", reason: "Wallet Deposit", date: "June 2 2025"}
-    ]
+    const { wallet, recentTransactions, refreshRecentTransactions } = useContext(AuthContext);
     
     const fetched = useRef(false);
-
-    // useStates
-    const [recentTransactions, setRecentTransactions] = useState(null);
 
     // useEffects
     useEffect(() => {
@@ -47,21 +38,7 @@ export default function WalletDashboardOverlay({
             }
         }
 
-        async function fetchMyRecentTransactionsOnMount() {
-            try {
-                const res = await fetchMyRecentTransactionsOnMount();
-
-                const retrievedRecentTransactions = res.data.data.recentTransactions;
-
-                console.log("Retrieved recent transactions:", retrievedRecentTransactions);
-
-                setRecentTransactions(retrievedRecentTransactions);
-            } catch (err) {
-                console.log("Something went wrong.", err);
-            }
-        }
-
-        fetchMyRecentTransactionsOnMount();
+        refreshRecentTransactions();
         fetchMyPayoutAccountsOnMount();
     }, []);
 

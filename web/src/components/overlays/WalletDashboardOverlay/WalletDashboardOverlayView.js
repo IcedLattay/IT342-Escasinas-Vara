@@ -69,25 +69,29 @@ export default function WalletDashboardOverlay({
                     { recentTransactions ?
                     recentTransactions.map((transaction, i) => (
                     <TransactionItem
-                        transactionId={transaction.id}
+                        id={transaction.id}
                         direction={transaction.direction}
                         amount={transaction.amount}
-                        reason={transaction.reason}
-                        date={transaction.date}
+                        activity={transaction.activity}
+                        date={transaction.formattedCreatedAt}
                         isLast={i === recentTransactions.length - 1}
                     />
                     ))
                     :
-                    Array.from({ length: 3 }).map((_, i) => (
+                    Array.from({ length: 3 }).map((_, i, arr) => {
+                    const isLast = i === arr.length - 1;
+
+                    return (
                     <div
                     className={transactionItemStyles.transactionItem}
                     style={{
                         borderBottom: isLast ? "none" : "1px solid #C3C3C3"
                     }}
                     >
-                        <div className={`${transactionItemStyles.details} ${transactionItemStyles.isLoading}`} />
+                        <div className={`${transactionItemStyles.details} ${transactionItemStyles.loading}`} />
                     </div>
-                    ))
+                    );
+                    })
                     }
                 </div>
             </div>
