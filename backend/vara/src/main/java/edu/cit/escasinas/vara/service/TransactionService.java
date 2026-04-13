@@ -12,6 +12,7 @@ public class TransactionService {
     public TransactionResponse normaliseWalletTransaction(WalletTransaction walletTransaction) {
         TransactionResponse transaction = new TransactionResponse();
 
+        transaction.id = walletTransaction.walletTransactionId;
         transaction.category = "WALLET";
         transaction.activity = walletTransaction.type.getDisplayName();
         transaction.amount = walletTransaction.amount.toString();
