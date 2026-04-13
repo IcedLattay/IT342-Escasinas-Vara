@@ -1,4 +1,5 @@
-import styles from "./WalletWithdrawalOverlay.module.css"
+import styles from "./WalletWithdrawalOverlay.module.css";
+import inputStyles from "../../../global-styles/InputStyles.module.css";
 import ExitOverlayButton from "../../ExitOverlayButton/ExitOverlayButton";
 import { formatBalance, handleAmountOnChange, handleAmountOnBlur } from "../../../helper-functions/WalletHelpFunctions";
 import { Loader2 } from "lucide-react";

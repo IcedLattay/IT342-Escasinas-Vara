@@ -1,12 +1,14 @@
 import SideBarMenu from "../../components/SideBarMenu/SideBarMenu";
 import { Outlet } from "react-router-dom";
-import "./Layout.css";
+import styles from "./LayoutPage.module.css";
+import HeaderContainer from "../../components/Header/HeaderContainer";
 
 export default function Layout() {
     return (
-        <div className="layout-page">
+        <div className={styles.content}>
             <SideBarMenu />
-            <div className="layout-page-main">
+            <div className={styles.dynamicContent}>
+                <HeaderContainer />
                 <Outlet />
             </div>
         </div>

@@ -1,14 +1,17 @@
 
 
-.layout-page {
+.content {
     display: flex;
     min-height: 100vh;
     max-width: 100vw;
 }
 
-    .layout-page .layout-page-main {
+    .dynamicContent {
+        position: relative;
         flex: 1;
+        flex-direction: column;
         display: flex;
+        padding: 2rem;
         /* min-width: 100%; */
         /* border: 1px solid black; */
         background-color: #f8f9f2;
