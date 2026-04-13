@@ -39,7 +39,7 @@ export default function WalletWithdrawalOverlay({
                 <div className={`${styles.field} ${styles.amount}`}>
                     <p>Enter amount</p>
 
-                    <div className={styles.inputWrapper}>
+                    <div className={`${styles.inputWrapper} ${inputStyles.inputWrapper} ${ !balanceIsSufficient ? inputStyles.error : ""}`}>
                         <p>{ wallet?.currency }</p>
 
                         <input 
