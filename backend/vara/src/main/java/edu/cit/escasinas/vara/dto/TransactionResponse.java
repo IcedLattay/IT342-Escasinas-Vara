@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TransactionResponse {
+    public Long id;
     public String category;
     public String activity;
     public String amount;
