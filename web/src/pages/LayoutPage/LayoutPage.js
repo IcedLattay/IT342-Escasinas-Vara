@@ -1,14 +1,23 @@
 import SideBarMenu from "../../components/SideBarMenu/SideBarMenu";
 import { Outlet } from "react-router-dom";
 import styles from "./LayoutPage.module.css";
+import { useState } from "react";
 import HeaderContainer from "../../components/Header/HeaderContainer";
 
 export default function Layout() {
+
+    const [walletDashboardOverlayIsOpen, setWalletDashboardOverlayIsOpen] = useState(false);
+
     return (
         <div className={styles.content}>
-            <SideBarMenu />
+            <SideBarMenu 
+                walletDashboardOverlayIsOpen={walletDashboardOverlayIsOpen}
+                setWalletDashboardOverlayIsOpen={setWalletDashboardOverlayIsOpen}
+            />
             <div className={styles.dynamicContent}>
-                <HeaderContainer />
+                <HeaderContainer 
+                    setWalletDashboardOverlayIsOpen={setWalletDashboardOverlayIsOpen}
+                />
                 <Outlet />
             </div>
         </div>

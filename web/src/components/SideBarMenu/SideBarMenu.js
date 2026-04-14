@@ -12,7 +12,10 @@ import AddPayoutAccountOverlay from "../overlays/AddPayoutAccountOverlay/AddPayo
 import ReceiptOverlay from "../overlays/ReceiptOverlay/ReceiptOverlay";
 import Modal from "../overlays/Modal";
 
-export default function SideBarMenu() {
+export default function SideBarMenu({
+    walletDashboardOverlayIsOpen, 
+    setWalletDashboardOverlayIsOpen
+}) {
     
     // useNavigate and useContext
     const navigate = useNavigate();
@@ -27,7 +30,6 @@ export default function SideBarMenu() {
     const [profileOverlayIsOpen, setProfileOverlayIsOpen] = useState(false);
     const [editProfileIsHovered, setEditProfileIsHovered] = useState(false);
     const [editProfileOverlayIsOpen, setEditProfileOverlayIsOpen] = useState(false);
-    const [walletDashboardOverlayIsOpen, setWalletDashboardOverlayIsOpen] = useState(false);
     const [savedPayoutAccounts, setSavedPayoutAccounts] = useState([]);
     const [walletDepositOverlayIsOpen, setWalletDepositOverlayIsOpen] = useState(false);
     const [walletWithdrawalOverlayIsOpen, setWalletWithdrawalOverlayIsOpen] = useState(false);
