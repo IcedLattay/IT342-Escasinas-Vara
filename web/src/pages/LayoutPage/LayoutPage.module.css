@@ -12,6 +12,7 @@
         flex-direction: column;
         display: flex;
         padding: 2rem;
+        z-index: 1;
         /* min-width: 100%; */
         /* border: 1px solid black; */
         background-color: #f8f9f2;
