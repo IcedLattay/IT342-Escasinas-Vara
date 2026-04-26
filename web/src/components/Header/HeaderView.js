@@ -6,7 +6,10 @@ export default function HeaderView({
     setWalletDashboardOverlayIsOpen
 }) {
     return (
-        <div className={styles.content}>
+        <div 
+            className={styles.content}
+            title="This is the header"
+        >
             <div 
                 className={styles.wallet}
                 onClick={() => setWalletDashboardOverlayIsOpen(true)}

@@ -1,8 +1,7 @@
 
 
 .content {
-    /* border: 1px solid red; */
-    position: absolute;
+    /* border: 1px solid coral; */
     right: 2rem;
     display: flex;
     justify-content: flex-end;
