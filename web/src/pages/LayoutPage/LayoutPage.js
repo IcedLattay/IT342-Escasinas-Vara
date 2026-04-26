@@ -1,4 +1,4 @@
-import SideBarMenu from "../../components/SideBarMenu/SideBarMenu";
+import SideBarMenuContainer from "../../components/SideBarMenu/SideBarMenuContainer";
 import { Outlet } from "react-router-dom";
 import styles from "./LayoutPage.module.css";
 import { useState } from "react";
@@ -10,7 +10,7 @@ export default function Layout() {
 
     return (
         <div className={styles.content}>
-            <SideBarMenu 
+            <SideBarMenuContainer
                 walletDashboardOverlayIsOpen={walletDashboardOverlayIsOpen}
                 setWalletDashboardOverlayIsOpen={setWalletDashboardOverlayIsOpen}
             />

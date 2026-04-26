@@ -1,4 +1,4 @@
-.sidebar-menu {
+.sidebarMenu {
     position: sticky;
     top: 0;
     min-width: 3.2rem;
@@ -17,12 +17,12 @@
     z-index: 2;
 }
 
-.sidebar-menu.shown {
+.shown {
     min-width: 15rem;
     width: 15rem;
 }
 
-    .sidebar-menu .header {
+    .header {
         position: relative;
         display: flex;
         height: 4rem;
@@ -30,7 +30,7 @@
         margin-top: .5rem;
     }
 
-        #sidebar-vara {
+        .logo {
             display: flex;
             align-items: center;
             padding: 0 1rem;
@@ -46,7 +46,7 @@
 
 
 
-        .sidebar-menu.shown #sidebar-vara {
+        .sidebarMenu.shown .logo {
             opacity: 1;
             visibility: visible;
             
@@ -55,7 +55,7 @@
                 visibility 0s linear;
         }
 
-        .sidebar-menu-button-container {
+        .buttonContainer {
             /* border: black 1px solid; */
             position: absolute;
             top: 50%;
@@ -65,7 +65,7 @@
             justify-content: end;
         }   
 
-            .sidebar-menu-button {
+            .menuButton {
                 box-sizing: border-box;
                 display: flex;
                 align-items: center;
@@ -74,12 +74,12 @@
                 background-color: transparent;
                 border-radius: .75rem;
             }
-            .sidebar-menu-button:hover {
+            .menuButton:hover {
                 background-color: #eaeaea;
                 cursor: pointer;
             }
 
-    .sidebar-menu-content {
+    .content {
         /* border: 1px solid rgb(255, 0, 0);
         background-color: aqua; */
         height: 100%;
@@ -96,7 +96,7 @@
         gap: 1.5rem;
     }
 
-    .sidebar-menu.shown .sidebar-menu-content {
+    .sidebarMenu.shown .content {
         /* border: 1px solid black; */
         display: flex;
         flex-direction: column;
@@ -109,11 +109,11 @@
             visibility 0s linear;
     }
 
-        .sidebar-menu-content p {
+        .content p {
             white-space: nowrap;
         }
 
-        .sidebar-menu-content .menu-buttons {
+        .content .menuButtons {
             /* border: 1px solid black; */
             flex: 1;
             height: 100%;
@@ -121,7 +121,7 @@
             flex-direction: column;
         }   
 
-            .sidebar-menu-content .menu-buttons .top {
+            .content .top {
                 display: flex;
                 flex-direction: column;
                 padding-bottom: .75rem;
@@ -129,7 +129,7 @@
                 border-bottom: 1px solid #C3C3C3;
             }
 
-                .sidebar-menu-content .menu-buttons .menu-button {
+                .content .menuButton {
                     height: 2.75rem;
                     box-sizing: border-box;
                     padding: 0.6rem 1rem;
@@ -143,22 +143,25 @@
                     border-radius: .4rem;
                 }
 
-                .sidebar-menu .menu-buttons .menu-button:hover,
-                .sidebar-menu .menu-buttons .menu-button.active {
+                .content .menuButton:hover {
                     background-color: #f0f0f0;
                 }
 
-                .sidebar-menu .menu-buttons .menu-button:active {
+                .content .menuButton.menuButtonActive {
+                    background-color: #f0f0f0;
+                }
+
+                .content .menuButton:active {
                     background-color: #eaeaea;
                 }
 
-                .sidebar-menu-content .menu-buttons .top .general {
+                .content .top .general {
                     display: flex;
                     flex-direction: column;
                     /* border: 1px solid greenyellow; */
                 }
                 
-                .sidebar-menu-content .menu-buttons .top .for-lending {
+                .content .top .forLending {
                     display: flex;
                     flex-direction: column;
                     /* border: 1px solid blue; */
@@ -166,16 +169,15 @@
                 
                 
 
-            .sidebar-menu-content .menu-buttons .bottom {
+            .content .bottom {
                 display: flex;
                 flex-direction: column;
                 margin-top: auto;
                 /* border: 1px solid blue; */
             }
 
-                
 
-                .menu-buttons #profile {
+                .content .bottom .profile {
                     position: relative;
                     display: flex;
                     background-color: transparent;
@@ -184,7 +186,7 @@
                     /* border: 1px solid red; */
                 }
                     
-                    .menu-buttons #profile #hitbox {
+                    .content .bottom .hitbox {
                         height: 2.75rem;
                         flex: 1;
                         box-sizing: border-box;
@@ -199,16 +201,19 @@
                         border-radius: .4rem;
                     }
 
-                    .menu-buttons #profile #hitbox:hover,
-                    .menu-buttons #profile #hitbox.active {
+                    .content .bottom .hitbox:hover {
                         background-color: #f0f0f0;
                     }
 
-                    .menu-buttons #profile #hitbox:active {
+                    .hitboxActive {
+                        background-color: #f0f0f0;
+                    }
+
+                    .content .bottom .hitbox:active {
                         background-color: #eaeaea;
                     }
 
-                    .menu-buttons #profile .overlay {
+                    .content .profile .overlay {
                         background-color: #ffffff;
                         border: 1px solid #cfcfcf;
                         box-shadow: 0.2rem 0 0.75rem rgba(0, 0, 0, 0.1);
@@ -216,80 +221,4 @@
                         z-index: 2;
                     }
 
-                    .menu-buttons #profile .overlay.profile-overlay {
-                        border-radius: 1rem;
-                        width: 15.5rem;
-                        padding: .8rem;
-                        position: absolute;
-                        bottom: 100%;
-                        left: 0;
-                        display: flex;
-                        flex-direction: column;
-                        gap: .5rem;
-                        /* visibility: hidden; */
-                    }
-
-
-                        .menu-buttons #profile .overlay #top {
-                            /* border: 1px solid #c0c0c0; */
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            box-sizing: border-box;
-                            padding: .5rem 0;
-                        }
-
-                                .menu-buttons #edit-profile #icon {
-                                    background-color: #ffffff;
-                                    position: absolute;
-                                    bottom: 0;
-                                    left: 68%;
-                                    width: 1rem;
-                                    height: 1rem;
-                                    z-index: 3;
-                                    border-radius: 100rem;
-                                    border: 1px solid #ffffff;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                }
-                                
-                                .menu-buttons #edit-profile:hover #icon {
-                                    border: 1px solid #dc2c00;
-                                }
-
-                        .menu-buttons #profile .overlay #middle {
-                            border-top: 1.5px solid #c0c0c0;
-                            border-bottom: 1px solid #c0c0c0;
-                            padding: .5rem 0;
-                            display: flex;
-                            flex-direction: column;
-
-                        }
-
-                        .menu-buttons #profile .overlay #bottom {
-                            display: flex;
-                            flex-direction: column;
-                        }
-
-                            .menu-buttons #profile .overlay .button {
-                                padding: .6rem 0 .6rem .6rem;
-                                display: flex;
-                                flex-direction: column;
-                                align-items: start;
-                                cursor: pointer;
-                                border-radius: .4rem;
-                            }
-
-                            .menu-buttons #profile .overlay .button:hover {
-                                background-color: #f0f0f0;
-                            }
-
-                            .menu-buttons #profile .overlay .button:active {
-                                background-color: #eaeaea;
-                            }    
-
-                            #logout-button {
-                                color: #d00000;
-                            }
-
+                    

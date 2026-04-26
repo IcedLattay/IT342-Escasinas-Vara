@@ -7,11 +7,10 @@
 }
 
     .dynamicContent {
-        position: relative;
         flex: 1;
         flex-direction: column;
         display: flex;
-        padding: 2rem;
+        padding: 2rem 2rem 0 2rem;
         z-index: 1;
         /* min-width: 100%; */
         /* border: 1px solid black; */
