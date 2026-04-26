@@ -87,6 +87,11 @@ export default function SideBarMenuContainer({
         setSidebarVisible(!sidebarVisible);
     }
 
+    function goTo(pageKey, path) {
+        setActiveMenuButton(pageKey);
+        navigate(path);
+    }
+
 
 
 
@@ -122,7 +127,7 @@ export default function SideBarMenuContainer({
             sidebar={{
                 menuButton: {
                     activeButton: activeMenuButton,
-                    setTo: setActiveMenuButton,
+                    goTo
                 },
                 isVisible: sidebarVisible,
                 onToggle: onSideBarClick,

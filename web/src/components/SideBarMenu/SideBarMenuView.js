@@ -65,7 +65,7 @@ export default function SideBarMenu({
 
                             <button 
                                 className={`${styles.menuButton} ${sidebar.menuButton.activeButton === "home" ? styles.menuButtonActive : ""}`}
-                                onClick={() => sidebar.menuButton.setTo("home")}
+                                onClick={() => sidebar.menuButton.goTo("home", "/home")}
                             >
                                     <p className=""
                                         style={{
@@ -75,7 +75,7 @@ export default function SideBarMenu({
                             
                             <button 
                                 className={`${styles.menuButton} ${sidebar.menuButton.activeButton === "my_loans" ? styles.menuButtonActive : ""}`}
-                                onClick={() => sidebar.menuButton.setTo("my_loans")}
+                                onClick={() => sidebar.menuButton.goTo("my_loans", "/my-loans")}
                             >
                                     <p
                                         style={{
@@ -85,7 +85,7 @@ export default function SideBarMenu({
                             
                             <button 
                                 className={`${styles.menuButton} ${sidebar.menuButton.activeButton === "loan_reqs" ? styles.menuButtonActive : ""}`}
-                                onClick={() => sidebar.menuButton.setTo("loan_reqs")}
+                                onClick={() => sidebar.menuButton.goTo("loan_reqs", "/loan-requests")}
                             >
                                     <p
                                         style={{
@@ -95,7 +95,7 @@ export default function SideBarMenu({
                             
                             <button 
                                 className={`${styles.menuButton} ${sidebar.menuButton.activeButton === "notifs" ? styles.menuButtonActive : ""}`}
-                                onClick={() => sidebar.menuButton.setTo("notifs")}
+                                onClick={() => sidebar.menuButton.goTo("notifs", "/notifications")}
                             >
                                     <p
                                         style={{
@@ -105,7 +105,7 @@ export default function SideBarMenu({
 
                             <button 
                                 className={`${styles.menuButton} ${sidebar.menuButton.activeButton === "msgs" ? styles.menuButtonActive : ""}`}
-                                onClick={() => sidebar.menuButton.setTo("msgs")}
+                                onClick={() => sidebar.menuButton.goTo("msgs", "/messages")}
                             >
                                     <p
                                         style={{
@@ -138,7 +138,7 @@ export default function SideBarMenu({
 
                             <button 
                                 className={`${styles.menuButton} ${sidebar.menuButton.activeButton === "offers_made" ? styles.menuButtonActive : ""}`}
-                                onClick={() => sidebar.menuButton.setTo("offers_made")}
+                                onClick={() => sidebar.menuButton.goTo("offers_made", "/offers-made")}
                             >
                                     <p
                                         style={{
@@ -148,7 +148,7 @@ export default function SideBarMenu({
 
                             <button 
                                 className={`${styles.menuButton} ${sidebar.menuButton.activeButton === "issued_loans" ? styles.menuButtonActive : ""}`}
-                                onClick={() => sidebar.menuButton.setTo("issued_loans")}
+                                onClick={() => sidebar.menuButton.goTo("issued_loans", "/issued-loans")}
                             >
                                     <p
                                         style={{
