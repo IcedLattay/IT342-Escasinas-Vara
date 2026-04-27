@@ -1,0 +1,294 @@
+.sidebar-menu {
+    position: sticky;
+    top: 0;
+    min-width: 3.2rem;
+    width: 3.2rem;
+    height: 100vh;
+    box-sizing: border-box;
+    padding: 0.75rem 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0.2rem 0 0.75rem rgba(0, 0, 0, 0.1);
+    border-right: 1px solid #cfcfcf;
+    transition: width 0.3s ease, min-width 0.3s ease;
+    /* overflow: hidden; */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sidebar-menu.shown {
+    min-width: 15rem;
+    width: 15rem;
+}
+
+    .sidebar-menu .header {
+        position: relative;
+        display: flex;
+        height: 4rem;
+        align-items: center;
+        margin-top: .5rem;
+    }
+
+        #sidebar-vara {
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            opacity: 0;
+            gap: .3rem;
+            visibility: hidden;
+            
+            transition:
+                opacity 0.15s ease,
+                visibility 0s linear 0.1s;
+                
+        }
+
+
+
+        .sidebar-menu.shown #sidebar-vara {
+            opacity: 1;
+            visibility: visible;
+            
+            transition:
+                opacity 0.2s ease 0.1s,
+                visibility 0s linear;
+        }
+
+        .sidebar-menu-button-container {
+            /* border: black 1px solid; */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+            display: flex;
+            justify-content: end;
+        }   
+
+            .sidebar-menu-button {
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.4rem 0.4rem;
+                background-color: transparent;
+                border-radius: .75rem;
+            }
+            .sidebar-menu-button:hover {
+                background-color: #eaeaea;
+                cursor: pointer;
+            }
+
+    .sidebar-menu-content {
+        /* border: 1px solid rgb(255, 0, 0);
+        background-color: aqua; */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+
+        transition:
+            opacity 0.15s ease,
+            visibility 0s linear 0.1s;
+
+        gap: 1.5rem;
+    }
+
+    .sidebar-menu.shown .sidebar-menu-content {
+        /* border: 1px solid black; */
+        display: flex;
+        flex-direction: column;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+
+        transition:
+            opacity 0.2s ease 0.1s,
+            visibility 0s linear;
+    }
+
+        .sidebar-menu-content p {
+            white-space: nowrap;
+        }
+
+        .sidebar-menu-content .menu-buttons {
+            /* border: 1px solid black; */
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }   
+
+            .sidebar-menu-content .menu-buttons .top {
+                display: flex;
+                flex-direction: column;
+                padding-bottom: .75rem;
+                /* border: 1px solid red; */
+                border-bottom: 1px solid #C3C3C3;
+            }
+
+                .sidebar-menu-content .menu-buttons .menu-button {
+                    height: 2.75rem;
+                    box-sizing: border-box;
+                    padding: 0.6rem 1rem;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: .5rem;
+                    justify-content: left;
+                    background-color: transparent;
+                    border: none;
+                    border-radius: .4rem;
+                }
+
+                .sidebar-menu .menu-buttons .menu-button:hover,
+                .sidebar-menu .menu-buttons .menu-button.active {
+                    background-color: #f0f0f0;
+                }
+
+                .sidebar-menu .menu-buttons .menu-button:active {
+                    background-color: #eaeaea;
+                }
+
+                .sidebar-menu-content .menu-buttons .top .general {
+                    display: flex;
+                    flex-direction: column;
+                    /* border: 1px solid greenyellow; */
+                }
+                
+                .sidebar-menu-content .menu-buttons .top .for-lending {
+                    display: flex;
+                    flex-direction: column;
+                    /* border: 1px solid blue; */
+                }
+                
+                
+
+            .sidebar-menu-content .menu-buttons .bottom {
+                display: flex;
+                flex-direction: column;
+                margin-top: auto;
+                /* border: 1px solid blue; */
+            }
+
+                
+
+                .menu-buttons #profile {
+                    position: relative;
+                    display: flex;
+                    background-color: transparent;
+                    padding: 0;
+                    border: none;
+                    /* border: 1px solid red; */
+                }
+                    
+                    .menu-buttons #profile #hitbox {
+                        height: 2.75rem;
+                        flex: 1;
+                        box-sizing: border-box;
+                        padding: 0.6rem 1rem;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: .5rem;
+                        justify-content: left;
+                        background-color: transparent;
+                        /* border: 1px solid red; */
+                        border-radius: .4rem;
+                    }
+
+                    .menu-buttons #profile #hitbox:hover,
+                    .menu-buttons #profile #hitbox.active {
+                        background-color: #f0f0f0;
+                    }
+
+                    .menu-buttons #profile #hitbox:active {
+                        background-color: #eaeaea;
+                    }
+
+                    .menu-buttons #profile .overlay {
+                        background-color: #ffffff;
+                        border: 1px solid #cfcfcf;
+                        box-shadow: 0.2rem 0 0.75rem rgba(0, 0, 0, 0.1);
+                        box-sizing: border-box;
+                        z-index: 2;
+                    }
+
+                    .menu-buttons #profile .overlay.profile-overlay {
+                        border-radius: 1rem;
+                        width: 15.5rem;
+                        padding: .8rem;
+                        position: absolute;
+                        bottom: 100%;
+                        left: 0;
+                        display: flex;
+                        flex-direction: column;
+                        gap: .5rem;
+                        /* visibility: hidden; */
+                    }
+
+
+                        .menu-buttons #profile .overlay #top {
+                            /* border: 1px solid #c0c0c0; */
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            box-sizing: border-box;
+                            padding: .5rem 0;
+                        }
+
+                                .menu-buttons #edit-profile #icon {
+                                    background-color: #ffffff;
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 68%;
+                                    width: 1rem;
+                                    height: 1rem;
+                                    z-index: 3;
+                                    border-radius: 100rem;
+                                    border: 1px solid #ffffff;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                }
+                                
+                                .menu-buttons #edit-profile:hover #icon {
+                                    border: 1px solid #dc2c00;
+                                }
+
+                        .menu-buttons #profile .overlay #middle {
+                            border-top: 1.5px solid #c0c0c0;
+                            border-bottom: 1px solid #c0c0c0;
+                            padding: .5rem 0;
+                            display: flex;
+                            flex-direction: column;
+
+                        }
+
+                        .menu-buttons #profile .overlay #bottom {
+                            display: flex;
+                            flex-direction: column;
+                        }
+
+                            .menu-buttons #profile .overlay .button {
+                                padding: .6rem 0 .6rem .6rem;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: start;
+                                cursor: pointer;
+                                border-radius: .4rem;
+                            }
+
+                            .menu-buttons #profile .overlay .button:hover {
+                                background-color: #f0f0f0;
+                            }
+
+                            .menu-buttons #profile .overlay .button:active {
+                                background-color: #eaeaea;
+                            }    
+
+                            #logout-button {
+                                color: #d00000;
+                            }
+

@@ -1,64 +1,39 @@
-import { createContext, useState, useEffect } from "react";
-import { fetchMyWallet, fetchMyRecentTransactions } from "../features/wallet/api/WalletService";
-import { fetchCurrentUser } from "../features/profile/api/UserService";
+import { createContext, useState, useEffect, use } from "react";
+import axios from "axios";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     
     // useStates
-    const [userIsAuthenticated, setUserIsAuthenticated] = useState(false);
+    const [userIsAuthenticated, setUserIsAuthenticated] = useState(null);
     const [user, setUser] = useState(null);
-    const [wallet, setWallet] = useState(null);
-    const [recentTransactions, setRecentTransactions] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
-    async function refreshUserData() {
-        setIsLoading(true);
-        try {
-            const res = await fetchCurrentUser();
 
-            const data = res.data.data.user;
-            
-            setUser(data);
-            setUserIsAuthenticated(true);
-        } catch (err) {
-            setUserIsAuthenticated(false);
-            setUser(null)
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-    async function refreshWalletData() {
-        try {
-            const res = await fetchMyWallet();
-
-            const data = res.data.data.wallet;
-
-            setWallet(data);
-        } catch (err) {
-            setWallet(null);
-        }
-    }
-
-    async function refreshRecentTransactions() {
-        try {
-            const res = await fetchMyRecentTransactions();
-            
-            const data = res.data.data.recentTransactions;
-
-            setRecentTransactions(data);
-        } catch (err) {
-            setRecentTransactions(null);
-        }
-    }
 
     // useEffects
     useEffect(() => {
-        refreshUserData();
-        refreshWalletData();
-        refreshRecentTransactions();
+
+        async function fetchUser() {
+            setIsLoading(true);
+            try {
+                const res = await axios.get("http://localhost:8080/api/users/me", 
+                    { 
+                        withCredentials: true,
+                    });
+
+                const userData = await res.data.data.user;
+                setUser(userData);
+                setUserIsAuthenticated(true);
+            } catch (err) {
+                setUserIsAuthenticated(false);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+
+        fetchUser();
     }, []);
 
     useEffect(() => {
@@ -67,14 +42,7 @@ export function AuthProvider({ children }) {
     }, [userIsAuthenticated, user]);
 
     return (
-        <AuthContext.Provider value={{ 
-            userIsAuthenticated, setUserIsAuthenticated, 
-            user, setUser, 
-            wallet, setWallet,
-            recentTransactions, setRecentTransactions,
-            isLoading, setIsLoading, 
-            refreshWalletData, refreshRecentTransactions
-        }}>
+        <AuthContext.Provider value={{ userIsAuthenticated, setUserIsAuthenticated, user, setUser, isLoading, setIsLoading }}>
         {children}
         </AuthContext.Provider>
     );
