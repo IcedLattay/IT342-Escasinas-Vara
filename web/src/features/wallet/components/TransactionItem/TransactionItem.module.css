@@ -1,0 +1,37 @@
+
+
+.transactionItem {
+    /* border: 1px solid rgb(0, 26, 255); */
+    height: 6rem;
+    box-sizing: border-box;
+    padding: 0.4rem .2rem;
+    display: flex;
+    width: 26rem;
+}
+
+    .details {
+        /* border: 1px solid red; */
+        padding: .4rem .7rem;
+        box-sizing: border-box;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border-radius: .5rem;
+    }
+    .details:hover {
+        background-color: #f0f0f0;
+    }
+    .details:active {
+        background-color: #eaeaea;
+    }
+    .loading {
+        composes: loading from "../../../../shared/styles/LoadingComponents.module.css";
+    }
+
+        .payment {
+            display: flex;
+            /* border: 1px solid red; */
+            flex-direction: column;
+            gap: .4rem;
+        }

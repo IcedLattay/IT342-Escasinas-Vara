@@ -1,0 +1,49 @@
+
+
+.content {
+    /* border: 1px solid red; */
+    flex-grow: 1;
+}
+
+    .headerContainer {
+        /* border: 1px solid teal; */
+        display: flex;
+        align-items: center;
+        margin-top: 3rem;
+    }
+
+        .text {
+            margin-left: .9rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .createOfferButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            border-radius: .4rem;
+            padding: 0 1rem;
+            height: 2rem;
+            margin-left: auto;
+            margin-right: .9rem;
+            cursor: pointer;
+        }
+        .createOfferButton:hover {
+            background-color: #eff1eb;
+        }
+        .createOfferButton:active {
+            transform: scale(.97);
+            background-color: #dfe7d1;
+        }
+
+    .gridContainer {
+        margin-top: 1rem;
+        /* border: 1px solid rebeccapurple; */
+        box-sizing: border-box;
+        display: grid;
+        column-gap: 3rem;
+        row-gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    }

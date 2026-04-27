@@ -1,0 +1,22 @@
+
+
+.content {
+    /* border: 1px solid red; */
+    flex-grow: 1;
+}
+
+    .header {
+        margin-left: .9rem;
+        margin-top: 3rem;
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+        .gridContainer {
+            margin-top: 1rem;
+            /* border: 1px solid rebeccapurple; */
+            box-sizing: border-box;
+            display: grid;
+            row-gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+        }

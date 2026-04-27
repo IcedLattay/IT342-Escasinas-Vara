@@ -1,0 +1,36 @@
+
+
+.content {
+    /* border: 1px solid coral; */
+    right: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+    .wallet {
+        /* border: 1px solid red; */
+        width: 10rem;
+        padding: .5rem;
+        display: flex;
+        align-items: center;
+        gap: .7rem;
+        border-radius: .4rem;
+        cursor: pointer;
+    }  
+    .wallet:hover {
+        background-color: #e7e7e7;
+    }
+    .wallet:active {
+        background-color: #dbdbdb;
+        scale: calc(0.99);
+    }
+    
+        .wallet .amountText {
+            /* border: 1px solid red; */
+            text-overflow: ellipsis;  
+            word-break: normal;       
+            overflow: hidden;         
+            white-space: nowrap;      
+            width: 100%;   
+        }

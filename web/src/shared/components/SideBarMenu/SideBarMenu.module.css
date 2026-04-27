@@ -1,0 +1,224 @@
+.sidebarMenu {
+    position: sticky;
+    top: 0;
+    min-width: 3.2rem;
+    width: 3.2rem;
+    height: 100vh;
+    box-sizing: border-box;
+    padding: 0.75rem 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0.2rem 0 0.75rem rgba(0, 0, 0, 0.1);
+    border-right: 1px solid #cfcfcf;
+    transition: width 0.3s ease, min-width 0.3s ease;
+    /* overflow: hidden; */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    z-index: 2;
+}
+
+.shown {
+    min-width: 15rem;
+    width: 15rem;
+}
+
+    .header {
+        position: relative;
+        display: flex;
+        height: 4rem;
+        align-items: center;
+        margin-top: .5rem;
+    }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            opacity: 0;
+            gap: .3rem;
+            visibility: hidden;
+            
+            transition:
+                opacity 0.15s ease,
+                visibility 0s linear 0.1s;
+                
+        }
+
+
+
+        .sidebarMenu.shown .logo {
+            opacity: 1;
+            visibility: visible;
+            
+            transition:
+                opacity 0.2s ease 0.1s,
+                visibility 0s linear;
+        }
+
+        .buttonContainer {
+            /* border: black 1px solid; */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+            display: flex;
+            justify-content: end;
+        }   
+
+            .menuButton {
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.4rem 0.4rem;
+                background-color: transparent;
+                border-radius: .75rem;
+            }
+            .menuButton:hover {
+                background-color: #eaeaea;
+                cursor: pointer;
+            }
+
+    .content {
+        /* border: 1px solid rgb(255, 0, 0);
+        background-color: aqua; */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+
+        transition:
+            opacity 0.15s ease,
+            visibility 0s linear 0.1s;
+
+        gap: 1.5rem;
+    }
+
+    .sidebarMenu.shown .content {
+        /* border: 1px solid black; */
+        display: flex;
+        flex-direction: column;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+
+        transition:
+            opacity 0.2s ease 0.1s,
+            visibility 0s linear;
+    }
+
+        .content p {
+            white-space: nowrap;
+        }
+
+        .content .menuButtons {
+            /* border: 1px solid black; */
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }   
+
+            .content .top {
+                display: flex;
+                flex-direction: column;
+                padding-bottom: .75rem;
+                /* border: 1px solid red; */
+                border-bottom: 1px solid #C3C3C3;
+            }
+
+                .content .menuButton {
+                    height: 2.75rem;
+                    box-sizing: border-box;
+                    padding: 0.6rem 1rem;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: .5rem;
+                    justify-content: left;
+                    background-color: transparent;
+                    border: none;
+                    border-radius: .4rem;
+                }
+
+                .content .menuButton:hover {
+                    background-color: #f0f0f0;
+                }
+
+                .content .menuButton.menuButtonActive {
+                    background-color: #f0f0f0;
+                }
+
+                .content .menuButton:active {
+                    background-color: #eaeaea;
+                }
+
+                .content .top .general {
+                    display: flex;
+                    flex-direction: column;
+                    /* border: 1px solid greenyellow; */
+                }
+                
+                .content .top .forLending {
+                    display: flex;
+                    flex-direction: column;
+                    /* border: 1px solid blue; */
+                }
+                
+                
+
+            .content .bottom {
+                display: flex;
+                flex-direction: column;
+                margin-top: auto;
+                /* border: 1px solid blue; */
+            }
+
+
+                .content .bottom .profile {
+                    position: relative;
+                    display: flex;
+                    background-color: transparent;
+                    padding: 0;
+                    border: none;
+                    /* border: 1px solid red; */
+                }
+                    
+                    .content .bottom .hitbox {
+                        height: 2.75rem;
+                        flex: 1;
+                        box-sizing: border-box;
+                        padding: 0.6rem 1rem;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: .5rem;
+                        justify-content: left;
+                        background-color: transparent;
+                        /* border: 1px solid red; */
+                        border-radius: .4rem;
+                    }
+
+                    .content .bottom .hitbox:hover {
+                        background-color: #f0f0f0;
+                    }
+
+                    .hitboxActive {
+                        background-color: #f0f0f0;
+                    }
+
+                    .content .bottom .hitbox:active {
+                        background-color: #eaeaea;
+                    }
+
+                    .content .profile .overlay {
+                        background-color: #ffffff;
+                        border: 1px solid #cfcfcf;
+                        box-shadow: 0.2rem 0 0.75rem rgba(0, 0, 0, 0.1);
+                        box-sizing: border-box;
+                        z-index: 2;
+                    }
+
+                    
