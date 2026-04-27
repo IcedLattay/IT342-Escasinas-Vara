@@ -1,0 +1,42 @@
+
+.content {
+    /* aspect-ratio: 24/9; */
+}
+
+    .loaner {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+        .loanerProfile {
+            display: flex;
+        }
+
+            .loanerPfp {
+                /* border: 1px solid green; */
+                margin-right: .3rem;
+                width: 1rem; height: 1rem;
+                border-radius: 100rem;
+                align-items: center;
+            }
+
+    .interestRates {
+        /* border: 1px solid hotpink; */
+        display: flex;
+        flex-direction: column;
+    }
+
+        .irOptions {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            gap: .4rem;
+        }
+
+            .option {
+                /* border: 1px solid #9fa099; */
+                background-color: #e5e8c4;
+                border-radius: 100rem;
+                padding: .2rem .7rem;
+            }

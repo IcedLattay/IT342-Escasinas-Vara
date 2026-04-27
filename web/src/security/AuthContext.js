@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
-import { fetchMyWallet, fetchMyRecentTransactions } from "../api/WalletService";
-import { fetchCurrentUser } from "../api/UserService";
+import { fetchMyWallet, fetchMyRecentTransactions } from "../features/wallet/api/WalletService";
+import { fetchCurrentUser } from "../features/profile/api/UserService";
 
 export const AuthContext = createContext();
 
