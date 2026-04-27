@@ -48,7 +48,7 @@
             .loadingDetail {
                 height: 3.425rem;
                 border-bottom: none;
-                composes: loading from "../../../global-styles/LoadingComponents.module.css";
+                composes: loading from "../../../../shared/styles/LoadingComponents.module.css";
             }
 
                 .value {

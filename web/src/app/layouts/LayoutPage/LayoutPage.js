@@ -1,8 +1,8 @@
-import SideBarMenuContainer from "../../components/SideBarMenu/SideBarMenuContainer";
+import SideBarMenuContainer from "../../../shared/components/SideBarMenu/SideBarMenuContainer";
 import { Outlet } from "react-router-dom";
 import styles from "./LayoutPage.module.css";
 import { useState } from "react";
-import HeaderContainer from "../../components/Header/HeaderContainer";
+import HeaderContainer from "../../../shared/components/Header/HeaderContainer";
 
 export default function Layout() {
 

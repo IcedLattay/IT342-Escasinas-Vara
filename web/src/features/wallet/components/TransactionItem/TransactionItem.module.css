@@ -26,7 +26,7 @@
         background-color: #eaeaea;
     }
     .loading {
-        composes: loading from "../../global-styles/LoadingComponents.module.css";
+        composes: loading from "../../../../shared/styles/LoadingComponents.module.css";
     }
 
         .payment {
